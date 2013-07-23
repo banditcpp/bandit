@@ -1,5 +1,4 @@
-#include <bandit/bandit.h>
-using namespace bandit;
+#include <specs/specs.h>
 
 int main(int argc, char* argv[])
 {

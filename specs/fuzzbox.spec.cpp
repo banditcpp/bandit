@@ -1,8 +1,4 @@
-#include <bandit/bandit.h>
-using namespace bandit;
-
-#include <snowhouse/snowhouse.h>
-using namespace snowhouse;
+#include <specs/specs.h>
 
 namespace fuzzbox {
 

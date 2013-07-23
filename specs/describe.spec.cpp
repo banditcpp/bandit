@@ -1,36 +1,12 @@
-#include <bandit/bandit.h>
-using namespace bandit;
+#include <specs/specs.h>
 
-#include <snowhouse/snowhouse.h>
-using namespace snowhouse;
-
-#include <specs/fakes/logging_fake.h>
-
-namespace bandit { namespace specs {
-  struct fake_reporter : 
-    public bandit::reporter, 
-    public bandit::specs::logging_fake
-  {
-    void context_starting(const char* desc)
-    {
-      log("context_starting: ", desc);
-    }
-
-    void context_ended(const char* desc)
-    {
-      log("context_ended: ", desc);
-    }
-  };
-  typedef unique_ptr<fake_reporter> fake_reporter_ptr;
-}}
-
-using namespace bandit::specs;
+using namespace bandit::fakes;
 
 run_bandit([](){
 
   describe("describe:", [](){
     bandit::detail::voidfunc_t describe_fn;
-    bandit::specs::fake_reporter_ptr reporter;
+    fake_reporter_ptr reporter;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
