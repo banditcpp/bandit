@@ -1,0 +1,3 @@
+[submodule "snowhouse"]
+	path = snowhouse
+	url = https://github.com/joakimkarlsson/snowhouse.git
