@@ -12,6 +12,12 @@ namespace bandit {
     {
       std::cout << ".";
     }
+
+    void it_failed(const char*)
+    {
+      std::cout << "F";
+    }
+
   };
 }
 

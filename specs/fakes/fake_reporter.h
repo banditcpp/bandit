@@ -25,6 +25,11 @@ namespace bandit { namespace fakes {
     {
       log("it_succeeded: ", desc);
     }
+
+    void it_failed(const char* desc)
+    {
+      log("it_failed: ", desc);
+    }
   };
   typedef unique_ptr<fake_reporter> fake_reporter_ptr;
 }}

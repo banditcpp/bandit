@@ -33,15 +33,22 @@ namespace bandit {
   {
     reporter.it_starting(desc);
 
-    for_each(context_stack.begin(), 
-        context_stack.end(), 
-        [](context* ctxt){
+    try
+    {
+      for_each(context_stack.begin(), 
+          context_stack.end(), 
+          [](context* ctxt){
           ctxt->run_before_eaches();
-        });
+          });
 
-    func();
+      func();
+      reporter.it_succeeded(desc);
+    }
+    catch(...)
+    {
+      reporter.it_failed(desc);
+    }
 
-    reporter.it_succeeded(desc);
   }
 
   inline void it(const char* desc, voidfunc_t func)
