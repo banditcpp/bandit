@@ -6,9 +6,13 @@ namespace bandit {
   using namespace std;
   using namespace detail;
 
-  inline void describe(const char* desc, voidfunc_t func)
+  inline void describe(const char* desc, voidfunc_t func, reporter* reporter = NULL)
   {
-    cout << "Running \"" << desc << "\"" << endl;
+    if(reporter)
+    {
+      reporter->context_starting(desc);
+    }
+
     context ctxt;
     context_stack().push_back(&ctxt);
     func();

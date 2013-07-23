@@ -12,6 +12,7 @@ namespace bandit { namespace detail {
 }}
 
 #include <bandit/registration/registration.h>
+#include <bandit/reporters/reporters.h>
 #include "context.h"
 #include "grammar.h"
 #include "runner.h"
