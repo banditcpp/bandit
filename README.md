@@ -10,7 +10,7 @@ bandit is a test framework. It is (going to be) agnostic of the assertion
 framework to use. Right now it uses [snowhouse](https://github.com/joakimkarlsson/snowhouse) for its internal testing. [Snowhouse](https://github.com/joakimkarlsson/snowhouse) is the assertion framework used by [igloo](https://github.com/joakimkarlsson/igloo).
 
 As bandit makes heavy use of lambdas it does not have to do a whole lot of preprocessor magic to get things done. The only macro
-right now is the run_bandit() construct which is used to register which specs to run.
+right now is the go_bandit() construct which is used to register which specs to run.
 
 This is a complete test application written in bandit:
 
@@ -21,7 +21,7 @@ using namespace bandit;
 #include <snowhouse/snowhouse.h>
 using namespace snowhouse;
 
-run_bandit([](){
+go_bandit([](){
 
     describe("fuzzbox:", [](){
       guitar_ptr guitar;

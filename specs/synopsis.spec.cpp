@@ -1,6 +1,6 @@
 #include <specs/specs.h>
 
-run_bandit([](){
+go_bandit([](){
   describe("my first spec", [&]() {
     int a;
 

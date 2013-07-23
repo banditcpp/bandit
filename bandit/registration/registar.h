@@ -14,7 +14,7 @@ namespace bandit { namespace detail {
 
 }}
 
-#define run_bandit(context) \
+#define go_bandit(context) \
   static bandit::detail::spec_registar bandit_registrar(bandit::detail::specs(), context);
 
 #endif

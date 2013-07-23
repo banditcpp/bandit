@@ -1,13 +1,17 @@
 #ifndef BANDIT_REPORTERS_H
 #define BANDIT_REPORTERS_H
 
-namespace bandit {
+#include <bandit/reporters/reporter.h>
+#include <bandit/reporters/dots_reporter.h>
 
-  struct reporter
+namespace bandit { namespace detail {
+
+  inline reporter& default_reporter()
   {
-    virtual void context_starting(const char* decs) = 0;
-    virtual void context_ended(const char* decs) = 0;
-  };
-}
+    static dots_reporter reporter;
+    return reporter;
+  }
+
+}}
 
 #endif

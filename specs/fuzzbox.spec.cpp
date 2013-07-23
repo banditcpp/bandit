@@ -44,7 +44,7 @@ namespace fuzzbox {
   };
   typedef unique_ptr<guitar> guitar_ptr;
   
-run_bandit([](){
+go_bandit([](){
 
     describe("fuzzbox:", [](){
       guitar_ptr guitar;

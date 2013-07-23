@@ -2,7 +2,7 @@
 
 using namespace bandit::fakes;
 
-run_bandit([](){
+go_bandit([](){
 
   describe("describe:", [](){
     bandit::detail::voidfunc_t describe_fn;

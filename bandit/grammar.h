@@ -29,12 +29,22 @@ namespace bandit {
     context_stack().back()->register_before_each(func);
   }
 
-  inline void it(const char* , voidfunc_t func)
+  inline void it(const char* desc, voidfunc_t func, reporter& reporter, contextstack_t& context_stack)
   {
-    for_each(context_stack().begin(), context_stack().end(), [](context* ctxt){
-        ctxt->run_before_eaches();
+    reporter.it_starting(desc);
+
+    for_each(context_stack.begin(), 
+        context_stack.end(), 
+        [](context* ctxt){
+          ctxt->run_before_eaches();
         });
+
     func();
+  }
+
+  inline void it(const char* desc, voidfunc_t func)
+  {
+    it(desc, func, default_reporter(), context_stack());
   }
 
 }
