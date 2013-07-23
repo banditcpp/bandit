@@ -17,7 +17,11 @@ namespace bandit {
     context_stack().push_back(&ctxt);
     func();
     context_stack().pop_back();
-    cout << "Finished running context \"" << desc << "\"" << endl;
+
+    if(reporter)
+    {
+      reporter->context_ended(desc);
+    }
   }
 
   inline void before_each(voidfunc_t func)

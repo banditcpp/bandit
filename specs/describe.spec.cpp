@@ -15,6 +15,11 @@ namespace bandit { namespace specs {
     {
       log("context_starting: ", desc);
     }
+
+    void context_ended(const char* desc)
+    {
+      log("context_ended: ", desc);
+    }
   };
   typedef unique_ptr<fake_reporter> fake_reporter_ptr;
 }}
@@ -24,18 +29,32 @@ using namespace bandit::specs;
 run_bandit([](){
 
   describe("describe:", [](){
-    bandit::detail::voidfunc_t a_describe_fn;
+    bandit::detail::voidfunc_t describe_fn;
     bandit::specs::fake_reporter_ptr reporter;
 
     before_each([&](){
-      a_describe_fn = [](){};
       reporter = fake_reporter_ptr(new fake_reporter());
     });
 
-    it("tells reporter it's starting a run", [&](){
-      describe("something", a_describe_fn, reporter.get());
-      AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_starting: something"));
+    describe("with a succeeding 'it'", [&](){
+
+      before_each([&](){
+        describe_fn = [](){};
+      });
+
+      it("tells reporter it's starting a run", [&](){
+        describe("something", describe_fn, reporter.get());
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_starting: something"));
+      });
+
+      it("tells reporter it's finished a run", [&](){
+        describe("something", describe_fn, reporter.get());
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_ended: something"));
+      });
+
     });
+
+
   });
 
 });
