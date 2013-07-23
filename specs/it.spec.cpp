@@ -17,6 +17,11 @@ go_bandit([](){
         it("my it", it_func, *(reporter.get()), contexts);
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_starting: my it"));
       });
+
+      it("tells reporter it's succeeded", [&](){
+        it("my it", it_func, *(reporter.get()), contexts);
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_succeeded: my it"));
+      });
     });
     
   });

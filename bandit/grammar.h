@@ -40,6 +40,8 @@ namespace bandit {
         });
 
     func();
+
+    reporter.it_succeeded(desc);
   }
 
   inline void it(const char* desc, voidfunc_t func)

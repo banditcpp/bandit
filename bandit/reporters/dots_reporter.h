@@ -8,6 +8,10 @@ namespace bandit {
     void context_starting(const char*) {}
     void context_ended(const char*) {}
     void it_starting(const char*) {}
+    void it_succeeded(const char*) 
+    {
+      std::cout << ".";
+    }
   };
 }
 
