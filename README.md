@@ -12,7 +12,7 @@ framework to use. Right now it uses [snowhouse](https://github.com/joakimkarlsso
 As bandit makes heavy use of lambdas it does not have to do a whole lot of preprocessor magic to get things done. The only macro
 right now is the run_bandit() construct which is used to register which specs to run.
 
-Synopsis:
+This is a complete test application written in bandit:
 
 ```cpp
 #include <bandit/bandit.h>
@@ -53,4 +53,9 @@ run_bandit([](){
     });
 
 });
+
+int main(int argc, char* argv[])
+{
+  return bandit::run(argc, argv);
+}
 ```
