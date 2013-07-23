@@ -2,7 +2,7 @@
 
 using namespace bandit;
 
-int main()
+int main(int argc, char* argv[])
 {
-  return 0;
+  return bandit::specs().run(argc, argv);
 }

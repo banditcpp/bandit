@@ -11,7 +11,7 @@ namespace bandit { namespace detail {
   typedef std::function<void ()> voidfunc_t;
 }}
 
-#include "runner.h"
+#include <bandit/registration/registration.h>
 #include "context.h"
 #include "grammar.h"
 
