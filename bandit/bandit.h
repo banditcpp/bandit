@@ -14,5 +14,6 @@ namespace bandit { namespace detail {
 #include <bandit/registration/registration.h>
 #include "context.h"
 #include "grammar.h"
+#include "runner.h"
 
 #endif
