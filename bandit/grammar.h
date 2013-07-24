@@ -6,21 +6,21 @@ namespace bandit {
   using namespace std;
   using namespace detail;
 
-  inline void describe(const char* desc, voidfunc_t func, reporter& reporter)
+  inline void describe(const char* desc, voidfunc_t func, reporter& reporter, contextstack_t& context_stack)
   {
     reporter.context_starting(desc);
 
     context ctxt;
-    context_stack().push_back(&ctxt);
+    context_stack.push_back(&ctxt);
     func();
-    context_stack().pop_back();
+    context_stack.pop_back();
 
     reporter.context_ended(desc);
   }
 
   inline void describe(const char* desc, voidfunc_t func)
   {
-    describe(desc, func, default_reporter());
+    describe(desc, func, default_reporter(), context_stack());
   }
 
   inline void before_each(voidfunc_t func)
@@ -33,14 +33,16 @@ namespace bandit {
   {
     reporter.it_starting(desc);
 
+    auto run_before_eaches = [&](){
+      for_each(context_stack.begin(), context_stack.end(), [](context* ctxt){
+          ctxt->run_before_eaches();
+      });
+    };
+
     try
     {
       assertion_exception_adapter([&](){
-          for_each(context_stack.begin(), 
-            context_stack.end(), 
-            [](context* ctxt){
-            ctxt->run_before_eaches();
-            });
+          run_before_eaches();
 
           func();
           reporter.it_succeeded(desc);
