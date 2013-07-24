@@ -5,14 +5,15 @@ go_bandit([](){
   describe("it:", [&](){
     voidfunc_t it_func;
     fake_reporter_ptr reporter;
-    contextstack_t contexts;
+    unique_ptr<contextstack_t> contexts;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
+      contexts = unique_ptr<contextstack_t>(new contextstack_t());
     });
 
     auto call_it = [&]() {
-      it("my it", it_func, *(reporter.get()), contexts, bandit::adapters::snowhouse);
+      it("my it", it_func, *(reporter.get()), *(contexts.get()), bandit::adapters::snowhouse);
     };
 
     describe("with succeeding test", [&](){

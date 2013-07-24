@@ -10,7 +10,7 @@ namespace bandit {
   {
     reporter.context_starting(desc);
 
-    context ctxt;
+    bandit_context ctxt;
     context_stack.push_back(&ctxt);
     func();
     context_stack.pop_back();
