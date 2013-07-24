@@ -18,7 +18,7 @@ namespace bandit {
       std::cout << "F";
     }
 
-    void it_error(const char*)
+    void it_unknown_error(const char*)
     {
       std::cout << "E";
     }

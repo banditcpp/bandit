@@ -53,7 +53,7 @@ namespace bandit {
     }
     catch(...)
     {
-      reporter.it_error(desc);
+      reporter.it_unknown_error(desc);
     }
 
   }

@@ -42,6 +42,17 @@ go_bandit([](){
       });
 
     });
+
+    describe("with crashing test", [&](){
+      before_each([&](){
+        it_func = [](){ throw std::logic_error("serious crash"); };
+      });
+
+      it("tells reporter it's failed", [&](){
+        call_it();
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_unknown_error: my it"));
+      });
+    });
     
   });
 });
