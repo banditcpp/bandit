@@ -33,7 +33,7 @@ namespace bandit {
       private:
         list<voidfunc_t> before_eaches_;
     };
-    typedef deque<bandit_context*> contextstack_t;
+    typedef deque<context*> contextstack_t;
 
     inline contextstack_t& context_stack()
     {

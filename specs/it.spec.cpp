@@ -6,10 +6,13 @@ go_bandit([](){
     voidfunc_t it_func;
     fake_reporter_ptr reporter;
     unique_ptr<contextstack_t> contexts;
+    unique_ptr<fake_context> context;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
       contexts = unique_ptr<contextstack_t>(new contextstack_t());
+      context = unique_ptr<fake_context>(new fake_context());
+      contexts->push_back(context.get());
     });
 
     auto call_it = [&]() {
@@ -29,6 +32,11 @@ go_bandit([](){
       it("tells reporter it's succeeded", [&](){
         call_it();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_succeeded: my it"));
+      });
+
+      it("calls before_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_before_eaches"));
       });
     });
 
