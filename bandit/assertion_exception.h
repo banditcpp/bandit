@@ -9,9 +9,19 @@ namespace bandit {
       std::runtime_error(message), message_(message), file_name_(file_name), line_number_(line_number) 
     {}
 
+    const std::string& file_name() const
+    {
+      return file_name_;
+    }
+
+    unsigned int line_number() const
+    {
+      return line_number_;
+    }
+
     private:
       const std::string& message_;
-      const std::string& file_name_;
+      const std::string file_name_;
       const unsigned int line_number_;
   };
 }

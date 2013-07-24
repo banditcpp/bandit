@@ -6,22 +6,21 @@ namespace bandit {
   using namespace std;
   using namespace detail;
 
-  inline void describe(const char* desc, voidfunc_t func, reporter* reporter = NULL)
+  inline void describe(const char* desc, voidfunc_t func, reporter& reporter)
   {
-    if(reporter)
-    {
-      reporter->context_starting(desc);
-    }
+    reporter.context_starting(desc);
 
     context ctxt;
     context_stack().push_back(&ctxt);
     func();
     context_stack().pop_back();
 
-    if(reporter)
-    {
-      reporter->context_ended(desc);
-    }
+    reporter.context_ended(desc);
+  }
+
+  inline void describe(const char* desc, voidfunc_t func)
+  {
+    describe(desc, func, default_reporter());
   }
 
   inline void before_each(voidfunc_t func)

@@ -11,6 +11,11 @@ namespace bandit { namespace fakes {
       log("test_run_starting");
     }
 
+    void test_run_complete()
+    {
+      log("test_run_complete");
+    }
+
     void context_starting(const char* desc)
     {
       log("context_starting: ", desc);

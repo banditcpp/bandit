@@ -13,6 +13,8 @@ namespace bandit {
 
     for_each(specs.begin(), specs.end(), call_func);
 
+    reporter.test_run_complete();
+
     return 0;
   }
 

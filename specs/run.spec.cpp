@@ -82,6 +82,11 @@ go_bandit([](){
         call_run();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("test_run_starting"));
       });
+
+      it("tells reporter a test run has completed", [&](){
+        call_run();
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("test_run_complete"));
+      });
     });
 
   

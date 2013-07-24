@@ -12,6 +12,11 @@ go_bandit([](){
       reporter = fake_reporter_ptr(new fake_reporter());
     });
 
+
+    auto call_describe = [&](){
+        describe("something", describe_fn, *(reporter.get()));
+    };
+
     describe("with a succeeding 'it'", [&](){
 
       before_each([&](){
@@ -19,12 +24,12 @@ go_bandit([](){
       });
 
       it("tells reporter it's starting a run", [&](){
-        describe("something", describe_fn, reporter.get());
+        call_describe();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_starting: something"));
       });
 
       it("tells reporter it's finished a run", [&](){
-        describe("something", describe_fn, reporter.get());
+        call_describe();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_ended: something"));
       });
 
