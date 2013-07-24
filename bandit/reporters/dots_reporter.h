@@ -13,11 +13,15 @@ namespace bandit {
       std::cout << ".";
     }
 
-    void it_failed(const char*)
+    void it_failed(const char*, const assertion_exception&)
     {
       std::cout << "F";
     }
 
+    void it_error(const char*)
+    {
+      std::cout << "E";
+    }
   };
 }
 

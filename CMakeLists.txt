@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(bandit)
 
-include_directories("${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/specs/snowhouse")
+include_directories("${PROJECT_SOURCE_DIR}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./bin)
 

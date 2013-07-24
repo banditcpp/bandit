@@ -5,7 +5,5 @@
 using namespace bandit;
 
 #include <specs/fakes/fakes.h>
-#include <snowhouse/snowhouse.h>
-using namespace snowhouse;
 
 #endif

@@ -29,31 +29,38 @@ namespace bandit {
     context_stack().back()->register_before_each(func);
   }
 
-  inline void it(const char* desc, voidfunc_t func, reporter& reporter, contextstack_t& context_stack)
+  inline void it(const char* desc, voidfunc_t func, reporter& reporter,
+      contextstack_t& context_stack, std::function<void (voidfunc_t)> assertion_exception_adapter)
   {
     reporter.it_starting(desc);
 
     try
     {
-      for_each(context_stack.begin(), 
-          context_stack.end(), 
-          [](context* ctxt){
-          ctxt->run_before_eaches();
-          });
+      assertion_exception_adapter([&](){
+          for_each(context_stack.begin(), 
+            context_stack.end(), 
+            [](context* ctxt){
+            ctxt->run_before_eaches();
+            });
 
-      func();
-      reporter.it_succeeded(desc);
+          func();
+          reporter.it_succeeded(desc);
+      });
+    }
+    catch(const bandit::assertion_exception& ex)
+    {
+      reporter.it_failed(desc, ex);
     }
     catch(...)
     {
-      reporter.it_failed(desc);
+      reporter.it_error(desc);
     }
 
   }
 
   inline void it(const char* desc, voidfunc_t func)
   {
-    it(desc, func, default_reporter(), context_stack());
+    it(desc, func, default_reporter(), context_stack(), registered_adapter());
   }
 
 }

@@ -11,18 +11,22 @@ go_bandit([](){
       reporter = fake_reporter_ptr(new fake_reporter());
     });
 
+    auto call_it = [&]() {
+      it("my it", it_func, *(reporter.get()), contexts, bandit::adapters::snowhouse);
+    };
+
     describe("with succeeding test", [&](){
       before_each([&](){
         it_func = [](){};
       });
 
       it("tells reporter it's starting", [&](){
-        it("my it", it_func, *(reporter.get()), contexts);
+        call_it();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_starting: my it"));
       });
 
       it("tells reporter it's succeeded", [&](){
-        it("my it", it_func, *(reporter.get()), contexts);
+        call_it();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_succeeded: my it"));
       });
     });
@@ -33,9 +37,10 @@ go_bandit([](){
       });
 
       it("tells reporter it's failed", [&](){
-        it("my it", it_func, *(reporter.get()), contexts);
-        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it"));
+        call_it();
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 2 Actual: 3 )"));
       });
+
     });
     
   });
