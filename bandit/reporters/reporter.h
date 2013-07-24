@@ -4,6 +4,8 @@
 namespace bandit {
   struct reporter
   {
+    virtual void test_run_starting() = 0;
+
     virtual void context_starting(const char* desc) = 0;
     virtual void context_ended(const char* desc) = 0;
 

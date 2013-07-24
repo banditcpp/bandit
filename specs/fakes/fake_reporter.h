@@ -6,6 +6,11 @@ namespace bandit { namespace fakes {
     public bandit::reporter, 
     public bandit::specs::logging_fake
   {
+    void test_run_starting()
+    {
+      log("test_run_starting");
+    }
+
     void context_starting(const char* desc)
     {
       log("context_starting: ", desc);

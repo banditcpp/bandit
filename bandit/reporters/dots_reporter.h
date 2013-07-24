@@ -5,6 +5,8 @@ namespace bandit {
 
   struct dots_reporter : public reporter
   {
+    void test_run_starting() {}
+
     void context_starting(const char*) {}
     void context_ended(const char*) {}
     void it_starting(const char*) {}

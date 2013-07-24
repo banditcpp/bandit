@@ -1,8 +1,10 @@
 #include <specs/specs.h>
 
 namespace bd = bandit::detail;
+using namespace bandit::fakes;
 
 // TODO: Move to own file in specs.
+// TODO: Comment rationale for this.
 struct argv_helper
 {
   argv_helper(int argc, const char* argv[])
@@ -48,9 +50,17 @@ go_bandit([](){
   describe("run:", [&](){
     unique_ptr<bd::spec_registry> specs;
     unique_ptr<argv_helper> argv;
+    fake_reporter_ptr reporter;
+
+    auto call_run = [&](){
+        bandit::run(argv->argc(), argv->non_const(), *(specs.get()), *(reporter.get()));
+    };
   
     before_each([&](){
       specs = unique_ptr<bd::spec_registry>(new bd::spec_registry());
+
+      reporter = fake_reporter_ptr(new fake_reporter());
+
       const char* args[] = {"executable"};
       argv = unique_ptr<argv_helper>(new argv_helper(1, args));
     });
@@ -64,8 +74,13 @@ go_bandit([](){
       });
     
       it("calls each context", [&](){
-        bandit::run(argv->argc(), argv->non_const(), *(specs.get()));
+        call_run();
         AssertThat(number_of_specs_called, Equals(1));
+      });
+
+      it("tells reporter a test run is about to start", [&](){
+        call_run();
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("test_run_starting"));
       });
     });
 
