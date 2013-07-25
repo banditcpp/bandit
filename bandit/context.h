@@ -10,6 +10,7 @@ namespace bandit {
     {
       public:
         virtual void register_before_each(voidfunc_t func) = 0;
+        virtual void register_after_each(voidfunc_t func) = 0;
         virtual void run_before_eaches() = 0;
     };
 
@@ -19,6 +20,11 @@ namespace bandit {
         void register_before_each(voidfunc_t func)
         {
           before_eaches_.push_back(func);
+        }
+
+        void register_after_each(voidfunc_t func)
+        {
+          after_eaches_.push_back(func);
         }
 
         void run_before_eaches()
@@ -32,6 +38,7 @@ namespace bandit {
 
       private:
         list<voidfunc_t> before_eaches_;
+        list<voidfunc_t> after_eaches_;
     };
     typedef deque<context*> contextstack_t;
 

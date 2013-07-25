@@ -23,9 +23,24 @@ namespace bandit {
     describe(desc, func, default_reporter(), context_stack());
   }
 
+  inline void before_each(voidfunc_t func, contextstack_t& context_stack)
+  {
+    context_stack.back()->register_before_each(func);
+  }
+
   inline void before_each(voidfunc_t func)
   {
-    context_stack().back()->register_before_each(func);
+    before_each(func, context_stack());
+  }
+
+  inline void after_each(voidfunc_t func, contextstack_t& context_stack)
+  {
+    context_stack.back()->register_after_each(func);
+  }
+
+  inline void after_each(voidfunc_t func)
+  {
+    after_each(func, context_stack());
   }
 
   inline void it(const char* desc, voidfunc_t func, reporter& reporter,

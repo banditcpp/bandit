@@ -10,6 +10,11 @@ namespace bandit { namespace fakes {
       log("register_before_each");
     }
 
+    void register_after_each(voidfunc_t)
+    {
+      log("register_after_each");
+    }
+
     void run_before_eaches()
     {
       log("run_before_eaches");
