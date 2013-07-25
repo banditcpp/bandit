@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <deque>
+#include <stdexcept>
 
 #define BANDIT_VERSION "1.0.0"
 
