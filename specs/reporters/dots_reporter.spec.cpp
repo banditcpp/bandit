@@ -65,7 +65,37 @@ go_bandit([](){
       });
 
       it("reports the failed assertion", [&](){
-        AssertThat(output(), Contains("some_file:123: assertion failed!"));
+        AssertThat(output(), Contains("my context my test:\nsome_file:123: assertion failed!"));
+      });
+
+      it("reports an 'F' for the failed assertion", [&](){
+        AssertThat(output(), StartsWith("F"));
+      });
+    
+    });
+
+    describe("a failing test run with nested contexts", [&](){
+
+      before_each([&](){
+        reporter->test_run_starting();
+        reporter->context_starting("my context");
+        reporter->context_starting("a nested context");
+        reporter->it_starting("my test");
+
+        assertion_exception exception("assertion failed!", "some_file", 123);
+        reporter->it_failed("my test", exception);
+
+        reporter->context_ended("a nested context");
+        reporter->context_ended("my context");
+        reporter->test_run_complete();
+      });
+
+      it("reports a failing test run in summary", [&](){
+        AssertThat(output(), EndsWith("Test run complete. 1 tests run. 0 succeeded. 1 failed.\n"));
+      });
+
+      it("reports the failed assertion", [&](){
+        AssertThat(output(), Contains("my context a nested context my test:\nsome_file:123: assertion failed!"));
       });
 
       it("reports an 'F' for the failed assertion", [&](){
