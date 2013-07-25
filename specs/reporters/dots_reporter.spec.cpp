@@ -43,6 +43,26 @@ go_bandit([](){
     
     });
   
+    describe("a failing test run", [&](){
+    
+      before_each([&](){
+        reporter->test_run_starting();
+        reporter->context_starting("my context");
+        reporter->it_starting("my test");
+
+        assertion_exception exception("assertion failed!", "some_file", 123);
+        reporter->it_failed("my test", exception);
+
+        reporter->context_ended("my context");
+        reporter->test_run_complete();
+      });
+
+      it("reports a failing test run in summary", [&](){
+        AssertThat(output(), EndsWith("Test run complete. 1 tests run. 0 succeeded. 1 failed.\n"));
+      });
+    
+    });
+
   });
 
 });

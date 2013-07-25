@@ -44,7 +44,7 @@ namespace bandit {
       stm_ << "Test run complete. " << specs_run_ << " tests run. " << specs_succeeded_ << " succeeded.";
       if(specs_failed_ > 0)
       {
-        stm_ << specs_failed_ << " failed.";
+        stm_ << " " << specs_failed_ << " failed.";
       }
 
       stm_ << std::endl;
