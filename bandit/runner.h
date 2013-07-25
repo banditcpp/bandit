@@ -3,9 +3,23 @@
 
 namespace bandit {
 
-  inline int run(int /*argc*/, char* /*argv*/[], const detail::spec_registry& specs,
+  inline int run(int argc, char* argv[], const detail::spec_registry& specs,
       reporter& reporter, contextstack_t& context_stack)
   {
+    options opt(argc, argv);
+
+    if(opt.help())
+    {
+      opt.print_usage();
+      return 0;
+    }
+
+    if(opt.version())
+    {
+      std::cout << "bandit version " << BANDIT_VERSION << std::endl;
+      return 0;
+    }
+
     auto call_func = [](const voidfunc_t& func) {
       func();
     };

@@ -14,7 +14,7 @@ go_bandit([](){
     unique_ptr<contextstack_t> context_stack;
 
     auto call_run = [&](){
-        return bandit::run(argv->argc(), argv->non_const(), *(specs.get()), *(reporter.get()), *(context_stack.get()));
+        return bandit::run(argv->argc(), argv->argv(), *(specs.get()), *(reporter.get()), *(context_stack.get()));
     };
   
     before_each([&](){

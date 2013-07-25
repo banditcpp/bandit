@@ -7,6 +7,8 @@
 #include <list>
 #include <deque>
 
+#define BANDIT_VERSION "1.0.0"
+
 namespace bandit { namespace detail {
   typedef std::function<void ()> voidfunc_t;
 }}
@@ -14,6 +16,8 @@ namespace bandit { namespace detail {
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>
 using namespace snowhouse;
 
+#include <bandit/external/optionparser.h>
+#include <bandit/options.h>
 #include <bandit/test_run_error.h>
 #include <bandit/registration/registration.h>
 #include <bandit/assertion_exception.h>

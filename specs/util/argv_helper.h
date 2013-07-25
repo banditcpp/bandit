@@ -34,7 +34,7 @@ namespace bandit { namespace specs { namespace util {
       delete[] non_const_argv_;
     }
 
-    char** non_const()
+    char** argv()
     {
       return non_const_argv_;
     }
