@@ -11,9 +11,10 @@ go_bandit([](){
     unique_ptr<bd::spec_registry> specs;
     unique_ptr<argv_helper> argv;
     fake_reporter_ptr reporter;
+    unique_ptr<contextstack_t> context_stack;
 
     auto call_run = [&](){
-        return bandit::run(argv->argc(), argv->non_const(), *(specs.get()), *(reporter.get()));
+        return bandit::run(argv->argc(), argv->non_const(), *(specs.get()), *(reporter.get()), *(context_stack.get()));
     };
   
     before_each([&](){
@@ -21,8 +22,15 @@ go_bandit([](){
 
       reporter = fake_reporter_ptr(new fake_reporter());
 
+      context_stack = unique_ptr<contextstack_t>(new contextstack_t());
+
       const char* args[] = {"executable"};
       argv = unique_ptr<argv_helper>(new argv_helper(1, args));
+    });
+
+    it("pushes the global context on the context stack", [&](){
+      call_run();
+      AssertThat(*context_stack, Is().OfLength(1));
     });
 
     describe("a successful test run", [&](){
