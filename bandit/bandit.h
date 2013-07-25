@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <deque>
+#include <stdexcept>
 
 namespace bandit { namespace detail {
   typedef std::function<void ()> voidfunc_t;

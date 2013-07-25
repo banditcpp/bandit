@@ -6,7 +6,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./bin)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++ -Wfatal-errors -Wall -W -Werror -Wfloat-equal -Wundef -Wendif-labels -Wshadow -pedantic-errors")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wfatal-errors -Wall -W -Werror -Wfloat-equal -Wundef -Wendif-labels")
 
 FILE(GLOB BanditSpecSourceFiles specs/*.cpp specs/**/*.cpp)
 add_executable(bandit-specs ${BanditSpecSourceFiles} )
