@@ -55,6 +55,16 @@ go_bandit([](){
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 2 Actual: 3 )"));
       });
 
+      it("calls before_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_before_eaches"));
+      });
+
+      it("calls after_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_after_eaches"));
+      });
+
     });
 
     describe("with crashing test", [&](){
@@ -65,6 +75,16 @@ go_bandit([](){
       it("tells reporter it's failed", [&](){
         call_it();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_unknown_error: my it"));
+      });
+
+      it("calls before_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_before_eaches"));
+      });
+
+      it("calls after_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_after_eaches"));
       });
     });
     

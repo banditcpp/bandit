@@ -67,8 +67,6 @@ namespace bandit {
 
           func();
           reporter.it_succeeded(desc);
-
-          run_after_eaches();
       });
     }
     catch(const bandit::assertion_exception& ex)
@@ -80,6 +78,14 @@ namespace bandit {
       reporter.it_unknown_error(desc);
     }
 
+    try
+    {
+      run_after_eaches();
+    }
+    catch(...)
+    {
+      reporter.it_unknown_error(desc);
+    }
   }
 
   inline void it(const char* desc, voidfunc_t func)
