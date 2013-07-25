@@ -5,6 +5,14 @@ namespace bandit {
 
   struct dots_reporter : public reporter
   {
+    dots_reporter(std::ostream& stm)
+      : stm_(stm)
+    {}
+
+    dots_reporter()
+      : stm_(std::cout)
+    {}
+
     void test_run_starting() 
     {
       specs_run_ = 0;
@@ -16,18 +24,24 @@ namespace bandit {
 
     void test_run_complete() 
     {
-      std::cout << std::endl;
+      stm_ << std::endl;
+
+      if(specs_run_ == 0)
+      {
+        stm_ << "Could not find any tests." << std::endl;
+        return;
+      }
 
       if(specs_failed_ > 0)
       {
-        std::cout << "There were failures!" << std::endl;
-        std::for_each(failures_.begin(), failures_.end(), [](const std::string& failure) {
-            std::cout << failure << std::endl;
+        stm_ << "There were failures!" << std::endl;
+        std::for_each(failures_.begin(), failures_.end(), [&](const std::string& failure) {
+            stm_ << failure << std::endl;
         });
-        std::cout << std::endl;
+        stm_ << std::endl;
       }
 
-      std::cout << "Test run complete. " << specs_run_ << " tests run. " << specs_succeeded_ << " succeeded. " << specs_failed_ << " failed." << std::endl;
+      stm_ << "Test run complete. " << specs_run_ << " tests run. " << specs_succeeded_ << " succeeded. " << specs_failed_ << " failed." << std::endl;
     }
 
     void context_starting(const char* desc) 
@@ -48,7 +62,7 @@ namespace bandit {
     void it_succeeded(const char*) 
     {
       specs_succeeded_++;
-      std::cout << ".";
+      stm_ << ".";
     }
 
     void it_failed(const char* desc, const assertion_exception& ex)
@@ -64,13 +78,13 @@ namespace bandit {
 
       failures_.push_back(ss.str());
 
-      std::cout << "F";
+      stm_ << "F";
     }
 
     void it_unknown_error(const char*)
     {
       specs_failed_++;
-      std::cout << "E";
+      stm_ << "E";
     }
 
     unsigned int number_of_failed_tests() const
@@ -96,11 +110,12 @@ namespace bandit {
     }
 
   private:
-      std::deque<std::string> contexts_;
-      std::list<std::string> failures_;
-      int specs_run_;
-      int specs_succeeded_;
-      int specs_failed_;
+    std::ostream& stm_;
+    std::deque<std::string> contexts_;
+    std::list<std::string> failures_;
+    int specs_run_;
+    int specs_succeeded_;
+    int specs_failed_;
   };
 }
 
