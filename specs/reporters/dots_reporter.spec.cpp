@@ -44,6 +44,10 @@ go_bandit([](){
       it("displays a dot for the successful test", [&](){
         AssertThat(output(), StartsWith("."));
       });
+
+      it("reports a successful test run", [&](){
+        AssertThat(reporter->did_we_pass(), Equals(true));
+      });
     });
   
     describe("a failing test run", [&](){
@@ -72,6 +76,9 @@ go_bandit([](){
         AssertThat(output(), StartsWith("F"));
       });
     
+      it("reports a failed test run", [&](){
+        AssertThat(reporter->did_we_pass(), Equals(false));
+      });
     });
 
     describe("a failing test run with nested contexts", [&](){
@@ -101,6 +108,10 @@ go_bandit([](){
       it("reports an 'F' for the failed assertion", [&](){
         AssertThat(output(), StartsWith("F"));
       });
+
+      it("reports a failed test run", [&](){
+        AssertThat(reporter->did_we_pass(), Equals(false));
+      });
     
     });
 
@@ -123,6 +134,10 @@ go_bandit([](){
 
       it("reports test run errors in summary", [&](){
         AssertThat(output(), EndsWith("Test run complete. 0 tests run. 0 succeeded. 1 test run errors.\n"))
+      });
+
+      it("reports a failed test run", [&](){
+        AssertThat(reporter->did_we_pass(), Equals(false));
       });
     });
 

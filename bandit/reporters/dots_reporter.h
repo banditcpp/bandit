@@ -121,6 +121,11 @@ namespace bandit {
       return specs_failed_;
     }
 
+    bool did_we_pass() const
+    {
+      return specs_failed_ == 0 && test_run_errors_.size() == 0;
+    }
+
   private:
     std::string current_context_name()
     {
