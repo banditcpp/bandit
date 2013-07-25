@@ -13,7 +13,7 @@ go_bandit([](){
     fake_reporter_ptr reporter;
 
     auto call_run = [&](){
-        bandit::run(argv->argc(), argv->non_const(), *(specs.get()), *(reporter.get()));
+        return bandit::run(argv->argc(), argv->non_const(), *(specs.get()), *(reporter.get()));
     };
   
     before_each([&](){
@@ -25,7 +25,7 @@ go_bandit([](){
       argv = unique_ptr<argv_helper>(new argv_helper(1, args));
     });
 
-    describe("one spec registered", [&](){
+    describe("a successful test run", [&](){
       int number_of_specs_called;
     
       before_each([&](){
@@ -33,7 +33,7 @@ go_bandit([](){
         specs->push_back([&](){ number_of_specs_called++; });
       });
     
-      it("calls each context", [&](){
+      it("calls the context", [&](){
         call_run();
         AssertThat(number_of_specs_called, Equals(1));
       });
@@ -47,9 +47,24 @@ go_bandit([](){
         call_run();
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("test_run_complete"));
       });
+
+      it("returns 0 as no specs failed", [&](){
+        AssertThat(call_run(), Equals(0));
+      });
     });
 
   
+    describe("a failing test run", [&](){
+    
+      before_each([&](){
+        reporter->set_failing_tests(24);
+      });
+
+      it("returns the number of failed tests", [&](){
+        AssertThat(call_run(), Equals(24));
+      });
+    
+    });
   });
 
 });

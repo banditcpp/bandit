@@ -6,6 +6,9 @@ namespace bandit { namespace fakes {
     public bandit::reporter, 
     public bandit::specs::logging_fake
   {
+    fake_reporter() : failing_tests_(0)
+    {}
+
     void test_run_starting()
     {
       log("test_run_starting");
@@ -45,6 +48,19 @@ namespace bandit { namespace fakes {
     {
       log("it_unknown_error: ", desc);
     }
+
+    unsigned int number_of_failed_tests() const
+    {
+      return failing_tests_;
+    }
+
+    void set_failing_tests(unsigned int count)
+    {
+      failing_tests_ = count;
+    }
+
+    private:
+    unsigned int failing_tests_;
   };
   typedef unique_ptr<fake_reporter> fake_reporter_ptr;
 }}

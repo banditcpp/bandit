@@ -15,7 +15,7 @@ namespace bandit {
 
     reporter.test_run_complete();
 
-    return 0;
+    return reporter.number_of_failed_tests();
   }
 
   inline int run(int argc, char* argv[])

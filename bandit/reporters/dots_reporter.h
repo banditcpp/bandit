@@ -73,6 +73,11 @@ namespace bandit {
       std::cout << "E";
     }
 
+    unsigned int number_of_failed_tests() const
+    {
+      return specs_failed_;
+    }
+
   private:
     std::string current_context_name()
     {
