@@ -60,6 +60,10 @@ namespace bandit {
       contexts_.pop_back();
     }
 
+    void test_run_error(const char*, const struct test_run_error&)
+    {
+    }
+
     void it_starting(const char*) 
     {
       specs_run_++;

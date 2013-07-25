@@ -29,6 +29,11 @@ namespace bandit { namespace fakes {
       log("context_ended: ", desc);
     }
 
+    void test_run_error(const char* desc, const struct test_run_error& err)
+    {
+      log("test_run_error: ", desc, " (", err.what(), ")");
+    }
+
     void it_starting(const char* desc)
     {
       log("it_starting: ", desc);

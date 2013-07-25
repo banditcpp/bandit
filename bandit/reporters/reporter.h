@@ -9,6 +9,7 @@ namespace bandit {
 
     virtual void context_starting(const char* desc) = 0;
     virtual void context_ended(const char* desc) = 0;
+    virtual void test_run_error(const char* desc, const test_run_error& error) = 0;
 
     virtual void it_starting(const char* desc) = 0;
     virtual void it_succeeded(const char* desc) = 0;

@@ -14,7 +14,15 @@ namespace bandit {
 
     bandit_context ctxt;
     context_stack.push_back(&ctxt);
-    func();
+    try
+    {
+      func();
+    }
+    catch(const test_run_error& error)
+    {
+      reporter.test_run_error(desc, error);
+    }
+
     context_stack.pop_back();
 
     reporter.context_ended(desc);

@@ -21,7 +21,7 @@ go_bandit([](){
 
 
     auto call_describe = [&](){
-        describe("something", describe_fn, *(reporter.get()), *(context_stack.get()));
+        describe("context name", describe_fn, *(reporter.get()), *(context_stack.get()));
     };
 
     describe("with a succeeding 'it'", [&](){
@@ -43,12 +43,12 @@ go_bandit([](){
 
       it("tells reporter it's starting a run", [&](){
         call_describe();
-        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_starting: something"));
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_starting: context name"));
       });
 
       it("tells reporter it's finished a run", [&](){
         call_describe();
-        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_ended: something"));
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("context_ended: context name"));
       });
 
       it("pushes a new context during execution", [&](){
@@ -63,6 +63,26 @@ go_bandit([](){
 
     });
 
+    describe("with test run error", [&](){
+        //
+        // This can occur if after_each or before_each are called
+        // after execution has started for a context.
+        // 
+    
+      before_each([&](){
+        describe_fn = [&](){ throw bandit::test_run_error("we dun goofed!"); };
+      });
+
+      it("doesn't propagate the error", [&](){
+        call_describe();
+      });
+
+      it("tells reporter to report the error", [&](){
+        call_describe();
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("test_run_error: context name (we dun goofed!)"));
+      });
+    
+    });
 
   });
 
