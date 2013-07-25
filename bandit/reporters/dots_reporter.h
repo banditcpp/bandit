@@ -41,7 +41,13 @@ namespace bandit {
         stm_ << std::endl;
       }
 
-      stm_ << "Test run complete. " << specs_run_ << " tests run. " << specs_succeeded_ << " succeeded. " << specs_failed_ << " failed." << std::endl;
+      stm_ << "Test run complete. " << specs_run_ << " tests run. " << specs_succeeded_ << " succeeded.";
+      if(specs_failed_ > 0)
+      {
+        stm_ << specs_failed_ << " failed.";
+      }
+
+      stm_ << std::endl;
     }
 
     void context_starting(const char* desc) 

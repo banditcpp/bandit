@@ -25,6 +25,23 @@ go_bandit([](){
       });
     
     });
+
+    describe("a successful test run", [&](){
+    
+      before_each([&](){
+        reporter->test_run_starting();
+        reporter->context_starting("my context");
+        reporter->it_starting("my test");
+        reporter->it_succeeded("my test");
+        reporter->context_ended("my context");
+        reporter->test_run_complete();
+      });
+
+      it("reports a successful test run", [&](){
+        AssertThat(output(), EndsWith("Test run complete. 1 tests run. 1 succeeded.\n"));
+      });
+    
+    });
   
   });
 
