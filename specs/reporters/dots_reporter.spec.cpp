@@ -41,6 +41,9 @@ go_bandit([](){
         AssertThat(output(), EndsWith("Test run complete. 1 tests run. 1 succeeded.\n"));
       });
     
+      it("displays a dot for the successful test", [&](){
+        AssertThat(output(), StartsWith("."));
+      });
     });
   
     describe("a failing test run", [&](){
@@ -63,6 +66,10 @@ go_bandit([](){
 
       it("reports the failed assertion", [&](){
         AssertThat(output(), Contains("some_file:123: assertion failed!"));
+      });
+
+      it("reports an 'F' for the failed assertion", [&](){
+        AssertThat(output(), StartsWith("F"));
       });
     
     });
