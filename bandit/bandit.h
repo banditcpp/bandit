@@ -14,6 +14,7 @@ namespace bandit { namespace detail {
 #include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>
 using namespace snowhouse;
 
+#include <bandit/test_run_error.h>
 #include <bandit/registration/registration.h>
 #include <bandit/assertion_exception.h>
 #include <bandit/adapters/adapters.h>

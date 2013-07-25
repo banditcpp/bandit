@@ -30,11 +30,21 @@ namespace bandit {
 
         void register_before_each(voidfunc_t func)
         {
+          if(is_executing_)
+          {
+            throw test_run_error("before_each was called after 'describe' or 'it'");
+          }
+
           before_eaches_.push_back(func);
         }
 
         void register_after_each(voidfunc_t func)
         {
+          if(is_executing_)
+          {
+            throw test_run_error("after_each was called after 'describe' or 'it'");
+          }
+
           after_eaches_.push_back(func);
         }
 
