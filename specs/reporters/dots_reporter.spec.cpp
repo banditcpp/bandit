@@ -60,6 +60,10 @@ go_bandit([](){
       it("reports a failing test run in summary", [&](){
         AssertThat(output(), EndsWith("Test run complete. 1 tests run. 0 succeeded. 1 failed.\n"));
       });
+
+      it("reports the failed assertion", [&](){
+        AssertThat(output(), Contains("some_file:123: assertion failed!"));
+      });
     
     });
 
