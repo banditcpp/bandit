@@ -9,6 +9,7 @@ namespace bandit {
     class context
     {
       public:
+        virtual void execution_is_starting() = 0;
         virtual void register_before_each(voidfunc_t func) = 0;
         virtual void register_after_each(voidfunc_t func) = 0;
         virtual void run_before_eaches() = 0;
@@ -18,6 +19,15 @@ namespace bandit {
     class bandit_context : public context
     {
       public:
+        bandit_context()
+          : is_executing_(false)
+        {}
+
+        void execution_is_starting()
+        {
+          is_executing_ = true;
+        }
+
         void register_before_each(voidfunc_t func)
         {
           before_eaches_.push_back(func);
@@ -47,6 +57,7 @@ namespace bandit {
         }
 
       private:
+        bool is_executing_;
         list<voidfunc_t> before_eaches_;
         list<voidfunc_t> after_eaches_;
     };

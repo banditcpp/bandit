@@ -5,6 +5,11 @@ namespace bandit { namespace fakes {
 
   struct fake_context : public bandit::detail::context, public bandit::specs::logging_fake
   {
+    void execution_is_starting()
+    {
+      log("execution_is_starting");
+    }
+
     void register_before_each(voidfunc_t)
     {
       log("register_before_each");

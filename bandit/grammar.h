@@ -10,6 +10,8 @@ namespace bandit {
   {
     reporter.context_starting(desc);
 
+    context_stack.back()->execution_is_starting();
+
     bandit_context ctxt;
     context_stack.push_back(&ctxt);
     func();
@@ -47,6 +49,8 @@ namespace bandit {
       contextstack_t& context_stack, std::function<void (voidfunc_t)> assertion_exception_adapter)
   {
     reporter.it_starting(desc);
+
+    context_stack.back()->execution_is_starting();
 
     auto run_before_eaches = [&](){
       for_each(context_stack.begin(), context_stack.end(), [](context* ctxt){

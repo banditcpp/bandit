@@ -19,6 +19,15 @@ go_bandit([](){
       it("my it", it_func, *(reporter.get()), *(contexts.get()), bandit::adapters::snowhouse);
     };
 
+    it("tells the current context that execution has started", [&](){
+      // This is important as once execution has started,
+      // before_each and after_each calls cannot be guaranteed to
+      // be run before any 'it' method.
+      
+      call_it();
+      AssertThat(context->call_log(), Has().AtLeast(1).EqualTo("execution_is_starting"));
+    });
+
     describe("with succeeding test", [&](){
       before_each([&](){
         it_func = [](){};
