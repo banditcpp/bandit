@@ -5,5 +5,6 @@
 using namespace bandit;
 
 #include <specs/fakes/fakes.h>
+#include <specs/util/util.h>
 
 #endif
