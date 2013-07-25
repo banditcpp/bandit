@@ -104,6 +104,28 @@ go_bandit([](){
     
     });
 
+    describe("a context with test run errors", [&](){
+    
+      before_each([&](){
+        reporter->test_run_starting();
+        reporter->context_starting("my context");
+
+        test_run_error error("we dun goofed!");
+        reporter->test_run_error("my context", error);
+
+        reporter->context_ended("my context");
+        reporter->test_run_complete();
+      });
+
+      it("reports that the context has failed", [&](){
+        AssertThat(output(), Contains("Failed to run \"my context\": error \"we dun goofed!\""));
+      });
+
+      it("reports test run errors in summary", [&](){
+        AssertThat(output(), EndsWith("Test run complete. 0 tests run. 0 succeeded. 1 test run errors.\n"))
+      });
+    });
+
   });
 
 });

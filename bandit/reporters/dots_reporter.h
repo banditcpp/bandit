@@ -26,11 +26,20 @@ namespace bandit {
     {
       stm_ << std::endl;
 
-      if(specs_run_ == 0)
+       if(specs_run_ == 0 && test_run_errors_.size() == 0)
       {
         stm_ << "Could not find any tests." << std::endl;
         return;
       }
+
+      if(test_run_errors_.size() > 0)
+      {
+        std::for_each(test_run_errors_.begin(), test_run_errors_.end(),
+            [&](const std::string& error){
+              stm_ << error << std::endl;
+            });
+      }
+
 
       if(specs_failed_ > 0)
       {
@@ -47,6 +56,11 @@ namespace bandit {
         stm_ << " " << specs_failed_ << " failed.";
       }
 
+      if(test_run_errors_.size() > 0)
+      {
+        stm_ << " " << test_run_errors_.size() << " test run errors.";
+      }
+
       stm_ << std::endl;
     }
 
@@ -60,8 +74,13 @@ namespace bandit {
       contexts_.pop_back();
     }
 
-    void test_run_error(const char*, const struct test_run_error&)
+    void test_run_error(const char*, const struct test_run_error& err)
     {
+      std::stringstream ss;
+      ss << std::endl;
+      ss << "Failed to run \"" << current_context_name() << "\": error \"" << err.what() << "\"" << std::endl;
+
+      test_run_errors_.push_back(ss.str());
     }
 
     void it_starting(const char*) 
@@ -123,6 +142,7 @@ namespace bandit {
     std::ostream& stm_;
     std::deque<std::string> contexts_;
     std::list<std::string> failures_;
+    std::list<std::string> test_run_errors_;
     int specs_run_;
     int specs_succeeded_;
     int specs_failed_;
