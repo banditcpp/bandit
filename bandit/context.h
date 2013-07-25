@@ -12,6 +12,7 @@ namespace bandit {
         virtual void register_before_each(voidfunc_t func) = 0;
         virtual void register_after_each(voidfunc_t func) = 0;
         virtual void run_before_eaches() = 0;
+        virtual void run_after_eaches() = 0;
     };
 
     class bandit_context : public context
@@ -29,11 +30,20 @@ namespace bandit {
 
         void run_before_eaches()
         {
-          for_each(before_eaches_.begin(), 
-                   before_eaches_.end(), 
-                   [](voidfunc_t be){
-                     be();
-                   });
+          run_all(before_eaches_);
+        }
+
+        void run_after_eaches()
+        {
+          run_all(after_eaches_);
+        }
+
+      private:
+        void run_all(const list<voidfunc_t>& funcs)
+        {
+          auto call_func = [](voidfunc_t f){ f(); };
+
+          for_each(funcs.begin(), funcs.end(), call_func);
         }
 
       private:

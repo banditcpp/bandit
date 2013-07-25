@@ -54,6 +54,12 @@ namespace bandit {
       });
     };
 
+    auto run_after_eaches = [&](){
+      for_each(context_stack.begin(), context_stack.end(), [](context* ctxt){
+          ctxt->run_after_eaches();
+      });
+    };
+
     try
     {
       assertion_exception_adapter([&](){
@@ -61,6 +67,8 @@ namespace bandit {
 
           func();
           reporter.it_succeeded(desc);
+
+          run_after_eaches();
       });
     }
     catch(const bandit::assertion_exception& ex)

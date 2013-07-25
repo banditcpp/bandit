@@ -38,6 +38,11 @@ go_bandit([](){
         call_it();
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_before_eaches"));
       });
+
+      it("calls after_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_after_eaches"));
+      });
     });
 
     describe("with failing test", [&](){

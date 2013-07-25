@@ -19,6 +19,11 @@ namespace bandit { namespace fakes {
     {
       log("run_before_eaches");
     }
+
+    void run_after_eaches()
+    {
+      log("run_after_eaches");
+    }
   };
 }}
 
