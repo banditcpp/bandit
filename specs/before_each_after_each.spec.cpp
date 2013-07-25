@@ -42,4 +42,37 @@ go_bandit([](){
       
       });
     });
+
+    describe("before_each/after_each integration", [&](){
+        bandit::specs::logging_fake logger;
+
+      before_each([&](){
+        logger.log("first before_each called");
+      });
+
+      before_each([&](){
+        logger.log("second before_each called");
+      });
+
+      after_each([&](){
+        logger.log("first after_each called");
+      });
+
+      after_each([&](){
+        logger.log("second after_each called");
+      });
+
+      it("should only have called the before_each functions for the first test", [&](){
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second before_each called"));
+        AssertThat(logger.call_log(), Has().None().Containing("after_each"));
+      });
+
+      it("should have called 'before_each' function twice, and 'after_each' functions once for the second test", [&](){
+        AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("first before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("second before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first after_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second after_each called"));
+      });
+    });
 });
