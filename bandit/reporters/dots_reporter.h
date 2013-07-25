@@ -110,9 +110,18 @@ namespace bandit {
       stm_ << "F";
     }
 
-    void it_unknown_error(const char*)
+    void it_unknown_error(const char* desc)
     {
       specs_failed_++;
+
+      std::stringstream ss;
+      ss << std::endl;
+      ss << current_context_name() << " " << desc << ":" << std::endl;
+      ss << "Unknown exception";
+      ss << std::endl;
+
+      failures_.push_back(ss.str());
+
       stm_ << "E";
     }
 

@@ -81,6 +81,29 @@ go_bandit([](){
       });
     });
 
+    describe("a test run with a non assertion_exception thrown", [&](){
+    
+      before_each([&](){
+        reporter->test_run_starting();
+        reporter->context_starting("my context");
+        reporter->it_starting("my test");
+
+        reporter->it_unknown_error("my test");
+
+        reporter->context_ended("my context");
+        reporter->test_run_complete();
+      });
+
+      it("reports an 'E' for the failed test", [&](){
+        AssertThat(output(), StartsWith("E"));
+      });
+
+      it("reports the failed test", [&](){
+        AssertThat(output(), Contains("my context my test:\nUnknown exception"))
+      });
+    
+    });
+
     describe("a failing test run with nested contexts", [&](){
 
       before_each([&](){
