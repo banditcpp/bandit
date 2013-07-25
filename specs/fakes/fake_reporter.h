@@ -6,7 +6,7 @@ namespace bandit { namespace fakes {
     public bandit::reporter, 
     public bandit::specs::logging_fake
   {
-    fake_reporter() : failing_tests_(0)
+    fake_reporter() : test_run_status_(true)
     {}
 
     void test_run_starting()
@@ -54,18 +54,18 @@ namespace bandit { namespace fakes {
       log("it_unknown_error: ", desc);
     }
 
-    unsigned int number_of_failed_tests() const
+    bool did_we_pass() const
     {
-      return failing_tests_;
+      return test_run_status_;
     }
 
-    void set_failing_tests(unsigned int count)
+    void set_test_run_status(bool status)
     {
-      failing_tests_ = count;
+      test_run_status_ = status;
     }
 
     private:
-    unsigned int failing_tests_;
+    bool test_run_status_;
   };
   typedef unique_ptr<fake_reporter> fake_reporter_ptr;
 }}

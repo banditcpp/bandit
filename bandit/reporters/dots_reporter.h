@@ -116,11 +116,6 @@ namespace bandit {
       stm_ << "E";
     }
 
-    unsigned int number_of_failed_tests() const
-    {
-      return specs_failed_;
-    }
-
     bool did_we_pass() const
     {
       return specs_failed_ == 0 && test_run_errors_.size() == 0;

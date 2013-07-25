@@ -65,11 +65,11 @@ go_bandit([](){
     describe("a failing test run", [&](){
     
       before_each([&](){
-        reporter->set_failing_tests(24);
+        reporter->set_test_run_status(false);
       });
 
-      it("returns the number of failed tests", [&](){
-        AssertThat(call_run(), Equals(24));
+      it("returns a non-zero error code", [&](){
+        AssertThat(call_run(), IsGreaterThan(0));
       });
     
     });
