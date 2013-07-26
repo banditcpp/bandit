@@ -16,7 +16,7 @@ namespace bandit { namespace specs { namespace util {
   struct argv_helper
   {
     argv_helper(int argc, const char* argv[])
-      : argc_(argc), argv_(argv)
+      : argc_(argc) 
     {
       non_const_argv_ = new char*[argc];
       for(int i=0; i < argc; i++)
@@ -55,7 +55,6 @@ namespace bandit { namespace specs { namespace util {
 
     private:
     int argc_;
-    const char** argv_;
     char** non_const_argv_;
   };
 
