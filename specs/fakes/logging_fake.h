@@ -10,15 +10,6 @@ namespace bandit { namespace specs {
     {
       return logstm_;
     }
-    template <typename T>
-    void log(T val, bool add_newline = true)
-    {
-      logstm_ << val;
-      if(add_newline)
-      {
-        logstm_ << "\n";
-      }
-    }
 
     std::string strip_newline(const char* val)
     {
