@@ -135,7 +135,7 @@ namespace bandit {
     {
       std::string name;
 
-      for_each(contexts_.begin(), contexts_.end(), [&](const std::string context){
+      std::for_each(contexts_.begin(), contexts_.end(), [&](const std::string context){
           if(name.size() > 0)
           {
             name += " ";

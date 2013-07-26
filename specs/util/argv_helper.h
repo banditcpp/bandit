@@ -21,10 +21,17 @@ namespace bandit { namespace specs { namespace util {
       non_const_argv_ = new char*[argc];
       for(int i=0; i < argc; i++)
       {
-        non_const_argv_[i] = new char[strlen(argv[i] + 1)];
-        strcpy(non_const_argv_[i], argv_[i]);
+		std::string s(argv[i]);
+        non_const_argv_[i] = new char[s.size() + 1];
+        for(size_t c=0;c<s.size();c++)
+		{
+			non_const_argv_[i][c] = s[c];
+		}
+		non_const_argv_[i][s.size()] = 0;
       }
     }
+
+
 
     ~argv_helper()
     {
