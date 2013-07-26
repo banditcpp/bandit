@@ -47,19 +47,19 @@ go_bandit([](){
         bandit::specs::logging_fake logger;
 
       before_each([&](){
-        logger.log("first before_each called");
+        logger.log() << "first before_each called" << std::endl;
       });
 
       before_each([&](){
-        logger.log("second before_each called");
+        logger.log() << "second before_each called" << std::endl;
       });
 
       after_each([&](){
-        logger.log("first after_each called");
+        logger.log() << "first after_each called" << std::endl;
       });
 
       after_each([&](){
-        logger.log("second after_each called");
+        logger.log() << "second after_each called" << std::endl;
       });
 
       it("should only have called the before_each functions for the first test", [&](){

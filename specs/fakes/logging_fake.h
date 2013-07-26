@@ -6,6 +6,10 @@ namespace bandit { namespace specs {
 
   struct logging_fake
   {
+    ostream& log()
+    {
+      return logstm_;
+    }
     template <typename T>
     void log(T val, bool add_newline = true)
     {
@@ -16,26 +20,13 @@ namespace bandit { namespace specs {
       }
     }
 
-    void log(const char* val, bool add_newline = true)
+    std::string strip_newline(const char* val)
     {
       std::string no_newline = val;
       std::transform(no_newline.begin(), no_newline.end(), no_newline.begin(), [](const char& c) {
           return (c == '\n' || c == '\r') ? ' ' : c;
       });
-
-      logstm_ << no_newline;
-
-      if(add_newline)
-      {
-        logstm_ << "\n";
-      }
-    }
-
-    template <typename First, typename... Args>
-    void log(First first, Args... args)
-    {
-      log(first, false);
-      log(args...);
+      return no_newline;
     }
 
     std::string call_log()

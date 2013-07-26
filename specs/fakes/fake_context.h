@@ -7,27 +7,27 @@ namespace bandit { namespace fakes {
   {
     void execution_is_starting()
     {
-      log("execution_is_starting");
+      log() << "execution_is_starting" << std::endl;
     }
 
     void register_before_each(voidfunc_t)
     {
-      log("register_before_each");
+      log() << "register_before_each" << std::endl;
     }
 
     void register_after_each(voidfunc_t)
     {
-      log("register_after_each");
+      log() << "register_after_each" << std::endl;
     }
 
     void run_before_eaches()
     {
-      log("run_before_eaches");
+      log() << "run_before_eaches" << std::endl;
     }
 
     void run_after_eaches()
     {
-      log("run_after_eaches");
+      log() << "run_after_eaches" << std::endl;
     }
   };
 }}

@@ -11,47 +11,47 @@ namespace bandit { namespace fakes {
 
     void test_run_starting()
     {
-      log("test_run_starting");
+      log() << "test_run_starting" << std::endl;
     }
 
     void test_run_complete()
     {
-      log("test_run_complete");
+      log() << "test_run_complete" << std::endl;
     }
 
     void context_starting(const char* desc)
     {
-      log("context_starting: ", desc);
+      log() << "context_starting: " <<  desc << std::endl;
     }
 
     void context_ended(const char* desc)
     {
-      log("context_ended: ", desc);
+      log() << "context_ended: " <<  desc << std::endl;
     }
 
     void test_run_error(const char* desc, const struct test_run_error& err)
     {
-      log("test_run_error: ", desc, " (", err.what(), ")");
+      log() << "test_run_error: " <<  desc <<  " (" <<  strip_newline(err.what()) <<  ")" << std::endl;
     }
 
     void it_starting(const char* desc)
     {
-      log("it_starting: ", desc);
+      log() << "it_starting: " <<  desc << std::endl;
     }
 
     void it_succeeded(const char* desc)
     {
-      log("it_succeeded: ", desc);
+      log() << "it_succeeded: " <<  desc << std::endl;
     }
 
     void it_failed(const char* desc, const assertion_exception& ex)
     {
-      log("it_failed: ", desc, " (" , ex.what(), ")");
+      log() << "it_failed: " <<  desc <<  " ("  <<  strip_newline(ex.what()) <<  ")" << std::endl;
     }
 
     void it_unknown_error(const char* desc)
     {
-      log("it_unknown_error: ", desc);
+      log() << "it_unknown_error: " <<  desc << std::endl;
     }
 
     bool did_we_pass() const
