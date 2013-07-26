@@ -56,3 +56,19 @@ int main(int argc, char* argv[])
   return bandit::run(argc, argv);
 }
 ```
+
+#Installing
+
+At the moment bandit comes bundled with Snowhouse as a git submodule. In order to set up your local 
+source tree properly, perform the following commands:
+
+```
+cd <where you have external header files>
+git clone https://github.com/joakimkarlsson/bandit
+cd bandit
+git submodule init
+git submodule update
+```
+
+Bandit is header only so there is no need for additional compilation before you can start using it. 
+Add bandit's directory to your include directories and you're ready to go.
