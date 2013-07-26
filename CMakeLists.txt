@@ -6,11 +6,13 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./bin)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wfatal-errors -Wall -W -Werror -Wfloat-equal -Wundef -Wendif-labels")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wfatal-errors -Wall -W -Werror -Wfloat-equal -Wundef -Wendif-labels")
 
-include(CheckCXXCompilerFlag)
-check_cxx_compiler_flag(-stdlib=libc++ HAS_STDLIB_FLAG)
-if (HAS_STDLIB_FLAG)
+#
+# If we're on Mac OS we assume we have libc++, otherwise we assume
+# we don't need it. (TODO: make this check more sofisticated)
+#
+if (CMAKE_HOST_APPLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
 
