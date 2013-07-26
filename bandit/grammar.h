@@ -54,7 +54,7 @@ namespace bandit {
   }
 
   inline void it(const char* desc, voidfunc_t func, reporter& reporter,
-      contextstack_t& context_stack, std::function<void (voidfunc_t)> assertion_exception_adapter)
+      contextstack_t& context_stack, bandit::adapters::assertion_adapter& assertion_adapter)
   {
     reporter.it_starting(desc);
 
@@ -74,7 +74,7 @@ namespace bandit {
 
     try
     {
-      assertion_exception_adapter([&](){
+      assertion_adapter.adapt_exceptions([&](){
           run_before_eaches();
 
           func();

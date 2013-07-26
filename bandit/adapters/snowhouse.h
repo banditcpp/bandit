@@ -3,15 +3,18 @@
 
 namespace bandit { namespace adapters {
 
-  auto snowhouse = [](detail::voidfunc_t func)
+  struct snowhouse_adapter : public assertion_adapter
   {
-    try
+    void adapt_exceptions(detail::voidfunc_t func)
     {
-      func();
-    }
-    catch(const snowhouse::AssertionException& ex)
-    {
-      throw assertion_exception(ex.GetMessage(), ex.GetFilename(), ex.GetLineNumber());
+      try
+      {
+        func();
+      }
+      catch(const snowhouse::AssertionException& ex)
+      {
+        throw assertion_exception(ex.GetMessage(), ex.GetFilename(), ex.GetLineNumber());
+      }
     }
   };
 

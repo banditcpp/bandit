@@ -7,6 +7,7 @@ go_bandit([](){
     fake_reporter_ptr reporter;
     unique_ptr<contextstack_t> contexts;
     unique_ptr<fake_context> context;
+    bandit::adapters::snowhouse_adapter assertion_adapter;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
@@ -16,7 +17,7 @@ go_bandit([](){
     });
 
     auto call_it = [&]() {
-      it("my it", it_func, *(reporter.get()), *(contexts.get()), bandit::adapters::snowhouse);
+      it("my it", it_func, *(reporter.get()), *(contexts.get()), assertion_adapter);
     };
 
     it("tells the current context that execution has started", [&](){

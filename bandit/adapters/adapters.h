@@ -1,13 +1,14 @@
 #ifndef BANDIT_ADAPTERS_H
 #define BANDIT_ADAPTERS_H
 
+#include <bandit/adapters/adapter.h>
 #include <bandit/adapters/snowhouse.h>
 
 namespace bandit {
 
-  inline std::function<void (detail::voidfunc_t)> registered_adapter()
+  inline bandit::adapters::assertion_adapter& registered_adapter()
   {
-    static std::function<void (detail::voidfunc_t)> adapter = bandit::adapters::snowhouse;
+    static bandit::adapters::snowhouse_adapter adapter;
     return adapter;
   }
 }
