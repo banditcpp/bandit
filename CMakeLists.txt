@@ -6,7 +6,12 @@ include_directories("${PROJECT_SOURCE_DIR}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./bin)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wfatal-errors -Wall -W -Werror -Wfloat-equal -Wundef -Wendif-labels")
+if (MSVC)
+  add_definitions(-wd4800)  # Suppress ''type' : forcing value to bool 'true' or 'false' (performance warning)'
+else()
+  # Assume GCC-style arguments
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wfatal-errors -Wall -W -Werror -Wfloat-equal -Wundef -Wendif-labels")
+endif()
 
 #
 # If we're on Mac OS we assume we have libc++, otherwise we assume
