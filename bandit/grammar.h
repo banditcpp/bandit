@@ -1,6 +1,9 @@
 #ifndef BANDIT_GRAMMAR_H
 #define BANDIT_GRAMMAR_H
 
+#include <thread>
+#include <chrono>
+
 namespace bandit {
 
   using namespace std;
@@ -57,6 +60,8 @@ namespace bandit {
       contextstack_t& context_stack, bandit::adapters::assertion_adapter& assertion_adapter)
   {
     reporter.it_starting(desc);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(30));
 
     context_stack.back()->execution_is_starting();
 

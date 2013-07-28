@@ -3,13 +3,21 @@
 
 #include <bandit/reporters/reporter.h>
 #include <bandit/reporters/dots_reporter.h>
+#include <bandit/reporters/single_line_reporter.h>
 
 namespace bandit { namespace detail {
 
-  inline reporter& default_reporter()
+  // TODO: Change to "registered_reporter"
+  inline reporter& default_reporter(reporter* reporter = NULL)
   {
-    static dots_reporter reporter(registered_failure_formatter());
-    return reporter;
+    static struct reporter* reporter_;
+
+    if(reporter)
+    {
+      reporter_ = reporter;
+    }
+
+    return *reporter_;
   }
 
 }}

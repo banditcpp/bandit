@@ -18,6 +18,7 @@ namespace bandit {
 
     virtual bool did_we_pass() const = 0;
   };
+  typedef std::unique_ptr<reporter> reporter_ptr;
 }
 
 #endif

@@ -18,23 +18,28 @@ namespace bandit { namespace detail {
         parsed_ok_ = !parse.error();
       }
 
-      bool help()
+      bool help() const
       {
         return options_[HELP];
       }
 
-      void print_usage()
+      void print_usage() const
       {
         option::printUsage(std::cout, usage());
       }
 
-      bool version()
+      bool version() const
       {
         return options_[VERSION];
       }
 
+      const char* reporter() const
+      {
+        return options_[REPORTER].arg;
+      }
+
       private:
-        enum option_index { UNKNOWN, VERSION, HELP };
+        enum option_index { UNKNOWN, VERSION, HELP, REPORTER };
         static const option::Descriptor* usage()
         {
           static const option::Descriptor usage[] =
@@ -43,6 +48,7 @@ namespace bandit { namespace detail {
                                                             "Options:" },
             {VERSION, 0, "v", "version", option::Arg::None, "  --version, -v, \tPrint version of bandit"},
             {HELP, 0, "", "help", option::Arg::None,        "  --help, \tPrint usage and exit."},
+            {REPORTER, 0, "r", "reporter", option::Arg::Optional, "  --reporter, -r, \tSelect reporter (dots, singleline)"},
             {0, 0, 0, 0, 0, 0}
           };
 

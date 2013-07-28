@@ -3,11 +3,29 @@
 
 namespace bandit {
 
-  inline int run(int argc, char* argv[], const detail::spec_registry& specs,
-      reporter& reporter, contextstack_t& context_stack)
-  {
-    options opt(argc, argv);
+  namespace detail {
 
+    inline reporter_ptr create_reporter(const options& opt,
+        const failure_formatter* formatter)
+    {
+      std::string name(opt.reporter() ? opt.reporter() : "");
+
+      if(name == "singleline")
+      {
+        return unique_ptr<reporter>(new single_line_reporter(*formatter));
+      }
+
+      return unique_ptr<reporter>(new dots_reporter(*formatter));
+    }
+
+    typedef std::function<reporter_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
+    typedef std::function<reporter* (reporter*)> register_reporter_fn;
+  }
+
+  inline int run(const options& opt, const detail::spec_registry& specs,
+      contextstack_t& context_stack, 
+      reporter& reporter)
+  {
     if(opt.help())
     {
       opt.print_usage();
@@ -38,7 +56,13 @@ namespace bandit {
 
   inline int run(int argc, char* argv[])
   {
-    return run(argc, argv, detail::specs(), default_reporter(), context_stack());
+    options opt(argc, argv);
+    failure_formatter_ptr formatter(new default_failure_formatter());
+    reporter_ptr reporter(create_reporter(opt, formatter.get()));
+
+    default_reporter(reporter.get());
+
+    return run(opt, detail::specs(), context_stack(), *(reporter.get()));
   }
 }
 
