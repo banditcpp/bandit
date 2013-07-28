@@ -5,10 +5,12 @@ go_bandit([](){
   describe("dots_reporter:", [&](){
     unique_ptr<std::stringstream> stm;
     unique_ptr<bandit::dots_reporter> reporter;
+    default_failure_formatter formatter;
   
     before_each([&](){
       stm = unique_ptr<std::stringstream>(new std::stringstream());
-      reporter = unique_ptr<bandit::dots_reporter>(new dots_reporter(*(stm.get())));
+      reporter = unique_ptr<bandit::dots_reporter>(
+        new dots_reporter(*(stm.get()), formatter));
     });
 
     auto output = [&](){ return stm->str(); };

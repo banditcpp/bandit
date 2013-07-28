@@ -8,7 +8,7 @@ namespace bandit { namespace detail {
 
   inline reporter& default_reporter()
   {
-    static dots_reporter reporter;
+    static dots_reporter reporter(registered_failure_formatter());
     return reporter;
   }
 

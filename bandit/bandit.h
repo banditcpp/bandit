@@ -22,6 +22,7 @@ using namespace snowhouse;
 #include <bandit/test_run_error.h>
 #include <bandit/registration/registration.h>
 #include <bandit/assertion_exception.h>
+#include <bandit/failure_formatters/failure_formatters.h>
 #include <bandit/adapters/adapters.h>
 #include <bandit/reporters/reporters.h>
 #include <bandit/context.h>

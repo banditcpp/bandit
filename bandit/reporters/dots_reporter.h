@@ -5,12 +5,13 @@ namespace bandit {
 
   struct dots_reporter : public reporter
   {
-    dots_reporter(std::ostream& stm)
-      : stm_(stm)
+    dots_reporter(std::ostream& stm,
+        const failure_formatter& failure_formatter)
+      : stm_(stm), failure_formatter_(failure_formatter)
     {}
 
-    dots_reporter()
-      : stm_(std::cout)
+    dots_reporter(const failure_formatter& failure_formatter)
+      : stm_(std::cout), failure_formatter_(failure_formatter)
     {}
 
     void test_run_starting() 
@@ -26,7 +27,7 @@ namespace bandit {
     {
       stm_ << std::endl;
 
-       if(specs_run_ == 0 && test_run_errors_.size() == 0)
+      if(specs_run_ == 0 && test_run_errors_.size() == 0)
       {
         stm_ << "Could not find any tests." << std::endl;
         return;
@@ -36,7 +37,7 @@ namespace bandit {
       {
         std::for_each(test_run_errors_.begin(), test_run_errors_.end(),
             [&](const std::string& error){
-              stm_ << error << std::endl;
+            stm_ << error << std::endl;
             });
       }
 
@@ -44,13 +45,15 @@ namespace bandit {
       if(specs_failed_ > 0)
       {
         stm_ << "There were failures!" << std::endl;
-        std::for_each(failures_.begin(), failures_.end(), [&](const std::string& failure) {
-            stm_ << failure << std::endl;
-        });
+        std::for_each(failures_.begin(), failures_.end(), 
+            [&](const std::string& failure) {
+              stm_ << failure << std::endl;
+            });
         stm_ << std::endl;
       }
 
-      stm_ << "Test run complete. " << specs_run_ << " tests run. " << specs_succeeded_ << " succeeded.";
+      stm_ << "Test run complete. " << specs_run_ << " tests run. " << 
+        specs_succeeded_ << " succeeded.";
       if(specs_failed_ > 0)
       {
         stm_ << " " << specs_failed_ << " failed.";
@@ -101,7 +104,7 @@ namespace bandit {
       std::stringstream ss;
       ss << std::endl;
       ss << current_context_name() << " " << desc << ":" << std::endl;
-      ss << ex.file_name() << ":" << ex.line_number() << ": ";
+      ss << failure_formatter_.format(ex);
       ss << ex.what();
       ss << std::endl;
 
@@ -130,7 +133,7 @@ namespace bandit {
       return specs_failed_ == 0 && test_run_errors_.size() == 0;
     }
 
-  private:
+    private:
     std::string current_context_name()
     {
       std::string name;
@@ -138,17 +141,18 @@ namespace bandit {
       std::for_each(contexts_.begin(), contexts_.end(), [&](const std::string context){
           if(name.size() > 0)
           {
-            name += " ";
+          name += " ";
           }
 
           name += context;
-      });
+          });
 
       return name;
     }
 
-  private:
+    private:
     std::ostream& stm_;
+    const failure_formatter& failure_formatter_;
     std::deque<std::string> contexts_;
     std::list<std::string> failures_;
     std::list<std::string> test_run_errors_;
