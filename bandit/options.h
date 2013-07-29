@@ -53,7 +53,7 @@ namespace bandit { namespace detail {
                                                             "Options:" },
             {VERSION, 0, "", "version", option::Arg::None, "  --version, \tPrint version of bandit"},
             {HELP, 0, "", "help", option::Arg::None,        "  --help, \tPrint usage and exit."},
-            {REPORTER, 0, "", "reporter", option::Arg::Optional, "  --reporter, \tSelect reporter (dots, singleline)"},
+            {REPORTER, 0, "", "reporter", option::Arg::Optional, "  --reporter, \tSelect reporter (dots, singleline, xunit)"},
             {COLOR, 0, "", "color", option::Arg::None,     "  --color, \tUse ANSI colors in output"},
             {0, 0, 0, 0, 0, 0}
           };

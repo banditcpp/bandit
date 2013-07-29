@@ -32,7 +32,7 @@ go_bandit([](){
 
         AssertThat(opt.color(), IsTrue());
       });
-    
+
       describe("with no arguments", [&](){
         const char* args[] = {"executable"};
         argv_helper argv(1, args);
@@ -47,6 +47,9 @@ go_bandit([](){
           AssertThat(opt.version(), IsFalse());
         });
       
+        it("cannot fine '--color'", [&](){
+          AssertThat(opt.color(), IsFalse());
+        });
       });
     });
 
