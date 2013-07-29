@@ -24,13 +24,13 @@ go_bandit([](){
         AssertThat(opt.version(), IsTrue());
       });
 
-      it("parses the '--no-color' option", [&](){
-        const char* args[] {"executable", "--no-color"};
+      it("parses the '--color' option", [&](){
+        const char* args[] = {"executable", "--color"};
         argv_helper argv(2, args);
 
         options opt(argv.argc(), argv.argv());
 
-        AssertThat(opt.no_color(), IsTrue());
+        AssertThat(opt.color(), IsTrue());
       });
     
       describe("with no arguments", [&](){

@@ -57,7 +57,7 @@ namespace bandit {
   {
     options opt(argc, argv);
     failure_formatter_ptr formatter(new default_failure_formatter());
-    bandit::detail::colorizer colorizer(!opt.no_color());
+    bandit::detail::colorizer colorizer(opt.color());
     listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
     registered_listener(reporter.get());
