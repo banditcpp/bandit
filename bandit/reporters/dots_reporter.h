@@ -22,6 +22,7 @@ namespace bandit {
       test_run_summary summary(specs_run_, specs_failed_, specs_succeeded_, failures_, 
           test_run_errors_);
       summary.write(stm_);
+      stm_.flush();
     }
 
     void test_run_error(const char* desc, const struct test_run_error& err)
@@ -39,18 +40,21 @@ namespace bandit {
     {
       progress_reporter::it_succeeded(desc);
       stm_ << ".";
+      stm_.flush();
     }
 
     void it_failed(const char* desc, const assertion_exception& ex)
     {
       progress_reporter::it_failed(desc, ex);
       stm_ << "F";
+      stm_.flush();
     }
 
     void it_unknown_error(const char* desc)
     {
       progress_reporter::it_unknown_error(desc);
       stm_ << "E";
+      stm_.flush();
     }
 
     private:
