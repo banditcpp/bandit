@@ -3,14 +3,6 @@
 
 namespace bandit {
 
-  namespace detail {
-
-    struct xml_element
-    {
-
-    };
-  }
-
   struct xunit_reporter : public progress_reporter
   {
     xunit_reporter(std::ostream& stm, const failure_formatter& formatter)
