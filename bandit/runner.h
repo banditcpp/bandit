@@ -5,26 +5,26 @@ namespace bandit {
 
   namespace detail {
 
-    inline reporter_ptr create_reporter(const options& opt,
+    inline listener_ptr create_reporter(const options& opt,
         const failure_formatter* formatter)
     {
       std::string name(opt.reporter() ? opt.reporter() : "");
 
       if(name == "singleline")
       {
-        return unique_ptr<reporter>(new single_line_reporter(*formatter));
+        return unique_ptr<listener>(new single_line_reporter(*formatter));
       }
 
-      return unique_ptr<reporter>(new dots_reporter(*formatter));
+      return unique_ptr<listener>(new dots_reporter(*formatter));
     }
 
-    typedef std::function<reporter_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
-    typedef std::function<reporter* (reporter*)> register_reporter_fn;
+    typedef std::function<listener_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
+    typedef std::function<listener* (listener*)> register_reporter_fn;
   }
 
   inline int run(const options& opt, const detail::spec_registry& specs,
       contextstack_t& context_stack, 
-      reporter& reporter)
+      listener& listener)
   {
     if(opt.help())
     {
@@ -42,23 +42,23 @@ namespace bandit {
       func();
     };
 
-    reporter.test_run_starting();
+    listener.test_run_starting();
 
     bandit_context global_context;
     context_stack.push_back(&global_context);
 
     for_each(specs.begin(), specs.end(), call_func);
 
-    reporter.test_run_complete();
+    listener.test_run_complete();
 
-    return reporter.did_we_pass() ? 0 : 1;
+    return listener.did_we_pass() ? 0 : 1;
   }
 
   inline int run(int argc, char* argv[])
   {
     options opt(argc, argv);
     failure_formatter_ptr formatter(new default_failure_formatter());
-    reporter_ptr reporter(create_reporter(opt, formatter.get()));
+    listener_ptr reporter(create_reporter(opt, formatter.get()));
 
     default_reporter(reporter.get());
 

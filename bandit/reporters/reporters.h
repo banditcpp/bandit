@@ -1,7 +1,6 @@
 #ifndef BANDIT_REPORTERS_H
 #define BANDIT_REPORTERS_H
 
-#include <bandit/reporters/reporter.h>
 #include <bandit/reporters/progress_reporter.h>
 #include <bandit/reporters/test_run_summary.h>
 #include <bandit/reporters/dots_reporter.h>
@@ -10,9 +9,9 @@
 namespace bandit { namespace detail {
 
   // TODO: Change to "registered_reporter"
-  inline reporter& default_reporter(reporter* reporter = NULL)
+  inline listener& default_reporter(listener* reporter = NULL)
   {
-    static struct reporter* reporter_;
+    static struct listener* reporter_;
 
     if(reporter)
     {

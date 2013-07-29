@@ -24,6 +24,7 @@ using namespace snowhouse;
 #include <bandit/assertion_exception.h>
 #include <bandit/failure_formatters/failure_formatters.h>
 #include <bandit/adapters/adapters.h>
+#include <bandit/listener.h>
 #include <bandit/reporters/reporters.h>
 #include <bandit/context.h>
 #include <bandit/grammar.h>

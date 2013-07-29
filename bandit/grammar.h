@@ -6,9 +6,9 @@ namespace bandit {
   using namespace std;
   using namespace detail;
 
-  inline void describe(const char* desc, voidfunc_t func, reporter& reporter, contextstack_t& context_stack)
+  inline void describe(const char* desc, voidfunc_t func, listener& listener, contextstack_t& context_stack)
   {
-    reporter.context_starting(desc);
+    listener.context_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
@@ -20,12 +20,12 @@ namespace bandit {
     }
     catch(const test_run_error& error)
     {
-      reporter.test_run_error(desc, error);
+      listener.test_run_error(desc, error);
     }
 
     context_stack.pop_back();
 
-    reporter.context_ended(desc);
+    listener.context_ended(desc);
   }
 
   inline void describe(const char* desc, voidfunc_t func)
@@ -53,10 +53,10 @@ namespace bandit {
     after_each(func, context_stack());
   }
 
-  inline void it(const char* desc, voidfunc_t func, reporter& reporter,
+  inline void it(const char* desc, voidfunc_t func, listener& listener,
       contextstack_t& context_stack, bandit::adapters::assertion_adapter& assertion_adapter)
   {
-    reporter.it_starting(desc);
+    listener.it_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
@@ -78,16 +78,16 @@ namespace bandit {
           run_before_eaches();
 
           func();
-          reporter.it_succeeded(desc);
+          listener.it_succeeded(desc);
       });
     }
     catch(const bandit::assertion_exception& ex)
     {
-      reporter.it_failed(desc, ex);
+      listener.it_failed(desc, ex);
     }
     catch(...)
     {
-      reporter.it_unknown_error(desc);
+      listener.it_unknown_error(desc);
     }
 
     try
@@ -96,7 +96,7 @@ namespace bandit {
     }
     catch(...)
     {
-      reporter.it_unknown_error(desc);
+      listener.it_unknown_error(desc);
     }
   }
 

@@ -1,8 +1,8 @@
-#ifndef BANDIT_REPORTER_H
-#define BANDIT_REPORTER_H
+#ifndef BANDIT_LISTENER_H
+#define BANDIT_LISTENER_H
 
 namespace bandit {
-  struct reporter
+  struct listener
   {
     virtual void test_run_starting() = 0;
     virtual void test_run_complete() = 0;
@@ -18,7 +18,7 @@ namespace bandit {
 
     virtual bool did_we_pass() const = 0;
   };
-  typedef std::unique_ptr<reporter> reporter_ptr;
+  typedef std::unique_ptr<listener> listener_ptr;
 }
 
 #endif
