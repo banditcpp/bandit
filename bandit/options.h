@@ -46,9 +46,9 @@ namespace bandit { namespace detail {
           {
             {UNKNOWN, 0, "", "", option::Arg::None,         "USAGE: <executable> [options]\n\n"
                                                             "Options:" },
-            {VERSION, 0, "v", "version", option::Arg::None, "  --version, -v, \tPrint version of bandit"},
+            {VERSION, 0, "", "version", option::Arg::None, "  --version, \tPrint version of bandit"},
             {HELP, 0, "", "help", option::Arg::None,        "  --help, \tPrint usage and exit."},
-            {REPORTER, 0, "r", "reporter", option::Arg::Optional, "  --reporter, -r, \tSelect reporter (dots, singleline)"},
+            {REPORTER, 0, "", "reporter", option::Arg::Optional, "  --reporter, \tSelect reporter (dots, singleline)"},
             {0, 0, 0, 0, 0, 0}
           };
 
