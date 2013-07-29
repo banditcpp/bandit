@@ -5,12 +5,13 @@ namespace bandit {
 
   struct dots_reporter : public progress_reporter
   {
-    dots_reporter(std::ostream& stm, const failure_formatter& failure_formatter)
-      : progress_reporter(failure_formatter), stm_(stm) 
+    dots_reporter(std::ostream& stm, const failure_formatter& failure_formatter, 
+        const detail::colorizer& colorizer)
+      : progress_reporter(failure_formatter), stm_(stm), colorizer_(colorizer)
     {}
 
-    dots_reporter(const failure_formatter& failure_formatter)
-      : progress_reporter(failure_formatter), stm_(std::cout)
+    dots_reporter(const failure_formatter& failure_formatter, const detail::colorizer& colorizer)
+      : progress_reporter(failure_formatter), stm_(std::cout), colorizer_(colorizer)
     {}
 
     void test_run_complete() 
@@ -20,7 +21,7 @@ namespace bandit {
       stm_ << std::endl;
 
       test_run_summary summary(specs_run_, specs_failed_, specs_succeeded_, failures_, 
-          test_run_errors_);
+          test_run_errors_, colorizer_);
       summary.write(stm_);
       stm_.flush();
     }
@@ -39,26 +40,27 @@ namespace bandit {
     void it_succeeded(const char* desc) 
     {
       progress_reporter::it_succeeded(desc);
-      stm_ << ".";
+      stm_ << colorizer_.green() << "." << colorizer_.reset();
       stm_.flush();
     }
 
     void it_failed(const char* desc, const assertion_exception& ex)
     {
       progress_reporter::it_failed(desc, ex);
-      stm_ << "F";
+      stm_ << colorizer_.red() << "F" << colorizer_.reset();
       stm_.flush();
     }
 
     void it_unknown_error(const char* desc)
     {
       progress_reporter::it_unknown_error(desc);
-      stm_ << "E";
+      stm_ << colorizer_.red() << "E" << colorizer_.reset();
       stm_.flush();
     }
 
     private:
     std::ostream& stm_;
+    const detail::colorizer& colorizer_;
   };
 }
 

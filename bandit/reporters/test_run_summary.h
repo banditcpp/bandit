@@ -6,17 +6,23 @@ namespace bandit {
   struct test_run_summary
   {
     test_run_summary(int specs_run, int specs_failed, int specs_succeeded,
-      const std::list<std::string>& failures, const std::list<std::string>& test_run_errors)
+      const std::list<std::string>& failures, const std::list<std::string>& test_run_errors,
+      const detail::colorizer& colorizer)
       : specs_run_(specs_run), specs_succeeded_(specs_succeeded), specs_failed_(specs_failed), 
-      failures_(failures), test_run_errors_(test_run_errors)
+      failures_(failures), test_run_errors_(test_run_errors), colorizer_(colorizer)
     {}
 
     void write(std::ostream& stm)
     {
       if(specs_run_ == 0 && test_run_errors_.size() == 0)
       {
-        stm << "Could not find any tests." << std::endl;
+        stm << colorizer_.red() << "Could not find any tests." << colorizer_.reset() << std::endl;
         return;
+      }
+
+      if(specs_failed_ == 0 && test_run_errors_.size() == 0)
+      {
+        stm << colorizer_.green() << "Success!" << colorizer_.reset() << std::endl;
       }
 
       if(test_run_errors_.size() > 0)
@@ -30,7 +36,7 @@ namespace bandit {
 
       if(specs_failed_ > 0)
       {
-        stm << "There were failures!" << std::endl;
+        stm << colorizer_.red() << "There were failures!" << colorizer_.reset() << std::endl;
         std::for_each(failures_.begin(), failures_.end(), 
             [&](const std::string& failure) {
               stm << failure << std::endl;
@@ -59,6 +65,7 @@ namespace bandit {
     int specs_failed_;
     std::list<std::string> failures_;
     std::list<std::string> test_run_errors_;
+    const detail::colorizer& colorizer_;
   };
 }
 

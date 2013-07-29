@@ -6,11 +6,12 @@ go_bandit([](){
     unique_ptr<std::stringstream> stm;
     unique_ptr<bandit::dots_reporter> reporter;
     default_failure_formatter formatter;
+    bandit::detail::colorizer colorizer(false);
   
     before_each([&](){
       stm = unique_ptr<std::stringstream>(new std::stringstream());
       reporter = unique_ptr<bandit::dots_reporter>(
-        new dots_reporter(*(stm.get()), formatter));
+        new dots_reporter(*(stm.get()), formatter, colorizer));
     });
 
     auto output = [&](){ return stm->str(); };
@@ -40,6 +41,7 @@ go_bandit([](){
       });
 
       it("reports a successful test run", [&](){
+        AssertThat(output(), Contains("Success!"));
         AssertThat(output(), EndsWith("Test run complete. 1 tests run. 1 succeeded.\n"));
       });
     

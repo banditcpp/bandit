@@ -38,8 +38,13 @@ namespace bandit { namespace detail {
         return options_[REPORTER].arg;
       }
 
+      bool no_color() const
+      {
+        return options_[NO_COLOR];
+      }
+
       private:
-        enum option_index { UNKNOWN, VERSION, HELP, REPORTER };
+        enum option_index { UNKNOWN, VERSION, HELP, REPORTER, NO_COLOR };
         static const option::Descriptor* usage()
         {
           static const option::Descriptor usage[] =
@@ -49,6 +54,7 @@ namespace bandit { namespace detail {
             {VERSION, 0, "", "version", option::Arg::None, "  --version, \tPrint version of bandit"},
             {HELP, 0, "", "help", option::Arg::None,        "  --help, \tPrint usage and exit."},
             {REPORTER, 0, "", "reporter", option::Arg::Optional, "  --reporter, \tSelect reporter (dots, singleline)"},
+            {NO_COLOR, 0, "", "no-color", option::Arg::None,     "  --no-color, \tSuppress colors in output"},
             {0, 0, 0, 0, 0, 0}
           };
 

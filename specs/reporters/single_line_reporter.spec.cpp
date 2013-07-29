@@ -6,11 +6,12 @@ go_bandit([](){
     unique_ptr<std::stringstream> stm;
     unique_ptr<bandit::single_line_reporter> reporter;
     default_failure_formatter formatter;
+    bandit::detail::colorizer colorizer(false);
   
     before_each([&](){
       stm = unique_ptr<std::stringstream>(new std::stringstream());
       reporter = unique_ptr<bandit::single_line_reporter>(
-        new single_line_reporter(*(stm.get()), formatter));
+        new single_line_reporter(*(stm.get()), formatter, colorizer));
     });
 
     auto output = [&](){ return stm->str(); };

@@ -5,13 +5,14 @@ namespace bandit {
 
   struct single_line_reporter : public progress_reporter
   {
-    single_line_reporter(std::ostream& stm,
-        const failure_formatter& failure_formatter)
-      : progress_reporter(failure_formatter), stm_(stm)
+    single_line_reporter(std::ostream& stm, const failure_formatter& failure_formatter,
+        const detail::colorizer& colorizer)
+      : progress_reporter(failure_formatter), stm_(stm), colorizer_(colorizer)
     {}
 
-    single_line_reporter(const failure_formatter& failure_formatter)
-      : progress_reporter(failure_formatter), stm_(std::cout)
+    single_line_reporter(const failure_formatter& failure_formatter,
+        const detail::colorizer& colorizer)
+      : progress_reporter(failure_formatter), stm_(std::cout), colorizer_(colorizer)
     {}
 
     void test_run_complete() 
@@ -21,7 +22,7 @@ namespace bandit {
       stm_ << std::endl;
 
       test_run_summary summary(specs_run_, specs_failed_, specs_succeeded_, failures_, 
-          test_run_errors_);
+          test_run_errors_, colorizer_);
       summary.write(stm_);
     }
 
@@ -73,13 +74,15 @@ namespace bandit {
 
       if(specs_failed_)
       {
-        stm_ << " " << specs_succeeded_ << " succeeded. " << specs_failed_ << " failed.";
+        stm_ << " " << specs_succeeded_ << " succeeded. " << colorizer_.red() << specs_failed_ <<
+          " failed." << colorizer_.reset();
       }
       stm_.flush();
     }
 
     private:
     std::ostream& stm_;
+    const detail::colorizer& colorizer_;
   };
 }
 

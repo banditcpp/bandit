@@ -6,16 +6,16 @@ namespace bandit {
   namespace detail {
 
     inline listener_ptr create_reporter(const options& opt,
-        const failure_formatter* formatter)
+        const failure_formatter* formatter, const colorizer& colorizer)
     {
       std::string name(opt.reporter() ? opt.reporter() : "");
 
       if(name == "singleline")
       {
-        return unique_ptr<listener>(new single_line_reporter(*formatter));
+        return unique_ptr<listener>(new single_line_reporter(*formatter, colorizer));
       }
 
-      return unique_ptr<listener>(new dots_reporter(*formatter));
+      return unique_ptr<listener>(new dots_reporter(*formatter, colorizer));
     }
 
     typedef std::function<listener_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
@@ -23,8 +23,7 @@ namespace bandit {
   }
 
   inline int run(const options& opt, const detail::spec_registry& specs,
-      contextstack_t& context_stack, 
-      listener& listener)
+      contextstack_t& context_stack, listener& listener)
   {
     if(opt.help())
     {
@@ -58,7 +57,8 @@ namespace bandit {
   {
     options opt(argc, argv);
     failure_formatter_ptr formatter(new default_failure_formatter());
-    listener_ptr reporter(create_reporter(opt, formatter.get()));
+    bandit::detail::colorizer colorizer(!opt.no_color());
+    listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
     registered_listener(reporter.get());
 
