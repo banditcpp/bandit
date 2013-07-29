@@ -1,1 +1,1 @@
-set makeprg=make\ -C../build-debug;\ cd\ $PWD
+set makeprg=make\ -C../build-clang;\ cd\ $PWD
