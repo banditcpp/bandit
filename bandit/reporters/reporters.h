@@ -8,8 +8,7 @@
 
 namespace bandit { namespace detail {
 
-  // TODO: Change to "registered_reporter"
-  inline listener& default_reporter(listener* reporter = NULL)
+  inline listener& registered_listener(listener* reporter = NULL)
   {
     static struct listener* reporter_;
 

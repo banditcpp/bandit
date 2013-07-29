@@ -30,7 +30,7 @@ namespace bandit {
 
   inline void describe(const char* desc, voidfunc_t func)
   {
-    describe(desc, func, default_reporter(), context_stack());
+    describe(desc, func, registered_listener(), context_stack());
   }
 
   inline void before_each(voidfunc_t func, contextstack_t& context_stack)
@@ -102,7 +102,7 @@ namespace bandit {
 
   inline void it(const char* desc, voidfunc_t func)
   {
-    it(desc, func, default_reporter(), context_stack(), registered_adapter());
+    it(desc, func, registered_listener(), context_stack(), registered_adapter());
   }
 
 }

@@ -60,7 +60,7 @@ namespace bandit {
     failure_formatter_ptr formatter(new default_failure_formatter());
     listener_ptr reporter(create_reporter(opt, formatter.get()));
 
-    default_reporter(reporter.get());
+    registered_listener(reporter.get());
 
     return run(opt, detail::specs(), context_stack(), *(reporter.get()));
   }
