@@ -2,6 +2,6 @@
 #define BANDIT_REGISTRATION_H
 
 #include <bandit/registration/spec_registry.h>
-#include <bandit/registration/registar.h>
+#include <bandit/registration/registrar.h>
 
 #endif
