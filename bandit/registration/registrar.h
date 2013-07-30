@@ -5,16 +5,15 @@ namespace bandit { namespace detail {
 
     struct spec_registrar
     {
-      spec_registrar(bandit::detail::spec_registry& registry,
-          bandit::detail::voidfunc_t func)
+      spec_registrar( bandit::detail::voidfunc_t func)
       {
-        registry.push_back(func);
+        bandit::detail::specs().push_back(func);
       }
     };
 
 }}
 
-#define go_bandit(context) \
-  static bandit::detail::spec_registrar bandit_registrar(bandit::detail::specs(), context);
+#define go_bandit \
+  static bandit::detail::spec_registrar bandit_registrar
 
 #endif
