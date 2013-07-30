@@ -43,8 +43,26 @@ namespace bandit { namespace detail {
         return options_[COLOR];
       }
 
+      typedef enum
+      {
+        FORMATTER_DEFAULT,
+        FORMATTER_VS,
+        FORMATTER_UNKNOWN
+      } formatters;
+
+      formatters formatter() const
+      {
+        std::string arg = options_[FORMATTER].arg ? options_[FORMATTER].arg : "";
+        if(arg == "vs")
+        {
+          return formatters::FORMATTER_VS;
+        }
+
+        return formatters::FORMATTER_DEFAULT;
+      }
+
       private:
-        enum option_index { UNKNOWN, VERSION, HELP, REPORTER, COLOR };
+        enum option_index { UNKNOWN, VERSION, HELP, REPORTER, COLOR, FORMATTER };
         static const option::Descriptor* usage()
         {
           static const option::Descriptor usage[] =
@@ -55,6 +73,7 @@ namespace bandit { namespace detail {
             {HELP, 0, "", "help", option::Arg::None,        "  --help, \tPrint usage and exit."},
             {REPORTER, 0, "", "reporter", option::Arg::Optional, "  --reporter, \tSelect reporter (dots, singleline, xunit)"},
             {COLOR, 0, "", "color", option::Arg::None,     "  --color, \tUse ANSI colors in output"},
+            {FORMATTER, 0, "", "formatter", option::Arg::Optional, "  --formatter, \tSelect formatting of errors (default, vs)"},
             {0, 0, 0, 0, 0, 0}
           };
 

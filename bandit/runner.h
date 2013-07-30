@@ -25,6 +25,16 @@ namespace bandit {
 
     typedef std::function<listener_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
     typedef std::function<listener* (listener*)> register_reporter_fn;
+
+    inline failure_formatter_ptr create_formatter(const options& opt)
+    {
+      if(opt.formatter() == options::formatters::FORMATTER_VS)
+      {
+        return failure_formatter_ptr(new visual_studio_failure_formatter());
+      }
+
+      return failure_formatter_ptr(new default_failure_formatter());
+    }
   }
 
   inline int run(const options& opt, const detail::spec_registry& specs,
@@ -61,7 +71,7 @@ namespace bandit {
   inline int run(int argc, char* argv[])
   {
     options opt(argc, argv);
-    failure_formatter_ptr formatter(new default_failure_formatter());
+    failure_formatter_ptr formatter(create_formatter(opt));
     bandit::detail::colorizer colorizer(opt.color());
     listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 

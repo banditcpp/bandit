@@ -33,6 +33,22 @@ go_bandit([](){
         AssertThat(opt.color(), IsTrue());
       });
 
+      it("parser the '--formatter=vs' option", [&](){
+        const char* args[] = {"executable", "--formatter=vs"};
+        argv_helper argv(2, args);
+
+        options opt(argv.argc(), argv.argv());
+        AssertThat(opt.formatter(), Equals(options::formatters::FORMATTER_VS));
+      });
+
+      it("parser the '--formatter=default' option", [&](){
+        const char* args[] = {"executable", "--formatter=default"};
+        argv_helper argv(2, args);
+
+        options opt(argv.argc(), argv.argv());
+        AssertThat(opt.formatter(), Equals(options::formatters::FORMATTER_DEFAULT));
+      });
+
       describe("with no arguments", [&](){
         const char* args[] = {"executable"};
         argv_helper argv(1, args);
@@ -49,6 +65,10 @@ go_bandit([](){
       
         it("cannot fine '--color'", [&](){
           AssertThat(opt.color(), IsFalse());
+        });
+
+        it("uses default formatter for '--formatter'", [&](){
+          AssertThat(opt.formatter(), Equals(options::formatters::FORMATTER_DEFAULT));
         });
       });
     });

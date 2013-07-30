@@ -3,6 +3,7 @@
 
 #include "failure_formatter.h"
 #include "default_failure_formatter.h"
+#include "visual_studio_failure_formatter.h"
 
 namespace bandit {
   inline failure_formatter& registered_failure_formatter()
