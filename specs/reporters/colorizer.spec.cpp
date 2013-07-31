@@ -1,3 +1,4 @@
+#ifndef _WIN32
 #include <specs/specs.h>
 
 go_bandit([](){
@@ -41,3 +42,4 @@ go_bandit([](){
   });
 
 });
+#endif

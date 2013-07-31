@@ -16,13 +16,19 @@ namespace bandit {
     {
       if(specs_run_ == 0 && test_run_errors_.size() == 0)
       {
-        stm << colorizer_.red() << "Could not find any tests." << colorizer_.reset() << std::endl;
+        stm << colorizer_.red();
+		stm << "Could not find any tests.";
+		stm << colorizer_.reset();
+		stm << std::endl;
         return;
       }
 
       if(specs_failed_ == 0 && test_run_errors_.size() == 0)
       {
-        stm << colorizer_.green() << "Success!" << colorizer_.reset() << std::endl;
+        stm << colorizer_.green();
+		stm << "Success!";
+		stm << colorizer_.reset();
+		stm << std::endl;
       }
 
       if(test_run_errors_.size() > 0)
@@ -36,7 +42,9 @@ namespace bandit {
 
       if(specs_failed_ > 0)
       {
-        stm << colorizer_.red() << "There were failures!" << colorizer_.reset() << std::endl;
+        stm << colorizer_.red();
+		stm << "There were failures!";
+		stm << colorizer_.reset() << std::endl;
         std::for_each(failures_.begin(), failures_.end(), 
             [&](const std::string& failure) {
               stm << failure << std::endl;
