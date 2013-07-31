@@ -11,7 +11,7 @@ go_bandit([](){
 
     before_each([&](){
       stm = unique_ptr<std::stringstream>(new std::stringstream());
-      reporter = unique_ptr<bandit::xunit_reporter>(new xunit_reporter(*(stm.get()), formatter));
+      reporter = unique_ptr<bandit::xunit_reporter>(new xunit_reporter(*stm, formatter));
     });
   
     describe("an empty test run", [&](){

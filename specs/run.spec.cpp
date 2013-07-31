@@ -15,8 +15,7 @@ go_bandit([](){
 
     auto call_run = [&](){
         options opt(argv->argc(), argv->argv());
-        return bandit::run(opt, *(specs.get()), *(context_stack.get()), 
-          *(reporter.get()));
+        return bandit::run(opt, *specs, *context_stack, *reporter);
     };
   
     before_each([&](){

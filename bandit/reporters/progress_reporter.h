@@ -100,7 +100,7 @@ namespace bandit {
     int specs_succeeded_;
     int specs_failed_;
     const failure_formatter& failure_formatter_;
-    std::deque<std::string> contexts_;
+    std::list<std::string> contexts_;
     std::list<std::string> failures_;
     std::list<std::string> test_run_errors_;
   };

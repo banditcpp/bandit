@@ -77,7 +77,7 @@ namespace bandit {
 
     registered_listener(reporter.get());
 
-    return run(opt, detail::specs(), context_stack(), *(reporter.get()));
+    return run(opt, detail::specs(), context_stack(), *reporter);
   }
 }
 

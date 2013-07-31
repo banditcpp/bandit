@@ -17,7 +17,7 @@ go_bandit([](){
     });
 
     auto call_it = [&]() {
-      it("my it", it_func, *(reporter.get()), *(contexts.get()), assertion_adapter);
+      it("my it", it_func, *reporter, *contexts, assertion_adapter);
     };
 
     it("tells the current context that execution has started", [&](){

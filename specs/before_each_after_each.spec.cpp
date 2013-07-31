@@ -22,7 +22,7 @@ go_bandit([](){
           });
 
         it("registers itself for the current context in the stack", [&](){
-          before_each(before_each_fn, *(context_stack.get())); 
+          before_each(before_each_fn, *context_stack); 
           Assert::That(context->call_log(), Has().Exactly(1).EqualTo("register_before_each"));
           });
 
@@ -36,7 +36,7 @@ go_bandit([](){
         });
       
         it("registers itself for the current context in the stack", [&](){
-          after_each(after_each_fn, *(context_stack.get())); 
+          after_each(after_each_fn, *context_stack); 
           Assert::That(context->call_log(), Has().Exactly(1).EqualTo("register_after_each"));
         });
       

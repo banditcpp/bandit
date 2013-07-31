@@ -11,7 +11,7 @@ go_bandit([](){
     before_each([&](){
       stm = unique_ptr<std::stringstream>(new std::stringstream());
       reporter = unique_ptr<bandit::single_line_reporter>(
-        new single_line_reporter(*(stm.get()), formatter, colorizer));
+        new single_line_reporter(*stm, formatter, colorizer));
     });
 
     auto output = [&](){ return stm->str(); };

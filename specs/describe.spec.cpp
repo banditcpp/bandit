@@ -21,7 +21,7 @@ go_bandit([](){
 
 
     auto call_describe = [&](){
-        describe("context name", describe_fn, *(reporter.get()), *(context_stack.get()));
+        describe("context name", describe_fn, *reporter, *context_stack);
     };
 
     describe("with a succeeding 'it'", [&](){
