@@ -24,13 +24,13 @@ go_bandit([](){
         AssertThat(opt.version(), IsTrue());
       });
 
-      it("parses the '--color' option", [&](){
-        const char* args[] = {"executable", "--color"};
+      it("parses the '--no-color' option", [&](){
+        const char* args[] = {"executable", "--no-color"};
         argv_helper argv(2, args);
 
         options opt(argv.argc(), argv.argv());
 
-        AssertThat(opt.color(), IsTrue());
+        AssertThat(opt.no_color(), IsTrue());
       });
 
       it("parser the '--formatter=vs' option", [&](){
@@ -63,8 +63,8 @@ go_bandit([](){
           AssertThat(opt.version(), IsFalse());
         });
       
-        it("cannot fine '--color'", [&](){
-          AssertThat(opt.color(), IsFalse());
+        it("cannot find '--no-color'", [&](){
+          AssertThat(opt.no_color(), IsFalse());
         });
 
         it("uses default formatter for '--formatter'", [&](){
