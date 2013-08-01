@@ -76,6 +76,10 @@ go_bandit([](){
         AssertThat(output(), Contains("my context my test:\nsome_file:123: assertion failed!"));
       });
 
+      it("only reports assertion failure once", [&](){
+        AssertThat(output(), Has().Exactly(1).EndingWith("assertion failed!"));
+      });
+
       it("reports an 'F' for the failed assertion", [&](){
         AssertThat(output(), StartsWith("F"));
       });

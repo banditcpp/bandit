@@ -54,8 +54,6 @@ namespace bandit {
       ss << std::endl;
       ss << current_context_name() << " " << desc << ":" << std::endl;
       ss << failure_formatter_.format(ex);
-      ss << ex.what();
-      ss << std::endl;
 
       failures_.push_back(ss.str());
     }
