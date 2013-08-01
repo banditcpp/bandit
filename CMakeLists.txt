@@ -26,5 +26,5 @@ add_executable(bandit-specs ${BanditSpecSourceFiles} )
 
 add_custom_command(TARGET bandit-specs
                    POST_BUILD
-                   COMMAND bandit-specs
+                   COMMAND bandit-specs --no-color --reporter=singleline
                    WORKING_DIRECTORY ./bin)
