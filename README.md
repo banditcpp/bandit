@@ -91,6 +91,7 @@ by using the ```go_bandit()``` construct:
 
 ```cpp
 #include <bandit/bandit.h>
+using namespace bandit;
 
 go_bandit([](){
 
@@ -109,6 +110,7 @@ An example:
 
 ```cpp
 #include <bandit/bandit.h>
+using namespace bandit;
 
 go_bandit([](){
 
@@ -145,6 +147,7 @@ and ```after_each()``` is for.
 
 ```cpp
 #include <bandit/bandit.h>
+using namespace bandit;
 
 go_bandit([](){
 
@@ -184,6 +187,7 @@ An example might be helpful:
 
 ```cpp
 #include <bandit/bandit.h>
+using namespace bandit;
 
 go_bandit([](){
 
