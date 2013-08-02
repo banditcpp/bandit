@@ -217,14 +217,28 @@ go_bandit([](){
         AssertThat(game->winner(), Equals(TIE));
       });
     });
+
+    describe("player two has made a bad move", [&](){
+    
+       before_each([&](){
+         make_a_bad_move(*player_two);
+       });
+       
+       it("considers player one the winner", [&](){
+         AssertThat(game->winner(), Equals(PLAYER_ONE));
+       });
+    });
+    
   });
 
 });
 ```
 
-When bandit is about to call ```it("considers the game a tie")```, first calls all registered ```before_each()```
-in the outermost context before it calls all ```before_each()``` in all contexts that are parents to
-the current ```describe()```. That way nested describes can augment the state set up by its parents,
-making the set up for each ```describe()``` pretty self explanatory.
+When bandit is about to call ```it("considers the game a tie")```, it first calls all registered ```before_each()``` in the outermost ```describe()``` before it calls ```before_each()``` in the current ```describe()```. With several levels of nesting, bandit will start at the outermost ```describe()``` and work its way down the ancestor chain until it reaches the ```describe()``` where the current ```it()``` is found.
+
+```after_each()``` will be called after the call to ```it()``` starting at the describe function of the ```it()``` and working its way up the ancestor chain.
+
+That way nested describes can augment the state set up by its parents, making the set up for each ```describe()``` pretty self explanatory even for components
+that have a complex set of states.
 
 
