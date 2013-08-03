@@ -87,6 +87,18 @@ The ```run()``` function will run all registered tests and report the result.
 Bandit enables you to tweak the way tests results are reported by allowing you to specify command
 line switches. Running ```[name of your executable] --help``` will list the available options.
 
+```
+$ my-exe --help
+SAGE: <executable> [options]
+
+Options:
+  --version,   Print version of bandit
+  --help,      Print usage and exit.
+  --reporter,  Select reporter (dots, singleline, xunit)
+  --no-color,  Suppress colors in output
+  --formatter, Select formatting of errors (default, vs)
+```
+
 #Writing Tests
 
 Once you have a command line application with an entry point that delegates to bandit, it's time to
