@@ -1,0 +1,284 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Bandit by joakimkarlsson</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Bandit</h1>
+        <p>Human friendly unit testing framework for C++11</p>
+        <p class="view"><a href="https://github.com/joakimkarlsson/bandit">View the Project on GitHub <small>joakimkarlsson/bandit</small></a></p>
+        <ul>
+          <li><a href="https://github.com/joakimkarlsson/bandit/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/joakimkarlsson/bandit/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/joakimkarlsson/bandit">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="bandit" class="anchor" href="#bandit"><span class="octicon octicon-link"></span></a>bandit</h1>
+
+<p>Bandit is a framework for C++11 that wants to make working with unit tests a pleasant
+experience.</p>
+
+<p>Bandit is released under the <a href="LICENSE.md">MIT license</a></p>
+
+<h1>
+<a name="an-example" class="anchor" href="#an-example"><span class="octicon octicon-link"></span></a>An example</h1>
+
+<p>This is a complete test application written in bandit:</p>
+
+<div class="highlight"><pre><span class="cp">#include &lt;bandit/bandit.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">bandit</span><span class="p">;</span>
+
+<span class="n">go_bandit</span><span class="p">([](){</span>
+
+    <span class="n">describe</span><span class="p">(</span><span class="s">"fuzzbox:"</span><span class="p">,</span> <span class="p">[](){</span>
+      <span class="n">guitar_ptr</span> <span class="n">guitar</span><span class="p">;</span>
+      <span class="n">fuzzbox_ptr</span> <span class="n">fuzzbox</span><span class="p">;</span>
+
+      <span class="n">before_each</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span>
+        <span class="n">guitar</span> <span class="o">=</span> <span class="n">guitar_ptr</span><span class="p">(</span><span class="k">new</span> <span class="k">struct</span> <span class="n">guitar</span><span class="p">());</span>
+        <span class="n">fuzzbox</span> <span class="o">=</span> <span class="n">fuzzbox_ptr</span><span class="p">(</span><span class="k">new</span> <span class="k">struct</span> <span class="n">fuzzbox</span><span class="p">());</span>
+      <span class="p">});</span>
+
+      <span class="n">before_each</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span>
+        <span class="n">guitar</span><span class="o">-&gt;</span><span class="n">add_effect</span><span class="p">(</span><span class="n">fuzzbox</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+      <span class="p">});</span>
+
+      <span class="n">it</span><span class="p">(</span><span class="s">"starts in clean mode"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+        <span class="n">AssertThat</span><span class="p">(</span><span class="n">guitar</span><span class="o">-&gt;</span><span class="n">sound</span><span class="p">(),</span> <span class="n">Equals</span><span class="p">(</span><span class="n">sounds</span><span class="o">::</span><span class="n">clean</span><span class="p">));</span>
+      <span class="p">});</span>
+
+      <span class="n">describe</span><span class="p">(</span><span class="s">"in distorted mode"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+
+        <span class="n">before_each</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span>
+          <span class="n">fuzzbox</span><span class="o">-&gt;</span><span class="n">flip</span><span class="p">();</span>
+        <span class="p">});</span>
+
+        <span class="n">it</span><span class="p">(</span><span class="s">"sounds distorted"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+          <span class="n">AssertThat</span><span class="p">(</span><span class="n">guitar</span><span class="o">-&gt;</span><span class="n">sound</span><span class="p">(),</span> <span class="n">Equals</span><span class="p">(</span><span class="n">sounds</span><span class="o">::</span><span class="n">distorted</span><span class="p">));</span>
+        <span class="p">});</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+
+<span class="p">});</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+  <span class="k">return</span> <span class="n">bandit</span><span class="o">::</span><span class="n">run</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h1>
+<a name="installing" class="anchor" href="#installing"><span class="octicon octicon-link"></span></a>Installing</h1>
+
+<p>Bandit is header only so there is no need for additional compilation before you can start using it. Download bandit and add its root directory to your project's include directories and you're ready to go.</p>
+
+<h1>
+<a name="running-tests" class="anchor" href="#running-tests"><span class="octicon octicon-link"></span></a>Running Tests</h1>
+
+<p>With bandit you create a command line application that runs all registered tests, reports the result
+on stdout, and then exits with an error level 0 if all tests passed, and an error level greater
+than 0 if some tests did not passed.</p>
+
+<p>Every application needs an entry point, and for bandit it should look like this:</p>
+
+<div class="highlight"><pre><span class="cp">#include &lt;bandit/bandit.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+  <span class="k">return</span> <span class="n">bandit</span><span class="o">::</span><span class="n">run</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The <code>run()</code> function will run all registered tests and report the result.</p>
+
+<h2>
+<a name="command-line-arguments" class="anchor" href="#command-line-arguments"><span class="octicon octicon-link"></span></a>Command line arguments</h2>
+
+<p>Bandit enables you to tweak the way tests results are reported by allowing you to specify command
+line switches. Running <code>[name of your executable] --help</code> will list the available options.</p>
+
+<h1>
+<a name="writing-tests" class="anchor" href="#writing-tests"><span class="octicon octicon-link"></span></a>Writing Tests</h1>
+
+<p>Once you have a command line application with an entry point that delegates to bandit, it's time to
+start writing some tests.</p>
+
+<p>We begin by adding a new .cpp file to our project. We then tell bandit that this file contains tests
+by using the <code>go_bandit()</code> construct:</p>
+
+<div class="highlight"><pre><span class="cp">#include &lt;bandit/bandit.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">bandit</span><span class="p">;</span>
+
+<span class="n">go_bandit</span><span class="p">([](){</span>
+
+  <span class="c1">// Our tests goes here...</span>
+
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="describing-things" class="anchor" href="#describing-things"><span class="octicon octicon-link"></span></a>Describing things</h2>
+
+<p>Bandit is all about describing how pieces of your code should work. These descriptions can be 
+be executed to verify that they're accurate. Each description specifies how a certain piece of
+your code behaves under certain conditions. </p>
+
+<p>An example:</p>
+
+<div class="highlight"><pre><span class="cp">#include &lt;bandit/bandit.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">bandit</span><span class="p">;</span>
+
+<span class="n">go_bandit</span><span class="p">([](){</span>
+
+  <span class="n">describe</span><span class="p">(</span><span class="s">"a turn based game"</span><span class="p">,</span> <span class="p">[](){</span>
+    <span class="n">game_ptr</span> <span class="n">game</span><span class="p">;</span>
+    <span class="n">player_ptr</span> <span class="n">player_one</span><span class="p">,</span> <span class="n">player_two</span><span class="p">;</span>
+
+    <span class="c1">// Setting up the game. More on this later...</span>
+
+    <span class="n">it</span><span class="p">(</span><span class="s">"is player one's turn"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">}(){</span>
+      <span class="n">AssertThat</span><span class="p">(</span><span class="n">game</span><span class="o">-&gt;</span><span class="n">whos_turn</span><span class="p">(),</span> <span class="n">Equals</span><span class="p">(</span><span class="n">player_one</span><span class="p">));</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+
+<p><code>describe()</code> in this case describes a game with two players. <code>it()</code> verifies that when a new
+game has just been created, it should be player one's turn to make a move.</p>
+
+<h2>
+<a name="assertions" class="anchor" href="#assertions"><span class="octicon octicon-link"></span></a>Assertions</h2>
+
+<p>The example above uses <a href="https://github.com/joakimkarlsson/snowhouse">snowhouse</a> for verifying that
+it actually is player one's turn to move.</p>
+
+<p>Bandit comes bundled with snowhouse out of the box, but it is possible to use any assertion framework
+that uses exceptions to notify us about errors. We need to create an adapter that translates from
+the framework's exception to bandit's exceptions.</p>
+
+<h2>
+<a name="setting-up-context" class="anchor" href="#setting-up-context"><span class="octicon octicon-link"></span></a>Setting up context</h2>
+
+<p>We need to be more specific about what it means to set up a game. This is what <code>before_each()</code>
+and <code>after_each()</code> is for.</p>
+
+<div class="highlight"><pre><span class="cp">#include &lt;bandit/bandit.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">bandit</span><span class="p">;</span>
+
+<span class="n">go_bandit</span><span class="p">([](){</span>
+
+  <span class="n">describe</span><span class="p">(</span><span class="s">"a turn based game"</span><span class="p">,</span> <span class="p">[](){</span>
+    <span class="n">game_ptr</span> <span class="n">game</span><span class="p">;</span>
+    <span class="n">player_ptr</span> <span class="n">player_one</span><span class="p">,</span> <span class="n">player_two</span><span class="p">;</span>
+
+    <span class="n">before_each</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span>
+      <span class="n">game</span> <span class="o">=</span> <span class="n">game_ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">game</span><span class="p">());</span>
+      <span class="n">player_one</span> <span class="o">=</span> <span class="n">player_ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">player</span><span class="p">(</span><span class="s">"Player 1"</span><span class="p">));</span>
+      <span class="n">player_two</span> <span class="o">=</span> <span class="n">player_ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">player</span><span class="p">(</span><span class="s">"Player 2"</span><span class="p">));</span>
+      <span class="n">game</span><span class="o">-&gt;</span><span class="n">add_player</span><span class="p">(</span><span class="o">*</span><span class="n">player_one</span><span class="p">);</span>
+      <span class="n">game</span><span class="o">-&gt;</span><span class="n">add_player</span><span class="p">(</span><span class="o">*</span><span class="n">player_two</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="n">it</span><span class="p">(</span><span class="s">"is player one's turn"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">}(){</span>
+      <span class="n">AssertThat</span><span class="p">(</span><span class="n">game</span><span class="o">-&gt;</span><span class="n">whos_turn</span><span class="p">(),</span> <span class="n">Equals</span><span class="p">(</span><span class="o">*</span><span class="n">player_one</span><span class="p">));</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+
+<p><code>before_each()</code> will be called before each <code>it()</code> method is called. This ensures that each 
+methods gets a fresh new context that hasn't been polluted by a previous test. If you need to restore
+things after a test, you can user <code>after_each()</code>, which will be called after each <code>it()</code>
+method.</p>
+
+<h1>
+<a name="nested-descriptions" class="anchor" href="#nested-descriptions"><span class="octicon octicon-link"></span></a>Nested descriptions</h1>
+
+<p>This is a power feature: you can nest descriptions. This will help you organize the different states
+that the thing you're describing can be in. The outer context says "here is this thing" and nested
+contexts can then say "in this state". This makes for descriptions that really conveys how a 
+component works under different conditions.</p>
+
+<p>An example might be helpful:</p>
+
+<div class="highlight"><pre><span class="cp">#include &lt;bandit/bandit.h&gt;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">bandit</span><span class="p">;</span>
+
+<span class="n">go_bandit</span><span class="p">([](){</span>
+
+  <span class="n">describe</span><span class="p">(</span><span class="s">"a turn based game"</span><span class="p">,</span> <span class="p">[](){</span>
+    <span class="n">game_ptr</span> <span class="n">game</span><span class="p">;</span>
+    <span class="n">player_ptr</span> <span class="n">player_one</span><span class="p">,</span> <span class="n">player_two</span><span class="p">;</span>
+
+    <span class="n">before_each</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span>
+      <span class="n">game</span> <span class="o">=</span> <span class="n">game_ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">game</span><span class="p">());</span>
+      <span class="n">player_one</span> <span class="o">=</span> <span class="n">player_ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">player</span><span class="p">(</span><span class="s">"Player 1"</span><span class="p">));</span>
+      <span class="n">player_two</span> <span class="o">=</span> <span class="n">player_ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">player</span><span class="p">(</span><span class="s">"Player 2"</span><span class="p">));</span>
+      <span class="n">game</span><span class="o">-&gt;</span><span class="n">add_player</span><span class="p">(</span><span class="o">*</span><span class="n">player_one</span><span class="p">);</span>
+      <span class="n">game</span><span class="o">-&gt;</span><span class="n">add_player</span><span class="p">(</span><span class="o">*</span><span class="n">player_two</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="n">it</span><span class="p">(</span><span class="s">"is player one's turn"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">}(){</span>
+      <span class="n">AssertThat</span><span class="p">(</span><span class="n">game</span><span class="o">-&gt;</span><span class="n">whos_turn</span><span class="p">(),</span> <span class="n">Equals</span><span class="p">(</span><span class="o">*</span><span class="n">player_one</span><span class="p">));</span>
+    <span class="p">});</span>
+
+    <span class="n">describe</span><span class="p">(</span><span class="s">"with all game positions filled"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+
+      <span class="n">before_each</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span>
+        <span class="n">fill_all_positions</span><span class="p">(</span><span class="n">game</span><span class="p">);</span>
+      <span class="p">});</span>
+
+      <span class="n">it</span><span class="p">(</span><span class="s">"considers the game a tie"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+        <span class="n">AssertThat</span><span class="p">(</span><span class="n">game</span><span class="o">-&gt;</span><span class="n">winner</span><span class="p">(),</span> <span class="n">Equals</span><span class="p">(</span><span class="n">TIE</span><span class="p">));</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+
+    <span class="n">describe</span><span class="p">(</span><span class="s">"player two has made a bad move"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+
+       <span class="n">before_each</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](){</span>
+         <span class="n">make_a_bad_move</span><span class="p">(</span><span class="o">*</span><span class="n">player_two</span><span class="p">);</span>
+       <span class="p">});</span>
+
+       <span class="n">it</span><span class="p">(</span><span class="s">"considers player one the winner"</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](){</span>
+         <span class="n">AssertThat</span><span class="p">(</span><span class="n">game</span><span class="o">-&gt;</span><span class="n">winner</span><span class="p">(),</span> <span class="n">Equals</span><span class="p">(</span><span class="n">PLAYER_ONE</span><span class="p">));</span>
+       <span class="p">});</span>
+    <span class="p">});</span>
+
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+
+<p>When bandit is about to call <code>it("considers the game a tie")</code>, it first calls all registered <code>before_each()</code> in the outermost <code>describe()</code> before it calls <code>before_each()</code> in the current <code>describe()</code>. With several levels of nesting, bandit will start at the outermost <code>describe()</code> and work its way down the ancestor chain until it reaches the <code>describe()</code> where the current <code>it()</code> is found.</p>
+
+<p><code>after_each()</code> will be called after the call to <code>it()</code> starting at the describe function of the <code>it()</code> and working its way up the ancestor chain.</p>
+
+<p>That way nested describes can augment the state set up by its parents, making the set up for each <code>describe()</code> pretty self explanatory even for components
+that have a complex set of states.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/joakimkarlsson">joakimkarlsson</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
