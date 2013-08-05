@@ -1,14 +1,20 @@
 ---
 layout: default
 ---
-Bandit is a framework for C++11 that wants to make working with unit tests a pleasant
-experience.
+Bandit is a framework for C++11 that wants to make working with unit tests a 
+pleasant experience.
 
-Bandit has been tested with GCC 4.7.3, Clang 3.2.0, and Visual Studio 2012. It doesn't work with Visual Studio 2010.
-If your compiler doesn't support the C++11 features required by Bandit, we suggest that you take a look at 
-[Igloo](http://igloo-testing.org), which is built on the same philosophy but works without C++11.
+Bandit has been tested with GCC 4.7.3, Clang 3.2.0, and Visual Studio 2012. It 
+doesn't work with Visual Studio 2010. If you want to see if bandit works for
+your compiler, bandit is shipped with a cmake project for generating bandit's 
+self tests. 
 
-Bandit is released under the [MIT license](LICENSE.md)
+If your compiler doesn't support the C++11 features required by Bandit, we 
+suggest that you take a look at [Igloo](http://igloo-testing.org), which is 
+built on the same philosophy but works without C++11.
+
+Bandit is released under the 
+[MIT license](https://github.com/joakimkarlsson/bandit/blob/master/LICENSE.md)
 
 #An example
 
@@ -59,13 +65,15 @@ int main(int argc, char* argv[])
 
 #Installing
 
-Bandit is header only so there is no need for additional compilation before you can start using it. Download bandit and add its root directory to your project's include directories and you're ready to go.
+Bandit is header only so there is no need for additional compilation before you
+can start using it. Download bandit and add its root directory to your project's
+include directories and you're ready to go.
 
 #Running Tests
 
-With bandit you create a command line application that runs all registered tests, reports the result
-on stdout, and then exits with an error level 0 if all tests passed, and an error level greater
-than 0 if some tests did not passed.
+With bandit you create a command line application that runs all registered 
+tests, reports the result on stdout, and then exits with an error level 0 if all
+tests passed, and an error level greater than 0 if some tests did not passed.
 
 Every application needs an entry point, and for bandit it should look like this:
 
@@ -82,8 +90,9 @@ The ```run()``` function will run all registered tests and report the result.
 
 ##Command line arguments
 
-Bandit enables you to tweak the way tests results are reported by allowing you to specify command
-line switches. Running ```[name of your executable] --help``` will list the available options.
+Bandit enables you to tweak the way tests results are reported by allowing you 
+to specify command line switches. Running ```[name of your executable] --help```
+will list the available options.
 
 {% highlight bash %}
 $ my-exe --help
@@ -99,11 +108,11 @@ Options:
 
 #Writing Tests
 
-Once you have a command line application with an entry point that delegates to bandit, it's time to
-start writing some tests.
+Once you have a command line application with an entry point that delegates to 
+bandit, it's time to start writing some tests.
 
-We begin by adding a new .cpp file to our project. We then tell bandit that this file contains tests
-by using the ```go_bandit()``` construct:
+We begin by adding a new .cpp file to our project. We then tell bandit that this
+file contains tests by using the ```go_bandit()``` construct:
 
 {% highlight cpp %}
 #include <bandit/bandit.h>
@@ -118,9 +127,10 @@ go_bandit([](){
 
 ##Describing things
 
-Bandit is all about describing how pieces of your code should work. These descriptions can be 
-be executed to verify that they're accurate. Each description specifies how a certain piece of
-your code behaves under certain conditions. 
+Bandit is all about describing how pieces of your code should work. These 
+descriptions can be be executed to verify that they're accurate. Each 
+description specifies how a certain piece of your code behaves under certain 
+conditions. 
 
 An example:
 
