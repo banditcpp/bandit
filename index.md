@@ -5,9 +5,11 @@ Bandit is a framework for C++11 that wants to make working with unit tests a
 pleasant experience.
 
 Bandit has been tested with GCC 4.7.3, Clang 3.2.0, and Visual Studio 2012. It 
-doesn't work with Visual Studio 2010. If you want to see if bandit works for
-your compiler, bandit is shipped with a cmake project for generating bandit's 
-self tests. 
+doesn't work with Visual Studio 2010. 
+
+We'll add more compilers to the list as we test them. If you want to see if 
+bandit works for your compiler, bandit is shipped with a cmake project for 
+generating bandit's self tests. 
 
 If your compiler doesn't support the C++11 features required by Bandit, we 
 suggest that you take a look at [Igloo](http://igloo-testing.org), which is 
