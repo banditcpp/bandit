@@ -199,6 +199,10 @@ methods gets a fresh new context that hasn't been polluted by a previous test. I
 things after a test, you can user ```after_each()```, which will be called after each ```it()```
 method.
 
+**NOTE:** *You need to declare your ```before_each()``` and ```after_each()``` methods before any 
+```it()``` or nested ```describe```. If you don't, bandit cannot guarantee that they will be called 
+correctly and will complain with an error message.*
+
 #Nested descriptions
 
 This is a power feature: you can nest descriptions. This will help you organize the different states
