@@ -161,12 +161,7 @@ game has just been created, it should be player one's turn to make a move.
 
 ##Assertions
 
-The example above uses [snowhouse](https://github.com/joakimkarlsson/snowhouse) for verifying that
-it actually is player one's turn to move.
-
-Bandit comes bundled with snowhouse out of the box, but it is possible to use any assertion framework
-that uses exceptions to notify us about errors. We need to create an adapter that translates from
-the framework's exception to bandit's exceptions.
+Bandit comes bundled with the [snowhouse](https://github.com/joakimkarlsson/snowhouse) assertion library.
 
 ##Setting up context
 
