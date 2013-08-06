@@ -26,6 +26,10 @@ go_bandit([](){
       it("reports no tests where run", [&](){
         AssertThat(output(), Equals("\nCould not find any tests.\n"));
       });
+
+      it("is not considered successful", [&](){
+        AssertThat(reporter->did_we_pass(), Equals(false));
+      });
     
     });
 

@@ -61,11 +61,6 @@ namespace bandit {
       print_status_line();
     }
 
-    bool did_we_pass() const
-    {
-      return specs_failed_ == 0 && test_run_errors_.size() == 0;
-    }
-
     private:
     void print_status_line()
     {

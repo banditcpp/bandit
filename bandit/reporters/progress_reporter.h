@@ -73,7 +73,7 @@ namespace bandit {
 
     bool did_we_pass() const
     {
-      return specs_failed_ == 0 && test_run_errors_.size() == 0;
+      return specs_run_ > 0 && specs_failed_ == 0 && test_run_errors_.size() == 0;
     }
 
     protected:
