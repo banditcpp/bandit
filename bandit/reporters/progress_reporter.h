@@ -6,7 +6,7 @@ namespace bandit {
   struct progress_reporter : public listener
   {
     progress_reporter(const failure_formatter& failure_formatter)
-      : specs_run_(0), specs_succeeded_(0), specs_failed_(0),
+      : specs_run_(0), specs_succeeded_(0), specs_failed_(0), specs_skipped_(0),
       failure_formatter_(failure_formatter)
     {}
 
@@ -15,6 +15,7 @@ namespace bandit {
       specs_run_ = 0;
       specs_succeeded_ = 0;
       specs_failed_ = 0;
+      specs_skipped_ = 0;
       failures_.clear();
       contexts_.clear();
     }
@@ -71,6 +72,11 @@ namespace bandit {
       failures_.push_back(ss.str());
     }
 
+    void it_skip(const char* /* desc */)
+    {
+      specs_skipped_++;
+    }
+
     bool did_we_pass() const
     {
       return specs_run_ > 0 && specs_failed_ == 0 && test_run_errors_.size() == 0;
@@ -97,6 +103,7 @@ namespace bandit {
     int specs_run_;
     int specs_succeeded_;
     int specs_failed_;
+    int specs_skipped_;
     const failure_formatter& failure_formatter_;
     std::list<std::string> contexts_;
     std::list<std::string> failures_;

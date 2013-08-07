@@ -127,6 +127,33 @@ go_bandit([](){
       });
     
     });
+
+    describe("a context with a skipped test", [&](){
+    
+        before_each([&](){
+          reporter->test_run_starting();
+          reporter->context_starting("my context");
+
+          reporter->it_starting("my test");
+          reporter->it_succeeded("my test");
+          reporter->it_skip("my skipped test");
+
+          reporter->context_ended("my context");
+          reporter->test_run_complete();
+        });
+      
+        it("outputs info about the skipped test", [&](){
+          AssertThat(output(), Contains(
+              "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"0\" skipped=\"1\">\n"
+              "\t<testcase classname=\"my context\" name=\"my test\" time=\"0\">\n"
+              "\t</testcase>\n"
+              "\t<testcase classname=\"my context\" name=\"my skipped test\" time=\"0\">\n"
+              "\t\t<skipped />\n"
+              "\t</testcase>\n"
+              "</testsuite>\n"));
+        });
+    
+    });
   
   });
 

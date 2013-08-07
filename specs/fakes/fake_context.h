@@ -5,6 +5,9 @@ namespace bandit { namespace fakes {
 
   struct fake_context : public bandit::detail::context, public bandit::specs::logging_fake
   {
+    fake_context() : is_skipped_(false)
+    {}
+
     void execution_is_starting()
     {
       log() << "execution_is_starting" << std::endl;
@@ -29,6 +32,21 @@ namespace bandit { namespace fakes {
     {
       log() << "run_after_eaches" << std::endl;
     }
+
+    void set_is_skipped(bool skip)
+    {
+      log() << "set_is_skipped: " << skip << std::endl;
+      is_skipped_ = skip;
+    }
+
+    bool is_skipped()
+    {
+      log() << "is_skipped: returning false" << std::endl;
+      return is_skipped_;
+    }
+
+    private:
+    bool is_skipped_;
   };
 }}
 

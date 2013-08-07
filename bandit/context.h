@@ -14,13 +14,15 @@ namespace bandit {
         virtual void register_after_each(voidfunc_t func) = 0;
         virtual void run_before_eaches() = 0;
         virtual void run_after_eaches() = 0;
+        virtual void set_is_skipped(bool skip) = 0;
+        virtual bool is_skipped() = 0;
     };
 
     class bandit_context : public context
     {
       public:
         bandit_context()
-          : is_executing_(false)
+          : is_executing_(false), is_skipped_(false)
         {}
 
         void execution_is_starting()
@@ -58,6 +60,16 @@ namespace bandit {
           run_all(after_eaches_);
         }
 
+        void set_is_skipped(bool skip)
+        {
+          is_skipped_ = skip;
+        }
+
+        bool is_skipped()
+        {
+          return is_skipped_;
+        }
+
       private:
         void run_all(const list<voidfunc_t>& funcs)
         {
@@ -68,6 +80,7 @@ namespace bandit {
 
       private:
         bool is_executing_;
+        bool is_skipped_;
         list<voidfunc_t> before_eaches_;
         list<voidfunc_t> after_eaches_;
     };

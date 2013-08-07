@@ -6,13 +6,16 @@ namespace bandit {
   using namespace std;
   using namespace detail;
 
-  inline void describe(const char* desc, voidfunc_t func, listener& listener, contextstack_t& context_stack)
+  inline void describe(const char* desc, voidfunc_t func, listener& listener, 
+      contextstack_t& context_stack, bool skip = false)
   {
     listener.context_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
     bandit_context ctxt;
+    ctxt.set_is_skipped(skip);
+
     context_stack.push_back(&ctxt);
     try
     {
@@ -30,7 +33,19 @@ namespace bandit {
 
   inline void describe(const char* desc, voidfunc_t func)
   {
-    describe(desc, func, registered_listener(), context_stack());
+    bool skip = false;
+    describe(desc, func, registered_listener(), context_stack(), skip);
+  }
+
+  inline void describe_skip(const char* desc, voidfunc_t func, listener& listener,
+      contextstack_t& context_stack)
+  {
+    describe(desc, func, listener, context_stack, true);
+  }
+
+  inline void describe_skip(const char* desc, voidfunc_t func)
+  {
+    describe_skip(desc, func, registered_listener(), context_stack());
   }
 
   inline void before_each(voidfunc_t func, contextstack_t& context_stack)
@@ -53,9 +68,25 @@ namespace bandit {
     after_each(func, context_stack());
   }
 
+  inline void it_skip(const char* desc, voidfunc_t, listener& listener)
+  {
+    listener.it_skip(desc);
+  }
+  
+  inline void it_skip(const char* desc, voidfunc_t func)
+  {
+    it_skip(desc, func, registered_listener());
+  }
+
   inline void it(const char* desc, voidfunc_t func, listener& listener,
       contextstack_t& context_stack, bandit::adapters::assertion_adapter& assertion_adapter)
   {
+    if(context_stack.back()->is_skipped())
+    {
+      it_skip(desc, func, listener);
+      return;
+    }
+
     listener.it_starting(desc);
 
     context_stack.back()->execution_is_starting();
@@ -104,6 +135,7 @@ namespace bandit {
   {
     it(desc, func, registered_listener(), context_stack(), registered_adapter());
   }
+
 
 }
 

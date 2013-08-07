@@ -54,6 +54,11 @@ namespace bandit { namespace fakes {
       log() << "it_unknown_error: " <<  desc << std::endl;
     }
 
+    void it_skip(const char* desc)
+    {
+      log() << "it_skip: " <<  desc << std::endl;
+    }
+
     bool did_we_pass() const
     {
       return test_run_status_;

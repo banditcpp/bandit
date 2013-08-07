@@ -176,6 +176,26 @@ go_bandit([](){
       });
     });
 
+    describe("a context with a skipped test", [&](){
+    
+        before_each([&](){
+          reporter->test_run_starting();
+          reporter->context_starting("my context");
+
+          reporter->it_starting("my test");
+          reporter->it_succeeded("my test");
+          reporter->it_skip("my skipped test");
+
+          reporter->context_ended("my context");
+          reporter->test_run_complete();
+        });
+      
+        it("reports that there is one skipped test in the summary", [&](){
+          AssertThat(output(), EndsWith("Test run complete. 1 tests run. 1 succeeded. 1 skipped.\n"));
+        });
+    
+    });
   });
+
 
 });

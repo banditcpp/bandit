@@ -20,7 +20,7 @@ namespace bandit {
 
       stm_ << std::endl;
 
-      test_run_summary summary(specs_run_, specs_failed_, specs_succeeded_, failures_, 
+      test_run_summary summary(specs_run_, specs_failed_, specs_succeeded_, specs_skipped_, failures_, 
           test_run_errors_, colorizer_);
       summary.write(stm_);
       stm_.flush();

@@ -15,6 +15,7 @@ namespace bandit {
     virtual void it_succeeded(const char* desc) = 0;
     virtual void it_failed(const char* desc, const assertion_exception& ex) = 0;
     virtual void it_unknown_error(const char* desc) = 0;
+    virtual void it_skip(const char* desc) = 0;
 
     virtual bool did_we_pass() const = 0;
   };

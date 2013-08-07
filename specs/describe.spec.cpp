@@ -84,6 +84,17 @@ go_bandit([](){
     
     });
 
+    describe("skip", [&](){
+    
+      it("pushes a context marked as skipped on the stack", [&](){
+        bool is_skipped_while_running_context;
+        describe_skip("context name", 
+          [&](){ is_skipped_while_running_context = context_stack->back()->is_skipped(); },
+          *reporter, *context_stack);
+        AssertThat(is_skipped_while_running_context, IsTrue());
+      });
+    
+    });
   });
 
 });

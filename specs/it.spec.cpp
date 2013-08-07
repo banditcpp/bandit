@@ -98,5 +98,40 @@ go_bandit([](){
       });
     });
     
+    describe("it_skip", [&](){
+    
+      it("tells reporter it's skipped", [&](){
+        it_skip("my it", [](){}, *reporter);
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
+      });
+
+      it("doesn't call function", [&](){
+        bool called = false;
+        it_skip("my it", [&](){ called = true; }, *reporter);
+        AssertThat(called, IsFalse());
+      });
+    
+    });
+
+    describe("with a context marked as skipped", [&](){
+    
+      before_each([&](){
+        context->set_is_skipped(true);
+      });
+
+      it("tells reporter it's skipped", [&](){
+        it_func = [](){};
+        call_it();
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
+      });
+
+      it("doesn't call function", [&](){
+        bool called = false;
+        it_func = [&](){ called = true; };
+        call_it();
+        AssertThat(called, IsFalse());
+      });
+    
+    });
   });
 });
