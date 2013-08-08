@@ -49,6 +49,23 @@ go_bandit([](){
         AssertThat(opt.formatter(), Equals(options::formatters::FORMATTER_DEFAULT));
       });
 
+      it("parses the '--skip=\"substring\" option", [&](){
+        const char* args[] = {"executable", "--skip=substring"};
+        argv_helper argv(2, args);
+
+        options opt(argv.argc(), argv.argv());
+        AssertThat(opt.skip(), Equals("substring"));
+      });
+
+      it("parses skip as empty string if not present", [&](){
+        const char* args[] = {"executable"};
+        argv_helper argv(1, args);
+
+        options opt(argv.argc(), argv.argv());
+        AssertThat(opt.skip(), Equals(""));
+        
+      });
+
       describe("with no arguments", [&](){
         const char* args[] = {"executable"};
         argv_helper argv(1, args);

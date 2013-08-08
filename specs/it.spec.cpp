@@ -8,16 +8,19 @@ go_bandit([](){
     unique_ptr<contextstack_t> contexts;
     unique_ptr<fake_context> context;
     bandit::adapters::snowhouse_adapter assertion_adapter;
+    skip_policy_ptr skip_policy;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
       contexts = unique_ptr<contextstack_t>(new contextstack_t());
       context = unique_ptr<fake_context>(new fake_context());
       contexts->push_back(context.get());
+
+      skip_policy = skip_policy_ptr(new always_include_policy());
     });
 
     auto call_it = [&]() {
-      it("my it", it_func, *reporter, *contexts, assertion_adapter);
+      it("my it", it_func, *reporter, *contexts, assertion_adapter, *skip_policy);
     };
 
     it("tells the current context that execution has started", [&](){
@@ -113,25 +116,52 @@ go_bandit([](){
     
     });
 
-    describe("with a context marked as skipped", [&](){
+    describe("skipping", [&](){
+        bool it_was_called;
+
+        before_each([&](){
+          it_func = [&](){ it_was_called = true; };
+          it_was_called = false;
+        });
     
-      before_each([&](){
-        context->set_is_skipped(true);
+      describe("describe is marked as skip", [&](){
+      
+        before_each([&](){
+          context->set_is_skipped(true);
+        });
+
+        it("tells reporter it's skipped", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
+        });
+
+        it("doesn't call function", [&](){
+          call_it();
+          AssertThat(it_was_called, IsFalse());
+        });
+      
       });
 
-      it("tells reporter it's skipped", [&](){
-        it_func = [](){};
-        call_it();
-        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
-      });
+      describe("with a policy that says to skip this it", [&](){
+      
+          before_each([&](){
+            skip_policy = skip_policy_ptr(new always_skip_policy());
+          });
 
-      it("doesn't call function", [&](){
-        bool called = false;
-        it_func = [&](){ called = true; };
-        call_it();
-        AssertThat(called, IsFalse());
+        it("tells reporter it's skipped", [&](){
+          call_it(); 
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
+        });
+
+        it("doesn't call function", [&](){
+          call_it();
+          AssertThat(it_was_called, IsFalse());
+        });
+      
       });
+      
     
     });
+
   });
 });

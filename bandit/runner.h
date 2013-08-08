@@ -5,6 +5,11 @@ namespace bandit {
 
   namespace detail {
 
+    inline skip_policy_ptr create_skip_policy(const options& opt)
+    {
+      return skip_policy_ptr(new name_contains_skip_policy(opt.skip()));
+    }
+
     inline listener_ptr create_reporter(const options& opt,
         const failure_formatter* formatter, const colorizer& colorizer)
     {
@@ -76,6 +81,9 @@ namespace bandit {
     listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
     registered_listener(reporter.get());
+
+    skip_policy_ptr skip_policy = create_skip_policy(opt);
+    registered_skip_policy(skip_policy.get());
 
     return run(opt, detail::specs(), context_stack(), *reporter);
   }

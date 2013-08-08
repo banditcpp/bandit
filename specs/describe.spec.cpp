@@ -21,7 +21,9 @@ go_bandit([](){
 
 
     auto call_describe = [&](){
-        describe("context name", describe_fn, *reporter, *context_stack);
+        always_include_policy skip_policy;
+        describe("context name", describe_fn, *reporter, *context_stack,
+          skip_policy);
     };
 
     describe("with a succeeding 'it'", [&](){
@@ -85,15 +87,46 @@ go_bandit([](){
     });
 
     describe("skip", [&](){
-    
-      it("pushes a context marked as skipped on the stack", [&](){
-        bool is_skipped_while_running_context;
-        describe_skip("context name", 
-          [&](){ is_skipped_while_running_context = context_stack->back()->is_skipped(); },
-          *reporter, *context_stack);
-        AssertThat(is_skipped_while_running_context, IsTrue());
+      bool is_skipped_while_running_context;
+      auto describe_fn = 
+          [&](){ is_skipped_while_running_context = context_stack->back()->is_skipped(); };
+
+      before_each([&](){
+        is_skipped_while_running_context = false;
+      });
+
+      describe("describe_skip", [&](){
+      
+        it("pushes a context marked as skipped on the stack", [&](){
+          describe_skip("context name", describe_fn, *reporter, *context_stack);
+          AssertThat(is_skipped_while_running_context, IsTrue());
+        });
+      
+      });
+
+      describe("with a policy telling to skip the describe", [&](){
+      
+        it("pushes a context marked as skipped on the stack", [&](){
+          always_skip_policy skip_policy;
+          describe("context name", describe_fn, *reporter, *context_stack, skip_policy);
+          AssertThat(is_skipped_while_running_context, IsTrue());
+        });
+      
       });
     
+      describe("with parent context marked as skip", [&](){
+      
+        before_each([&](){
+          context_stack->back()->set_is_skipped(true);
+        });
+
+        it("pushes a context marked as skipped on the stack", [&](){
+          always_include_policy skip_policy;
+          describe("context name", describe_fn, *reporter, *context_stack, skip_policy);
+          AssertThat(is_skipped_while_running_context, IsTrue());
+        });
+      
+      });
     });
   });
 
