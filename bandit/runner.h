@@ -5,9 +5,9 @@ namespace bandit {
 
   namespace detail {
 
-    inline skip_policy_ptr create_skip_policy(const options& opt)
+    inline run_policy_ptr create_run_policy(const options& opt)
     {
-      return skip_policy_ptr(new name_contains_skip_policy(opt.skip()));
+      return run_policy_ptr(new bandit_run_policy(opt.skip(), opt.only()));
     }
 
     inline listener_ptr create_reporter(const options& opt,
@@ -63,7 +63,8 @@ namespace bandit {
 
     listener.test_run_starting();
 
-    bandit_context global_context;
+    bool hard_skip = false;
+    bandit_context global_context("", hard_skip);
     context_stack.push_back(&global_context);
 
     for_each(specs.begin(), specs.end(), call_func);
@@ -82,8 +83,8 @@ namespace bandit {
 
     registered_listener(reporter.get());
 
-    skip_policy_ptr skip_policy = create_skip_policy(opt);
-    registered_skip_policy(skip_policy.get());
+    run_policy_ptr run_policy = create_run_policy(opt);
+    registered_run_policy(run_policy.get());
 
     return run(opt, detail::specs(), context_stack(), *reporter);
   }

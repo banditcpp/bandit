@@ -66,9 +66,14 @@ namespace bandit { namespace detail {
         return options_[SKIP].arg ? options_[SKIP].arg : "";
       }
 
+      const char* only() const
+      {
+        return options_[ONLY].arg ? options_[ONLY].arg : "";
+      }
+
       private:
         enum option_index { UNKNOWN, VERSION, HELP, REPORTER, NO_COLOR, 
-          FORMATTER, SKIP };
+          FORMATTER, SKIP, ONLY };
 
         static const option::Descriptor* usage()
         {
@@ -82,6 +87,7 @@ namespace bandit { namespace detail {
             {NO_COLOR, 0, "", "no-color", option::Arg::None,     "  --no-color, \tSuppress colors in output"},
             {FORMATTER, 0, "", "formatter", option::Arg::Optional, "  --formatter=<formatter>, \tSelect formatting of errors (default, vs)"},
             {SKIP, 0, "", "skip", option::Arg::Optional, "  --skip=<substring>, \tskip all 'describe' and 'it' containing substring"},
+            {ONLY, 0, "", "only", option::Arg::Optional, "  --only=<substring>, \tonly run 'describe' and 'it' containing substring"},
             {0, 0, 0, 0, 0, 0}
           };
 

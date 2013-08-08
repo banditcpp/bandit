@@ -7,7 +7,8 @@ go_bandit([](){
     unique_ptr<bandit_context> context;
 
     before_each([&](){
-      context = unique_ptr<bandit_context>(new bandit_context());
+      bool hard_skip = false;
+      context = unique_ptr<bandit_context>(new bandit_context("context name", hard_skip));
     });
 
     it("is ok to register before_each as it is not executing", [&](){

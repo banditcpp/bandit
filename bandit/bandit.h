@@ -19,7 +19,6 @@ using namespace snowhouse;
 
 #include <bandit/external/optionparser.h>
 #include <bandit/options.h>
-#include <bandit/skip_policies/skip_policies.h>
 #include <bandit/test_run_error.h>
 #include <bandit/registration/registration.h>
 #include <bandit/assertion_exception.h>
@@ -28,6 +27,7 @@ using namespace snowhouse;
 #include <bandit/listener.h>
 #include <bandit/reporters/reporters.h>
 #include <bandit/context.h>
+#include <bandit/run_policies/run_policies.h>
 #include <bandit/grammar.h>
 #include <bandit/runner.h>
 

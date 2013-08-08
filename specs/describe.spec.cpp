@@ -21,9 +21,7 @@ go_bandit([](){
 
 
     auto call_describe = [&](){
-        always_include_policy skip_policy;
-        describe("context name", describe_fn, *reporter, *context_stack,
-          skip_policy);
+        describe("context name", describe_fn, *reporter, *context_stack);
     };
 
     describe("with a succeeding 'it'", [&](){
@@ -87,43 +85,19 @@ go_bandit([](){
     });
 
     describe("skip", [&](){
-      bool is_skipped_while_running_context;
+      bool context_is_hard_skip;
       auto describe_fn = 
-          [&](){ is_skipped_while_running_context = context_stack->back()->is_skipped(); };
+          [&](){ context_is_hard_skip = context_stack->back()->hard_skip(); };
 
       before_each([&](){
-        is_skipped_while_running_context = false;
+        context_is_hard_skip = false;
       });
 
       describe("describe_skip", [&](){
       
         it("pushes a context marked as skipped on the stack", [&](){
           describe_skip("context name", describe_fn, *reporter, *context_stack);
-          AssertThat(is_skipped_while_running_context, IsTrue());
-        });
-      
-      });
-
-      describe("with a policy telling to skip the describe", [&](){
-      
-        it("pushes a context marked as skipped on the stack", [&](){
-          always_skip_policy skip_policy;
-          describe("context name", describe_fn, *reporter, *context_stack, skip_policy);
-          AssertThat(is_skipped_while_running_context, IsTrue());
-        });
-      
-      });
-    
-      describe("with parent context marked as skip", [&](){
-      
-        before_each([&](){
-          context_stack->back()->set_is_skipped(true);
-        });
-
-        it("pushes a context marked as skipped on the stack", [&](){
-          always_include_policy skip_policy;
-          describe("context name", describe_fn, *reporter, *context_stack, skip_policy);
-          AssertThat(is_skipped_while_running_context, IsTrue());
+          AssertThat(context_is_hard_skip, IsTrue());
         });
       
       });

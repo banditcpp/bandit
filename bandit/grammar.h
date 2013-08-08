@@ -7,15 +7,13 @@ namespace bandit {
   using namespace detail;
 
   inline void describe(const char* desc, voidfunc_t func, listener& listener, 
-      contextstack_t& context_stack, skip_policy& skip_policy)
+      contextstack_t& context_stack, bool hard_skip = false)
   {
     listener.context_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
-    bandit_context ctxt;
-    ctxt.set_is_skipped(context_stack.back()->is_skipped() ||
-        skip_policy.should_skip(desc));
+    bandit_context ctxt(desc, hard_skip);
 
     context_stack.push_back(&ctxt);
     try
@@ -34,14 +32,14 @@ namespace bandit {
 
   inline void describe(const char* desc, voidfunc_t func)
   {
-    describe(desc, func, registered_listener(), context_stack(), registered_skip_policy());
+    describe(desc, func, registered_listener(), context_stack());
   }
 
   inline void describe_skip(const char* desc, voidfunc_t func, listener& listener,
       contextstack_t& context_stack)
   {
-    always_skip_policy skip_policy;
-    describe(desc, func, listener, context_stack, skip_policy);
+    bool skip = true;
+    describe(desc, func, listener, context_stack, skip);
   }
 
   inline void describe_skip(const char* desc, voidfunc_t func)
@@ -81,10 +79,10 @@ namespace bandit {
 
   inline void it(const char* desc, voidfunc_t func, listener& listener,
       contextstack_t& context_stack, 
-      bandit::adapters::assertion_adapter& assertion_adapter,
-      const skip_policy& skip_policy)
+      bandit::adapters::assertion_adapter& assertion_adapter, 
+      const run_policy& run_policy)
   {
-    if(context_stack.back()->is_skipped() || skip_policy.should_skip(desc))
+    if(!run_policy.should_run(desc, context_stack))
     {
       it_skip(desc, func, listener);
       return;
@@ -137,7 +135,7 @@ namespace bandit {
   inline void it(const char* desc, voidfunc_t func)
   {
     it(desc, func, registered_listener(), context_stack(), registered_adapter(),
-        registered_skip_policy());
+        registered_run_policy());
   }
 
 

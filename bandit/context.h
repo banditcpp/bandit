@@ -9,22 +9,27 @@ namespace bandit {
     class context
     {
       public:
+        virtual const std::string& name() = 0;
         virtual void execution_is_starting() = 0;
         virtual void register_before_each(voidfunc_t func) = 0;
         virtual void register_after_each(voidfunc_t func) = 0;
         virtual void run_before_eaches() = 0;
         virtual void run_after_eaches() = 0;
-        virtual void set_is_skipped(bool skip) = 0;
-        virtual bool is_skipped() = 0;
+        virtual bool hard_skip() = 0;
     };
 
     class bandit_context : public context
     {
       public:
-        bandit_context()
-          : is_executing_(false), is_skipped_(false)
+        bandit_context(const char* desc, bool hard_skip)
+          : desc_(desc), hard_skip_(hard_skip), is_executing_(false)
         {}
 
+        const std::string& name() 
+        {
+          return desc_;
+        }
+        
         void execution_is_starting()
         {
           is_executing_ = true;
@@ -60,14 +65,9 @@ namespace bandit {
           run_all(after_eaches_);
         }
 
-        void set_is_skipped(bool skip)
+        bool hard_skip() 
         {
-          is_skipped_ = skip;
-        }
-
-        bool is_skipped()
-        {
-          return is_skipped_;
+          return hard_skip_;
         }
 
       private:
@@ -79,8 +79,9 @@ namespace bandit {
         }
 
       private:
+        std::string desc_;
+        bool hard_skip_;
         bool is_executing_;
-        bool is_skipped_;
         list<voidfunc_t> before_eaches_;
         list<voidfunc_t> after_eaches_;
     };
