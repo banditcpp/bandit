@@ -25,6 +25,11 @@ namespace bandit {
         return unique_ptr<listener>(new xunit_reporter(*formatter));
       }
 
+      if(name == "spec")
+      {
+        return unique_ptr<listener>(new spec_reporter(*formatter, colorizer));
+      }
+
       return unique_ptr<listener>(new dots_reporter(*formatter, colorizer));
     }
 
