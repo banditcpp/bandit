@@ -64,21 +64,30 @@ namespace bandit {
     virtual void it_succeeded(const char* desc)
     {
       progress_reporter::it_succeeded(desc);
-      stm_ << colorizer_.green() << "OK" << colorizer_.reset() << std::endl;
+      stm_ << colorizer_.green();
+	  stm_ << "OK";
+	  stm_ << colorizer_.reset();
+	  stm_ << std::endl;
       stm_.flush();
     }
 
     virtual void it_failed(const char* desc, const assertion_exception& ex)
     {
       progress_reporter::it_failed(desc, ex);
-      stm_ << colorizer_.red() << "FAILED" << colorizer_.reset() << std::endl;
+      stm_ << colorizer_.red();
+	  stm_ << "FAILED";
+	  stm_ << colorizer_.reset();
+	  stm_ << std::endl;
       stm_.flush();
     }
 
     virtual void it_unknown_error(const char* desc)
     {
       progress_reporter::it_unknown_error(desc);
-      stm_ << colorizer_.red() << "ERROR" << colorizer_.reset() << std::endl;
+      stm_ << colorizer_.red();
+	  stm_ << "ERROR";
+	  stm_ << colorizer_.reset();
+	  stm_ << std::endl;
       stm_.flush();
     }
 
