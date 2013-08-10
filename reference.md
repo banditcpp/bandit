@@ -113,7 +113,14 @@ When you have nested `describe()` functions, bandit will call all `before_each()
 for the outermost context first, then all for it child context until each reaches
 the context containing the current `it()`.
 
-**NOTE:** *All `before_each()` must be declared before any `it()` or nested `describe()`.*
+**NOTE:** *All `before_each()` must be declared before any `it()` or nested `describe()`.
+Otherwise bandit cannot guarantee that everything is set up correctly and will
+complain with an error message*
 
 ##after_each()
-TBD
+Sometimes (more rarely than you might think) you need to clean up after each
+test. `after_each()` gets called after each `it()` function.
+
+**NOTE:** *All `after_each()` must be declared before any `it()` or nested `describe()`.
+Otherwise bandit cannot guarantee that everything is set up correctly and will
+complain with an error message*
