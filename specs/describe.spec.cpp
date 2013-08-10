@@ -7,15 +7,15 @@ go_bandit([](){
   describe("describe:", [](){
     bandit::detail::voidfunc_t describe_fn;
     fake_reporter_ptr reporter;
-    unique_ptr<contextstack_t> context_stack;
-    unique_ptr<fake_context> global_context;
+    std::unique_ptr<contextstack_t> context_stack;
+    std::unique_ptr<fake_context> global_context;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
 
-      context_stack = unique_ptr<contextstack_t>(new contextstack_t());
+      context_stack = std::unique_ptr<contextstack_t>(new contextstack_t());
 
-      global_context = unique_ptr<fake_context>(new fake_context());
+      global_context = std::unique_ptr<fake_context>(new fake_context());
       context_stack->push_back(global_context.get());
     });
 

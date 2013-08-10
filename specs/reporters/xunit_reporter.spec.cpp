@@ -3,15 +3,15 @@
 go_bandit([](){
 
   describe("xunit_reporter:", [&](){
-    unique_ptr<std::stringstream> stm;
+    std::unique_ptr<std::stringstream> stm;
     default_failure_formatter formatter;
-    unique_ptr<bandit::xunit_reporter> reporter;
+    std::unique_ptr<bandit::xunit_reporter> reporter;
 
     auto output = [&](){ return stm->str(); };
 
     before_each([&](){
-      stm = unique_ptr<std::stringstream>(new std::stringstream());
-      reporter = unique_ptr<bandit::xunit_reporter>(new xunit_reporter(*stm, formatter));
+      stm = std::unique_ptr<std::stringstream>(new std::stringstream());
+      reporter = std::unique_ptr<bandit::xunit_reporter>(new xunit_reporter(*stm, formatter));
     });
   
     describe("an empty test run", [&](){

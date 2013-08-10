@@ -72,7 +72,7 @@ namespace bandit { namespace fakes {
     private:
     bool test_run_status_;
   };
-  typedef unique_ptr<fake_reporter> fake_reporter_ptr;
+  typedef std::unique_ptr<fake_reporter> fake_reporter_ptr;
 }}
 
 #endif

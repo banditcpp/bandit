@@ -5,15 +5,15 @@ go_bandit([](){
   describe("it:", [&](){
     voidfunc_t it_func;
     fake_reporter_ptr reporter;
-    unique_ptr<contextstack_t> contexts;
-    unique_ptr<fake_context> context;
+    std::unique_ptr<contextstack_t> contexts;
+    std::unique_ptr<fake_context> context;
     bandit::adapters::snowhouse_adapter assertion_adapter;
     run_policy_ptr run_policy;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
-      contexts = unique_ptr<contextstack_t>(new contextstack_t());
-      context = unique_ptr<fake_context>(new fake_context());
+      contexts = std::unique_ptr<contextstack_t>(new contextstack_t());
+      context = std::unique_ptr<fake_context>(new fake_context());
       contexts->push_back(context.get());
 
       run_policy = run_policy_ptr(new always_run_policy());

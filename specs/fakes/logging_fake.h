@@ -6,7 +6,7 @@ namespace bandit { namespace specs {
 
   struct logging_fake
   {
-    ostream& log()
+    std::ostream& log()
     {
       return logstm_;
     }

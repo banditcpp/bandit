@@ -8,10 +8,10 @@ using namespace bandit::specs::util;
 go_bandit([](){
 
   describe("run:", [&](){
-    unique_ptr<bd::spec_registry> specs;
-    unique_ptr<argv_helper> argv;
+    std::unique_ptr<bd::spec_registry> specs;
+    std::unique_ptr<argv_helper> argv;
     fake_reporter_ptr reporter;
-    unique_ptr<contextstack_t> context_stack;
+    std::unique_ptr<contextstack_t> context_stack;
 
     auto call_run = [&](){
         options opt(argv->argc(), argv->argv());
@@ -19,14 +19,14 @@ go_bandit([](){
     };
   
     before_each([&](){
-      specs = unique_ptr<bd::spec_registry>(new bd::spec_registry());
+      specs = std::unique_ptr<bd::spec_registry>(new bd::spec_registry());
 
       reporter = fake_reporter_ptr(new fake_reporter());
 
-      context_stack = unique_ptr<contextstack_t>(new contextstack_t());
+      context_stack = std::unique_ptr<contextstack_t>(new contextstack_t());
 
       const char* args[] = {"executable"};
-      argv = unique_ptr<argv_helper>(new argv_helper(1, args));
+      argv = std::unique_ptr<argv_helper>(new argv_helper(1, args));
     });
 
     it("pushes the global context on the context stack", [&](){

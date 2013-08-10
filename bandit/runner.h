@@ -17,20 +17,20 @@ namespace bandit {
 
       if(name == "singleline")
       {
-        return unique_ptr<listener>(new single_line_reporter(*formatter, colorizer));
+        return std::unique_ptr<listener>(new single_line_reporter(*formatter, colorizer));
       }
 
       if(name == "xunit")
       {
-        return unique_ptr<listener>(new xunit_reporter(*formatter));
+        return std::unique_ptr<listener>(new xunit_reporter(*formatter));
       }
 
       if(name == "spec")
       {
-        return unique_ptr<listener>(new spec_reporter(*formatter, colorizer));
+        return std::unique_ptr<listener>(new spec_reporter(*formatter, colorizer));
       }
 
-      return unique_ptr<listener>(new dots_reporter(*formatter, colorizer));
+      return std::unique_ptr<listener>(new dots_reporter(*formatter, colorizer));
     }
 
     typedef std::function<listener_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;

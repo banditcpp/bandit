@@ -3,7 +3,6 @@
 
 namespace bandit {
 
-  using namespace std;
   using namespace detail;
 
   inline void describe(const char* desc, voidfunc_t func, listener& listener, 

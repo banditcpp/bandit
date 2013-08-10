@@ -3,14 +3,14 @@
 go_bandit([](){
 
   describe("single line reporter", [&](){
-    unique_ptr<std::stringstream> stm;
-    unique_ptr<bandit::single_line_reporter> reporter;
+    std::unique_ptr<std::stringstream> stm;
+    std::unique_ptr<bandit::single_line_reporter> reporter;
     default_failure_formatter formatter;
     bandit::detail::colorizer colorizer(false);
   
     before_each([&](){
-      stm = unique_ptr<std::stringstream>(new std::stringstream());
-      reporter = unique_ptr<bandit::single_line_reporter>(
+      stm = std::unique_ptr<std::stringstream>(new std::stringstream());
+      reporter = std::unique_ptr<bandit::single_line_reporter>(
         new single_line_reporter(*stm, formatter, colorizer));
     });
 

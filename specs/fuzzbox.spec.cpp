@@ -25,7 +25,7 @@ namespace fuzzbox {
     private:
     sounds sound_;
   };
-  typedef unique_ptr<fuzzbox> fuzzbox_ptr;
+  typedef std::unique_ptr<fuzzbox> fuzzbox_ptr;
 
   struct guitar
   {
@@ -42,7 +42,7 @@ namespace fuzzbox {
     private:
     fuzzbox* effect_;
   };
-  typedef unique_ptr<guitar> guitar_ptr;
+  typedef std::unique_ptr<guitar> guitar_ptr;
   
 go_bandit([](){
 

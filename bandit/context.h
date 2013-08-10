@@ -4,8 +4,6 @@
 namespace bandit {
   namespace detail {
 
-    using namespace std;
-
     class context
     {
       public:
@@ -71,7 +69,7 @@ namespace bandit {
         }
 
       private:
-        void run_all(const list<voidfunc_t>& funcs)
+        void run_all(const std::list<voidfunc_t>& funcs)
         {
           auto call_func = [](voidfunc_t f){ f(); };
 
@@ -82,10 +80,10 @@ namespace bandit {
         std::string desc_;
         bool hard_skip_;
         bool is_executing_;
-        list<voidfunc_t> before_eaches_;
-        list<voidfunc_t> after_eaches_;
+        std::list<voidfunc_t> before_eaches_;
+        std::list<voidfunc_t> after_eaches_;
     };
-    typedef deque<context*> contextstack_t;
+    typedef std::deque<context*> contextstack_t;
 
     inline contextstack_t& context_stack()
     {
