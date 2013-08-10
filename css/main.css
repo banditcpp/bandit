@@ -17,6 +17,10 @@ body {
   text-shadow: none;
 }
 
+.navbar .nav>li>a:hover {
+  color: #33a;
+}
+
 .jumbotron {
   padding: 5px 15px 5px 45px;
   margin-bottom: 15px;
