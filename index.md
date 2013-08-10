@@ -4,17 +4,6 @@ layout: index
 Bandit is a framework for C++11 that wants to make working with unit tests a 
 pleasant experience.
 
-Bandit has been tested with GCC 4.7.3, Clang 3.2.0, and Visual Studio 2012. It 
-doesn't work with Visual Studio 2010. 
-
-We'll add more compilers to the list as we test them. If you want to see if 
-bandit works for your compiler, bandit is shipped with a cmake project for 
-generating bandit's self tests. 
-
-If your compiler doesn't support the C++11 features required by Bandit, we 
-suggest that you take a look at [Igloo](http://igloo-testing.org), which is 
-built on the same philosophy but works without C++11.
-
 Bandit is released under the 
 [MIT license](https://github.com/joakimkarlsson/bandit/blob/master/LICENSE.md)
 
@@ -27,7 +16,6 @@ This is a complete test application written in bandit:
 using namespace bandit;
 
 go_bandit([](){
-
     describe("fuzzbox:", [](){
       guitar_ptr guitar;
       fuzzbox_ptr fuzzbox;
@@ -35,10 +23,7 @@ go_bandit([](){
       before_each([&](){
         guitar = guitar_ptr(new struct guitar());
         fuzzbox = fuzzbox_ptr(new struct fuzzbox());
-      });
-
-      before_each([&](){
-        guitar->add_effect(fuzzbox.get());
+        guitar->add_effect(*fuzzbox);
       });
 
       it("starts in clean mode", [&](){
@@ -46,7 +31,6 @@ go_bandit([](){
       });
 
       describe("in distorted mode", [&](){
-
         before_each([&](){
           fuzzbox->flip();
         });
@@ -56,7 +40,6 @@ go_bandit([](){
         });
       });
     });
-
 });
 
 int main(int argc, char* argv[])
@@ -71,42 +54,19 @@ Bandit is header only so there is no need for additional compilation before you
 can start using it. Download bandit and add its root directory to your project's
 include directories and you're ready to go.
 
-#Running Tests
+#Compilers
 
-With bandit you create a command line application that runs all registered 
-tests, reports the result on stdout, and then exits with an error level 0 if all
-tests passed, and an error level greater than 0 if some tests did not passed.
+Bandit has been tested with GCC 4.7.3, Clang 3.2.0, and Visual Studio 2012. It 
+doesn't work with Visual Studio 2010. 
 
-Every application needs an entry point, and for bandit it should look like this:
+We'll add more compilers to the list as we test them. If you want to see if 
+bandit works for your compiler, bandit is shipped with a cmake project for 
+generating bandit's self tests. 
 
-{% highlight cpp %}
-#include <bandit/bandit.h>
+If your compiler doesn't support the C++11 features required by Bandit, we 
+suggest that you take a look at [Igloo](http://igloo-testing.org), which is 
+built on the same philosophy but works without C++11.
 
-int main(int argc, char* argv[])
-{
-  return bandit::run(argc, argv);
-}
-{% endhighlight %}
-
-The ```run()``` function will run all registered tests and report the result.
-
-##Command line arguments
-
-Bandit enables you to tweak the way tests results are reported by allowing you 
-to specify command line switches. Running ```[name of your executable] --help```
-will list the available options.
-
-{% highlight bash %}
-$ my-exe --help
-USAGE: <executable> [options]
-
-Options:
-  --version,   Print version of bandit
-  --help,      Print usage and exit.
-  --reporter,  Select reporter (dots, singleline, xunit)
-  --no-color,  Suppress colors in output
-  --formatter, Select formatting of errors (default, vs)
-{% endhighlight %}
 
 #Writing Tests
 
