@@ -47,17 +47,67 @@ for holding the objects that we need for our tests. You can have several levels
 of nested `describe()` where each level specifies specific cases of its parent
 level.
 
+This function is similar to the concept of a fixture in xUnit based frameworks.
+
+{% highlight cpp %}
+describe("a calculator", [&](){
+  calculator calc;
+
+  describe("in scientific mode", [&](){
+    // Additional setup and tests.
+
+    describe("in hex mode", [&](){
+      // Additional setup and tests.
+    });
+  });
+
+  describe("in basic mode", [&](){
+    // Additional setup and tests.
+  });
+});
+{% endhighlight %}
+
 ##describe_skip()
-TBD
+This tells bandit to skip running all `it()` functions in this `describe()` and
+all its nested describes. Bandit will report the number of skipped `it()` functions
+after the test run has completed.
 
 ##it()
-TBD
+This function describes something that should hold true for the component we're
+describing.
+
+`it()` is similar to a test method in xUnit based frameworks.
 
 ##it_skip()
-TBD
+This causes the function to be skipped during a test run. The number of skipped
+functions will be reported by the bandit executable after a test run.
 
 ##before_each()
-TBD
+This function is used to set up all prerequisites needed before we can start 
+testing. `before_each()` is called before each `it()` during a test run. This 
+way you know that each `it()` function has access to a fresh new context that
+hasn't been contaminated by other tests.
+
+You can have several `before_each()` methods in a `describe()` function. They
+will be called in the order they are declared before each `it()` function.
+
+{% highlight cpp %}
+describe("a calculator", [&](){
+  calculator_ptr calc;
+
+  before_each([&](){
+    // Make sure each 'it()' gets a fresh new
+    // calculator to work with.
+    calc = calculator_ptr(new calculator());
+  });
+
+  it("can add", [&](){
+    AssertThat(calculator->add(3,2), Equals(5));
+  });
+
+  // More tests...
+});
+{% endhighlight %}
 
 ##after_each()
 TBD
