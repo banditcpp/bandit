@@ -109,5 +109,11 @@ describe("a calculator", [&](){
 });
 {% endhighlight %}
 
+When you have nested `describe()` functions, bandit will call all `before_each()`
+for the outermost context first, then all for it child context until each reaches
+the context containing the current `it()`.
+
+**NOTE:** *All `before_each()` must be declared before any `it()` or nested `describe()`.*
+
 ##after_each()
 TBD
