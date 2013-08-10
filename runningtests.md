@@ -18,11 +18,13 @@ $ my-exe --help
 USAGE: <executable> [options]
 
 Options:
-  --version,   Print version of bandit
-  --help,      Print usage and exit.
-  --reporter,  Select reporter (dots, singleline, xunit, spec)
-  --no-color,  Suppress colors in output
-  --formatter, Select formatting of errors (default, vs)
+  --version,               Print version of bandit
+  --help,                  Print usage and exit.
+  --reporter=<reporter>,   Select reporter (dots, singleline, xunit, spec)
+  --no-color,              Suppress colors in output
+  --formatter=<formatter>, Select formatting of errors (default, vs)
+  --skip=<substring>,      skip all 'describe' and 'it' containing substring
+  --only=<substring>,      only run 'describe' and 'it' containing substring
 {% endhighlight %}
 
 ##Reporters

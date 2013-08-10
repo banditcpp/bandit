@@ -30,7 +30,8 @@ Could not find any tests.
 $
 {% endhighlight %}
 
-This means bandit is running fine.
+This means bandit is running fine, we just haven't added any tests for it to
+run yet.
 
 ##Adding Tests
 
@@ -87,7 +88,7 @@ Bandit takes a lot of inspiration from frameworks like RSpec, where our tests
 take the form of specifications that describes how a component should work. These
 specifications can be executed to verify that your code fulfills them.
 
-This is conveyed by the `describe()` and `it()` syntax.
+This is conveyed by the 'describe/it' syntax.
 
 `describe()` specifies what we're testing, and `it()` specifies what should hold
 true for that thing.
