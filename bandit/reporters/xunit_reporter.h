@@ -1,7 +1,7 @@
 #ifndef BANDIT_REPORTERS_XUNIT_REPORTER_H
 #define BANDIT_REPORTERS_XUNIT_REPORTER_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct xunit_reporter : public progress_reporter
   {
@@ -104,6 +104,6 @@ namespace bandit {
     std::ostream& stm_;
     std::stringstream work_stm_;
   };
-}
+}}
 
 #endif

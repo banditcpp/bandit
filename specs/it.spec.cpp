@@ -1,23 +1,23 @@
 #include <specs/specs.h>
 using namespace bandit::fakes;
-using namespace bandit::detail;
+namespace bd = bandit::detail;
 
 go_bandit([](){
   describe("it:", [&](){
-    voidfunc_t it_func;
+    bd::voidfunc_t it_func;
     fake_reporter_ptr reporter;
-    std::unique_ptr<contextstack_t> contexts;
+    std::unique_ptr<bd::contextstack_t> contexts;
     std::unique_ptr<fake_context> context;
     bandit::adapters::snowhouse_adapter assertion_adapter;
-    run_policy_ptr run_policy;
+    bd::run_policy_ptr run_policy;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
-      contexts = std::unique_ptr<contextstack_t>(new contextstack_t());
+      contexts = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
       context = std::unique_ptr<fake_context>(new fake_context());
       contexts->push_back(context.get());
 
-      run_policy = run_policy_ptr(new always_run_policy());
+      run_policy = bd::run_policy_ptr(new bd::always_run_policy());
     });
 
     auto call_it = [&]() {
@@ -121,7 +121,7 @@ go_bandit([](){
         bool it_was_called;
 
         before_each([&](){
-          run_policy = run_policy_ptr(new never_run_policy());
+          run_policy = bd::run_policy_ptr(new bd::never_run_policy());
           it_func = [&](){ it_was_called = true; };
           it_was_called = false;
         });
@@ -149,7 +149,7 @@ go_bandit([](){
       describe("with a policy that says to skip this it", [&](){
       
           before_each([&](){
-            run_policy = run_policy_ptr(new never_run_policy());
+            run_policy = bd::run_policy_ptr(new bd::never_run_policy());
           });
 
         it("tells reporter it's skipped", [&](){

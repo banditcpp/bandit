@@ -4,7 +4,7 @@
 namespace bandit {
 
   inline void describe(const char* desc, detail::voidfunc_t func,
-      listener& listener, detail::contextstack_t& context_stack,
+      detail::listener& listener, detail::contextstack_t& context_stack,
       bool hard_skip = false)
   {
     listener.context_starting(desc);
@@ -18,7 +18,7 @@ namespace bandit {
     {
       func();
     }
-    catch(const test_run_error& error)
+    catch(const bandit::detail::test_run_error& error)
     {
       listener.test_run_error(desc, error);
     }
@@ -34,7 +34,7 @@ namespace bandit {
   }
 
   inline void describe_skip(const char* desc, detail::voidfunc_t func,
-      listener& listener, detail::contextstack_t& context_stack)
+      detail::listener& listener, detail::contextstack_t& context_stack)
   {
     bool skip = true;
     describe(desc, func, listener, context_stack, skip);
@@ -68,7 +68,7 @@ namespace bandit {
     after_each(func, detail::context_stack());
   }
 
-  inline void it_skip(const char* desc, detail::voidfunc_t, listener& listener)
+  inline void it_skip(const char* desc, detail::voidfunc_t, detail::listener& listener)
   {
     listener.it_skip(desc);
   }
@@ -78,7 +78,7 @@ namespace bandit {
     it_skip(desc, func, detail::registered_listener());
   }
 
-  inline void it(const char* desc, detail::voidfunc_t func, listener& listener,
+  inline void it(const char* desc, detail::voidfunc_t func, detail::listener& listener,
       detail::contextstack_t& context_stack, 
       bandit::adapters::assertion_adapter& assertion_adapter, 
       const detail::run_policy& run_policy)
@@ -114,7 +114,7 @@ namespace bandit {
           listener.it_succeeded(desc);
       });
     }
-    catch(const bandit::assertion_exception& ex)
+    catch(const bandit::detail::assertion_exception& ex)
     {
       listener.it_failed(desc, ex);
     }
@@ -136,7 +136,7 @@ namespace bandit {
   inline void it(const char* desc, detail::voidfunc_t func)
   {
     it(desc, func, detail::registered_listener(), detail::context_stack(), 
-        registered_adapter(), detail::registered_run_policy());
+        detail::registered_adapter(), detail::registered_run_policy());
   }
 
 

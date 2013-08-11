@@ -1,27 +1,27 @@
 #include <specs/specs.h>
 using namespace bandit::fakes;
 using namespace bandit::specs::util;
-using namespace bandit::detail;
+namespace bd = bandit::detail;
 
 go_bandit([](){
 
   describe("run:", [&](){
-    std::unique_ptr<spec_registry> specs;
+    std::unique_ptr<bd::spec_registry> specs;
     std::unique_ptr<argv_helper> argv;
     fake_reporter_ptr reporter;
-    std::unique_ptr<contextstack_t> context_stack;
+    std::unique_ptr<bd::contextstack_t> context_stack;
 
     auto call_run = [&](){
-        options opt(argv->argc(), argv->argv());
+        bd::options opt(argv->argc(), argv->argv());
         return bandit::run(opt, *specs, *context_stack, *reporter);
     };
   
     before_each([&](){
-      specs = std::unique_ptr<spec_registry>(new spec_registry());
+      specs = std::unique_ptr<bd::spec_registry>(new bd::spec_registry());
 
       reporter = fake_reporter_ptr(new fake_reporter());
 
-      context_stack = std::unique_ptr<contextstack_t>(new contextstack_t());
+      context_stack = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
 
       const char* args[] = {"executable"};
       argv = std::unique_ptr<argv_helper>(new argv_helper(1, args));

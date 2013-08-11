@@ -13,7 +13,7 @@ namespace bandit { namespace adapters {
       }
       catch(const snowhouse::AssertionException& ex)
       {
-        throw assertion_exception(ex.GetMessage(), ex.GetFilename(), ex.GetLineNumber());
+        throw bandit::detail::assertion_exception(ex.GetMessage(), ex.GetFilename(), ex.GetLineNumber());
       }
     }
   };

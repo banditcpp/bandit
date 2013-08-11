@@ -1,17 +1,18 @@
 #include <specs/specs.h>
+namespace bd = bandit::detail;
 
 go_bandit([](){
 
   describe("xunit_reporter:", [&](){
     std::unique_ptr<std::stringstream> stm;
-    default_failure_formatter formatter;
-    std::unique_ptr<bandit::xunit_reporter> reporter;
+    bd::default_failure_formatter formatter;
+    std::unique_ptr<bd::xunit_reporter> reporter;
 
     auto output = [&](){ return stm->str(); };
 
     before_each([&](){
       stm = std::unique_ptr<std::stringstream>(new std::stringstream());
-      reporter = std::unique_ptr<bandit::xunit_reporter>(new xunit_reporter(*stm, formatter));
+      reporter = std::unique_ptr<bd::xunit_reporter>(new bd::xunit_reporter(*stm, formatter));
     });
   
     describe("an empty test run", [&](){
@@ -60,7 +61,7 @@ go_bandit([](){
         reporter->context_starting("my context");
         reporter->it_starting("my test");
 
-        assertion_exception exception("assertion failed!", "some_file", 123);
+        bd::assertion_exception exception("assertion failed!", "some_file", 123);
         reporter->it_failed("my test", exception);
 
         reporter->context_ended("my context");
@@ -110,7 +111,7 @@ go_bandit([](){
           reporter->context_starting("my context & < > \\ \"");
           reporter->it_starting("my test & < > \\ \"");
 
-          assertion_exception exception("assertion failed & < > \\ \"", "some_file", 123);
+          bd::assertion_exception exception("assertion failed & < > \\ \"", "some_file", 123);
           reporter->it_failed("my test & < > \\ \"", exception);
 
           reporter->context_ended("my context & < > \\ \"");

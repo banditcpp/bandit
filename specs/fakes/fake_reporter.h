@@ -3,7 +3,7 @@
 
 namespace bandit { namespace fakes {
   struct fake_reporter : 
-    public bandit::listener, 
+    public bandit::detail::listener, 
     public bandit::specs::logging_fake
   {
     fake_reporter() : test_run_status_(true)
@@ -29,7 +29,7 @@ namespace bandit { namespace fakes {
       log() << "context_ended: " <<  desc << std::endl;
     }
 
-    void test_run_error(const char* desc, const struct test_run_error& err)
+    void test_run_error(const char* desc, const struct bandit::detail::test_run_error& err)
     {
       log() << "test_run_error: " <<  desc <<  " (" <<  strip_newline(err.what()) <<  ")" << std::endl;
     }
@@ -44,7 +44,7 @@ namespace bandit { namespace fakes {
       log() << "it_succeeded: " <<  desc << std::endl;
     }
 
-    void it_failed(const char* desc, const assertion_exception& ex)
+    void it_failed(const char* desc, const bandit::detail::assertion_exception& ex)
     {
       log() << "it_failed: " <<  desc <<  " ("  <<  strip_newline(ex.what()) <<  ")" << std::endl;
     }

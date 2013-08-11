@@ -1,7 +1,7 @@
 #ifndef BANDIT_DOTS_REPORTER_H
 #define BANDIT_DOTS_REPORTER_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct dots_reporter : public progress_reporter
   {
@@ -62,6 +62,6 @@ namespace bandit {
     std::ostream& stm_;
     const detail::colorizer& colorizer_;
   };
-}
+}}
 
 #endif

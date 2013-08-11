@@ -1,7 +1,7 @@
 #ifndef BANDIT_SPEC_REPORTER_H
 #define BANDIT_SPEC_REPORTER_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct spec_reporter : public progress_reporter
   {
@@ -119,6 +119,6 @@ namespace bandit {
     const detail::colorizer& colorizer_;
     int indentation_;
   };
-}
+}}
 
 #endif

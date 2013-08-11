@@ -1,7 +1,7 @@
 #ifndef BANDIT_VISUAL_STUDIO_FAILURE_FORMATTER_H
 #define BANDIT_VISUAL_STUDIO_FAILURE_FORMATTER_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct visual_studio_failure_formatter : public failure_formatter
   {
@@ -31,6 +31,6 @@ namespace bandit {
     }
   };
 
-}
+}}
 
 #endif

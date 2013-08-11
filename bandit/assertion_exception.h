@@ -1,7 +1,7 @@
 #ifndef BANDIT_ASSERTION_EXCEPTION_H
 #define BANDIT_ASSERTION_EXCEPTION_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct assertion_exception : public std::runtime_error
   {
@@ -28,6 +28,6 @@ namespace bandit {
     const std::string file_name_;
     const unsigned int line_number_;
   };
-}
+}}
 
 #endif

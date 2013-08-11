@@ -1,17 +1,18 @@
 #include <specs/specs.h>
+namespace bd = bandit::detail;
 
 go_bandit([](){
 
   describe("single line reporter", [&](){
     std::unique_ptr<std::stringstream> stm;
-    std::unique_ptr<bandit::single_line_reporter> reporter;
-    default_failure_formatter formatter;
-    bandit::detail::colorizer colorizer(false);
+    std::unique_ptr<bd::single_line_reporter> reporter;
+    bd::default_failure_formatter formatter;
+    bd::colorizer colorizer(false);
   
     before_each([&](){
       stm = std::unique_ptr<std::stringstream>(new std::stringstream());
-      reporter = std::unique_ptr<bandit::single_line_reporter>(
-        new single_line_reporter(*stm, formatter, colorizer));
+      reporter = std::unique_ptr<bd::single_line_reporter>(
+        new bd::single_line_reporter(*stm, formatter, colorizer));
     });
 
     auto output = [&](){ return stm->str(); };
@@ -64,7 +65,7 @@ go_bandit([](){
         reporter->context_starting("my context");
         reporter->it_starting("my test");
 
-        assertion_exception exception("assertion failed!", "some_file", 123);
+        bd::assertion_exception exception("assertion failed!", "some_file", 123);
         reporter->it_failed("my test", exception);
 
         reporter->context_ended("my context");
@@ -121,7 +122,7 @@ go_bandit([](){
         reporter->context_starting("a nested context");
         reporter->it_starting("my test");
 
-        assertion_exception exception("assertion failed!", "some_file", 123);
+        bd::assertion_exception exception("assertion failed!", "some_file", 123);
         reporter->it_failed("my test", exception);
 
         reporter->context_ended("a nested context");
@@ -154,7 +155,7 @@ go_bandit([](){
         reporter->test_run_starting();
         reporter->context_starting("my context");
 
-        test_run_error error("we dun goofed!");
+        bd::test_run_error error("we dun goofed!");
         reporter->test_run_error("my context", error);
 
         reporter->context_ended("my context");

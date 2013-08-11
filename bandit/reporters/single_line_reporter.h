@@ -1,7 +1,7 @@
 #ifndef BANDIT_REPORTERS_SINGLE_LINE_REPORTER_H
 #define BANDIT_REPORTERS_SINGLE_LINE_REPORTER_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct single_line_reporter : public progress_reporter
   {
@@ -79,6 +79,6 @@ namespace bandit {
     std::ostream& stm_;
     const detail::colorizer& colorizer_;
   };
-}
+}}
 
 #endif

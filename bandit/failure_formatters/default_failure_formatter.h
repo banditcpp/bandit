@@ -1,7 +1,7 @@
 #ifndef BANDIT_DEFAULT_FAILURE_FORMATTER_H
 #define BANDIT_DEFAULT_FAILURE_FORMATTER_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct default_failure_formatter : public failure_formatter
   {
@@ -25,6 +25,6 @@ namespace bandit {
       return ss.str();
     }
   };
-}
+}}
 
 #endif

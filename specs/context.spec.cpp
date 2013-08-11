@@ -27,15 +27,15 @@ go_bandit([](){
       });
     
       it("is not ok to register before_each", [&](){
-        AssertThrows(bandit::test_run_error, context->register_before_each([](){}));
-        Assert::That(LastException<bandit::test_run_error>().what(), 
+        AssertThrows(bandit::detail::test_run_error, context->register_before_each([](){}));
+        Assert::That(LastException<bandit::detail::test_run_error>().what(), 
           Equals("before_each was called after 'describe' or 'it'"));
       });
 
       it("is not ok to register after_each", [&](){
-        AssertThrows(bandit::test_run_error, context->register_after_each([](){}));
-        //Assert::That(LastException<bandit::test_run_error>().what(), 
-        //  Equals("after_each was called after 'describe' or 'it'"));
+        AssertThrows(bandit::detail::test_run_error, context->register_after_each([](){}));
+        Assert::That(LastException<bandit::detail::test_run_error>().what(), 
+         Equals("after_each was called after 'describe' or 'it'"));
       });
     });
   

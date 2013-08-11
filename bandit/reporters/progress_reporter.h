@@ -1,11 +1,11 @@
 #ifndef BANDIT_PROGRESS_REPORTER_H
 #define BANDIT_PROGRESS_REPORTER_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct progress_reporter : public listener
   {
-    progress_reporter(const failure_formatter& failure_formatter)
+    progress_reporter(const detail::failure_formatter& failure_formatter)
       : specs_run_(0), specs_succeeded_(0), specs_failed_(0), specs_skipped_(0),
       failure_formatter_(failure_formatter)
     {}
@@ -104,11 +104,11 @@ namespace bandit {
     int specs_succeeded_;
     int specs_failed_;
     int specs_skipped_;
-    const failure_formatter& failure_formatter_;
+    const detail::failure_formatter& failure_formatter_;
     std::list<std::string> contexts_;
     std::list<std::string> failures_;
     std::list<std::string> test_run_errors_;
   };
-}
+}}
 
 #endif

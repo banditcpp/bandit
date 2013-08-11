@@ -1,7 +1,7 @@
 #ifndef BANDIT_TEST_RUN_SUMMARY_H
 #define BANDIT_TEST_RUN_SUMMARY_H
 
-namespace bandit {
+namespace bandit { namespace detail {
 
   struct test_run_summary
   {
@@ -83,6 +83,6 @@ namespace bandit {
     std::list<std::string> test_run_errors_;
     const detail::colorizer& colorizer_;
   };
-}
+}}
 
 #endif

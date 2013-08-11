@@ -1,20 +1,20 @@
 #include <specs/specs.h>
 
 using namespace bandit::fakes;
-using namespace bandit::detail;
+namespace bd = bandit::detail;
 
 go_bandit([](){
 
   describe("describe:", [](){
     bandit::detail::voidfunc_t describe_fn;
     fake_reporter_ptr reporter;
-    std::unique_ptr<contextstack_t> context_stack;
+    std::unique_ptr<bd::contextstack_t> context_stack;
     std::unique_ptr<fake_context> global_context;
 
     before_each([&](){
       reporter = fake_reporter_ptr(new fake_reporter());
 
-      context_stack = std::unique_ptr<contextstack_t>(new contextstack_t());
+      context_stack = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
 
       global_context = std::unique_ptr<fake_context>(new fake_context());
       context_stack->push_back(global_context.get());
@@ -71,7 +71,7 @@ go_bandit([](){
         // 
     
       before_each([&](){
-        describe_fn = [&](){ throw bandit::test_run_error("we dun goofed!"); };
+        describe_fn = [&](){ throw bandit::detail::test_run_error("we dun goofed!"); };
       });
 
       it("doesn't propagate the error", [&](){

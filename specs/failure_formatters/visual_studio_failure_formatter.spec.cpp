@@ -1,18 +1,19 @@
 #include <specs/specs.h>
+namespace bd = bandit::detail;
 
 go_bandit([](){
 
   describe("Visual Studio failure formatter:", [&](){
   
-    visual_studio_failure_formatter formatter;
+    bd::visual_studio_failure_formatter formatter;
 
     it("formats assertions with file and line number", [&](){
-      assertion_exception exception("message", "file", 321);
+      bd::assertion_exception exception("message", "file", 321);
       AssertThat(formatter.format(exception), Equals("file(321): message"));
     });
 
     it("formats assertions without file and line number", [&](){
-      assertion_exception exception("message");
+      bd::assertion_exception exception("message");
       AssertThat(formatter.format(exception), Equals("bandit: message"));
     });
   

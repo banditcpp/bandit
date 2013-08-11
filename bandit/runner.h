@@ -17,24 +17,24 @@ namespace bandit {
 
       if(name == "singleline")
       {
-        return std::unique_ptr<listener>(new single_line_reporter(*formatter, colorizer));
+        return std::unique_ptr<detail::listener>(new single_line_reporter(*formatter, colorizer));
       }
 
       if(name == "xunit")
       {
-        return std::unique_ptr<listener>(new xunit_reporter(*formatter));
+        return std::unique_ptr<detail::listener>(new xunit_reporter(*formatter));
       }
 
       if(name == "spec")
       {
-        return std::unique_ptr<listener>(new spec_reporter(*formatter, colorizer));
+        return std::unique_ptr<detail::listener>(new spec_reporter(*formatter, colorizer));
       }
 
-      return std::unique_ptr<listener>(new dots_reporter(*formatter, colorizer));
+      return std::unique_ptr<detail::listener>(new dots_reporter(*formatter, colorizer));
     }
 
     typedef std::function<listener_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
-    typedef std::function<listener* (listener*)> register_reporter_fn;
+    typedef std::function<detail::listener* (detail::listener*)> register_reporter_fn;
 
     inline failure_formatter_ptr create_formatter(const options& opt)
     {
@@ -48,7 +48,7 @@ namespace bandit {
   }
 
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
-      detail::contextstack_t& context_stack, listener& listener)
+      detail::contextstack_t& context_stack, detail::listener& listener)
   {
     if(opt.help())
     {
@@ -82,9 +82,9 @@ namespace bandit {
   inline int run(int argc, char* argv[])
   {
     detail::options opt(argc, argv);
-    failure_formatter_ptr formatter(create_formatter(opt));
+    detail::failure_formatter_ptr formatter(create_formatter(opt));
     bandit::detail::colorizer colorizer(!opt.no_color());
-    listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
+    detail::listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
     detail::registered_listener(reporter.get());
 

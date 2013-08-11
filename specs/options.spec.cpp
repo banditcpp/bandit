@@ -1,7 +1,7 @@
 #include <specs/specs.h>
 
 using namespace bandit::specs::util;
-using namespace bandit::detail;
+namespace bd = bandit::detail;
 
 go_bandit([](){
 
@@ -11,7 +11,7 @@ go_bandit([](){
         const char* args[] = {"executable", "--help"};
         argv_helper argv(2, args);
 
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
 
         AssertThat(opt.help(), IsTrue());
       });
@@ -20,7 +20,7 @@ go_bandit([](){
         const char* args[] = {"executable", "--version"};
         argv_helper argv(2, args);
 
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
 
         AssertThat(opt.version(), IsTrue());
       });
@@ -29,7 +29,7 @@ go_bandit([](){
         const char* args[] = {"executable", "--no-color"};
         argv_helper argv(2, args);
 
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
 
         AssertThat(opt.no_color(), IsTrue());
       });
@@ -38,23 +38,23 @@ go_bandit([](){
         const char* args[] = {"executable", "--formatter=vs"};
         argv_helper argv(2, args);
 
-        options opt(argv.argc(), argv.argv());
-        AssertThat(opt.formatter(), Equals(options::formatters::FORMATTER_VS));
+        bd::options opt(argv.argc(), argv.argv());
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
       });
 
       it("parser the '--formatter=default' option", [&](){
         const char* args[] = {"executable", "--formatter=default"};
         argv_helper argv(2, args);
 
-        options opt(argv.argc(), argv.argv());
-        AssertThat(opt.formatter(), Equals(options::formatters::FORMATTER_DEFAULT));
+        bd::options opt(argv.argc(), argv.argv());
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
       });
 
       it("parses the '--skip=\"substring\"' option", [&](){
         const char* args[] = {"executable", "--skip=substring"};
         argv_helper argv(2, args);
 
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.skip(), Equals("substring"));
       });
 
@@ -62,7 +62,7 @@ go_bandit([](){
         const char* args[] = {"executable"};
         argv_helper argv(1, args);
 
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.skip(), Equals(""));
       });
 
@@ -70,7 +70,7 @@ go_bandit([](){
         const char* args[] = {"executable", "--only=substring"};
         argv_helper argv(2, args);
 
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.only(), Equals("substring"));
       });
 
@@ -78,14 +78,14 @@ go_bandit([](){
         const char* args[] = {"executable"};
         argv_helper argv(1, args);
 
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.only(), Equals(""));
       });
 
       describe("with no arguments", [&](){
         const char* args[] = {"executable"};
         argv_helper argv(1, args);
-        options opt(argv.argc(), argv.argv());
+        bd::options opt(argv.argc(), argv.argv());
 
       
         it("cannot find '--help'", [&](){
@@ -101,7 +101,7 @@ go_bandit([](){
         });
 
         it("uses default formatter for '--formatter'", [&](){
-          AssertThat(opt.formatter(), Equals(options::formatters::FORMATTER_DEFAULT));
+          AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
         });
       });
     });
