@@ -4,11 +4,12 @@ go_bandit([](){
 
   describe("bandit_context:", [&](){
   
-    std::unique_ptr<bandit_context> context;
+    std::unique_ptr<bandit::detail::bandit_context> context;
 
     before_each([&](){
       bool hard_skip = false;
-      context = std::unique_ptr<bandit_context>(new bandit_context("context name", hard_skip));
+      context = std::unique_ptr<bandit::detail::bandit_context>(
+        new bandit::detail::bandit_context("context name", hard_skip));
     });
 
     it("is ok to register before_each as it is not executing", [&](){

@@ -1,14 +1,12 @@
 #include <specs/specs.h>
-
-namespace bd = bandit::detail;
 using namespace bandit::fakes;
 using namespace bandit::specs::util;
-
+using namespace bandit::detail;
 
 go_bandit([](){
 
   describe("run:", [&](){
-    std::unique_ptr<bd::spec_registry> specs;
+    std::unique_ptr<spec_registry> specs;
     std::unique_ptr<argv_helper> argv;
     fake_reporter_ptr reporter;
     std::unique_ptr<contextstack_t> context_stack;
@@ -19,7 +17,7 @@ go_bandit([](){
     };
   
     before_each([&](){
-      specs = std::unique_ptr<bd::spec_registry>(new bd::spec_registry());
+      specs = std::unique_ptr<spec_registry>(new spec_registry());
 
       reporter = fake_reporter_ptr(new fake_reporter());
 

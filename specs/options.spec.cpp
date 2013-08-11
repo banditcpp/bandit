@@ -1,6 +1,7 @@
 #include <specs/specs.h>
 
 using namespace bandit::specs::util;
+using namespace bandit::detail;
 
 go_bandit([](){
 

@@ -19,12 +19,12 @@ namespace bandit { namespace fakes {
       log() << "execution_is_starting" << std::endl;
     }
 
-    void register_before_each(voidfunc_t)
+    void register_before_each(detail::voidfunc_t)
     {
       log() << "register_before_each" << std::endl;
     }
 
-    void register_after_each(voidfunc_t)
+    void register_after_each(detail::voidfunc_t)
     {
       log() << "register_after_each" << std::endl;
     }

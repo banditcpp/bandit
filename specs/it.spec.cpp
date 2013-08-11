@@ -1,5 +1,6 @@
 #include <specs/specs.h>
 using namespace bandit::fakes;
+using namespace bandit::detail;
 
 go_bandit([](){
   describe("it:", [&](){

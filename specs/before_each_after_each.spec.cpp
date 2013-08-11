@@ -5,17 +5,17 @@ namespace bf = bandit::fakes;
 go_bandit([](){
 
     describe("before_each/after_each", [&](){
-      std::unique_ptr<contextstack_t> context_stack;
+      std::unique_ptr<bandit::detail::contextstack_t> context_stack;
       std::unique_ptr<bf::fake_context> context;
     
       before_each([&](){
         context = std::unique_ptr<bf::fake_context>(new bf::fake_context());
-        context_stack = std::unique_ptr<contextstack_t>(new contextstack_t());
+        context_stack = std::unique_ptr<bandit::detail::contextstack_t>(new bandit::detail::contextstack_t());
         context_stack->push_back(context.get());
       });
       
       describe("before_each", [&](){
-        voidfunc_t before_each_fn;
+        bandit::detail::voidfunc_t before_each_fn;
 
         before_each([&](){
           before_each_fn = [](){};
@@ -29,7 +29,7 @@ go_bandit([](){
       }); 
 
       describe("after_each", [&](){
-        voidfunc_t after_each_fn;
+          bandit::detail::voidfunc_t after_each_fn;
         
         before_each([&](){
           after_each_fn = [](){};
