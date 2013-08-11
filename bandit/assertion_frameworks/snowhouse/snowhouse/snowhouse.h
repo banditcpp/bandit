@@ -1,7 +1,7 @@
 #ifndef _SNOWHOUSE_H_JK_2013_06_28
 #define _SNOWHOUSE_H_JK_2013_06_28
 
-#define SNOWHOUSE_VERSION "1.0.0"
+#define SNOWHOUSE_VERSION "1.0.1"
 
 #include <iostream>
 #include <map>
@@ -21,4 +21,3 @@
 #include "exceptions.h"
 
 #endif
-
