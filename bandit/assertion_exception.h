@@ -14,6 +14,12 @@ namespace bandit { namespace detail {
       : std::runtime_error(message), line_number_(0)
     {}
 
+    //
+    // To make gcc < 4.7 happy.
+    //
+    virtual ~assertion_exception() throw()
+    {}
+
     const std::string& file_name() const
     {
       return file_name_;
