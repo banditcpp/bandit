@@ -58,12 +58,24 @@ include directories and you're ready to go.
 
 #Compilers
 
-Bandit has been tested with GCC 4.7.3, Clang 3.2.0, and Visual Studio 2012. It 
-doesn't work with Visual Studio 2010. 
+Bandit has been tested with the following compilers:
 
-We'll add more compilers to the list as we test them. If you want to see if 
-bandit works for your compiler, bandit is shipped with a cmake project for 
-generating bandit's self tests. 
+---
+
+| Compiler | Works |
+| -------- | -----: |
+| GCC 4.5  | Yes    |
+| GCC 4.6  | Yes    |
+| GCC 4.7  | Yes    |
+| GCC 4.8  | Yes    |
+| Clang 3.2| Yes    |
+| VS2010   | No     |
+| VS2012   | Yes    |
+
+---
+
+If you want to see if bandit works for your compiler, bandit is shipped with a
+cmake project for generating bandit's self tests. Let us know how it goes.
 
 If your compiler doesn't support the C++11 features required by Bandit, we 
 suggest that you take a look at [Igloo](http://igloo-testing.org), which is 
