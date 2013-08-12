@@ -7,6 +7,8 @@ pleasant experience.
 Bandit is released under the 
 [MIT license](https://github.com/joakimkarlsson/bandit/blob/master/LICENSE.md)
 
+[![Build Status](https://travis-ci.org/joakimkarlsson/bandit.png)](https://travis-ci.org/joakimkarlsson/bandit)
+
 #An example
 
 This is a complete test application written in bandit:
