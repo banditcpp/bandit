@@ -41,7 +41,7 @@ of executed, failed and skipped tests.
 `--reporter=xunit` reports the test results in a xml format supported by most
 continuous integration servers.
 
-`--reporter=specs` reports the tests in a format similar to how they are written
+`--reporter=spec` reports the tests in a format similar to how they are written
 along with the status of each test. 
 
 ##Formatters
