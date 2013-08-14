@@ -42,14 +42,14 @@ namespace bandit { namespace detail {
     }
 
   private:
-	  int get_console_color() const
+	  WORD get_console_color() const
 	  {
 		  CONSOLE_SCREEN_BUFFER_INFO info = {0};
 		  GetConsoleScreenBufferInfo(stdout_handle_, &info);
 		  return info.wAttributes;
 	  }
 
-	  void set_console_color(int color) const
+	  void set_console_color(WORD color) const
 	  {
 		  SetConsoleTextAttribute(stdout_handle_, color);
 	  }
@@ -57,7 +57,7 @@ namespace bandit { namespace detail {
     private:
     bool colors_enabled_;
 	HANDLE stdout_handle_;
-	int original_color_;
+	WORD original_color_;
   };
 
 #else

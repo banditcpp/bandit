@@ -31,8 +31,8 @@ namespace bandit { namespace detail {
     }
 
     private:
-    const std::string file_name_;
-    const unsigned int line_number_;
+    std::string file_name_;
+    unsigned int line_number_;
   };
 }}
 

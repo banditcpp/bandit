@@ -14,6 +14,8 @@ namespace bandit { namespace detail {
       : progress_reporter(failure_formatter), stm_(std::cout), colorizer_(colorizer), indentation_(0)
     {}
 
+	spec_reporter& operator=(const spec_reporter&) { return *this; }
+
     void test_run_complete() 
     {
       progress_reporter::test_run_complete();

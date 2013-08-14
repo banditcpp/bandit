@@ -10,6 +10,8 @@ namespace bandit { namespace detail {
       failure_formatter_(failure_formatter)
     {}
 
+	progress_reporter& operator=(const progress_reporter&) { return *this; }
+
     virtual void test_run_starting() 
     {
       specs_run_ = 0;

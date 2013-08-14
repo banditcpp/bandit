@@ -13,6 +13,8 @@ namespace bandit { namespace detail {
       colorizer_(colorizer)
     {}
 
+	test_run_summary& operator=(const test_run_summary&) { return *this; }
+
     void write(std::ostream& stm)
     {
       if(specs_run_ == 0 && test_run_errors_.size() == 0)

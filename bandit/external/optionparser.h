@@ -231,6 +231,12 @@ struct MSC_Builtin_CLZ
   }
 };
 #define __builtin_clz(x) MSC_Builtin_CLZ::builtin_clz(x)
+
+#pragma warning( push )
+#pragma warning( disable: 4510 )
+#pragma warning( disable: 4512 )
+#pragma warning( disable: 4610 )
+#pragma warning( disable: 4127 )
 #endif
 
 class Option;
@@ -1554,9 +1560,9 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
 
     do // loop over short options in group, for long options the body is executed only once
     {
-      int idx;
+      int idx = 0;
 
-      const char* optarg;
+      const char* optarg = 0;
 
       /******************** long option **********************/
       if (handle_short_options == false || try_single_minus_longopt)
@@ -2811,5 +2817,9 @@ void printUsage(Function* prn, Stream* stream, const Descriptor usage[], int wid
 
 }
 // namespace option
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif /* OPTIONPARSER_H_ */
