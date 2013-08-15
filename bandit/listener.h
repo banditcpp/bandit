@@ -4,6 +4,8 @@
 namespace bandit { namespace detail {
   struct listener
   {
+    virtual ~listener() {}
+
     virtual void test_run_starting() = 0;
     virtual void test_run_complete() = 0;
 

@@ -7,6 +7,7 @@ namespace bandit {
     class context
     {
       public:
+        virtual ~context() {}
         virtual const std::string& name() = 0;
         virtual void execution_is_starting() = 0;
         virtual void register_before_each(voidfunc_t func) = 0;

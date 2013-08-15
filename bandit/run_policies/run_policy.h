@@ -5,6 +5,7 @@ namespace bandit { namespace detail {
 
   struct run_policy
   {
+    virtual ~run_policy() {}
     virtual bool should_run(const char* it_name, const contextstack_t& contexts) const = 0;
   };
   typedef std::unique_ptr<run_policy> run_policy_ptr;
