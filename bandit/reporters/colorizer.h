@@ -1,10 +1,13 @@
 #ifndef BANDIT_REPORTERS_COLORIZER_H
 #define BANDIT_REPORTERS_COLORIZER_H
 
+#ifdef _WIN32
+  #include <windows.h>
+#endif
+
 namespace bandit { namespace detail {
 
 #ifdef _WIN32
-  #include <windows.h>
   struct colorizer
   {
     colorizer(bool colors_enabled = true)
