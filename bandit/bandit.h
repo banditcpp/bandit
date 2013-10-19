@@ -8,7 +8,7 @@
 #include <deque>
 #include <stdexcept>
 
-#define BANDIT_VERSION "1.1.2"
+#define BANDIT_VERSION "1.1.4"
 
 namespace bandit { namespace detail {
   typedef std::function<void ()> voidfunc_t;

@@ -2,7 +2,7 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 bin
-cmake_install.cmake
+*.cmake
 builds/
 tags
 cotire
