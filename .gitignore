@@ -5,3 +5,4 @@ bin
 cmake_install.cmake
 builds/
 tags
+cotire
