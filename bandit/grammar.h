@@ -105,13 +105,14 @@ namespace bandit {
       });
     };
 
+    bool we_have_been_successful_so_far = false;
     try
     {
       assertion_adapter.adapt_exceptions([&](){
           run_before_eaches();
 
           func();
-          listener.it_succeeded(desc);
+          we_have_been_successful_so_far = true;
       });
     }
     catch(const bandit::detail::assertion_exception& ex)
@@ -132,6 +133,11 @@ namespace bandit {
     {
       assertion_adapter.adapt_exceptions([&](){
           run_after_eaches();
+
+          if(we_have_been_successful_so_far) 
+          {
+            listener.it_succeeded(desc);
+          }
       });
     }
     catch(const bandit::detail::assertion_exception& ex)

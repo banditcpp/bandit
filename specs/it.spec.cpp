@@ -68,6 +68,11 @@ go_bandit([](){
           call_it();
           AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 3 Actual: 2 )"));
         });
+
+        it("doesn't report a succeeding test", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().None().EqualTo("it_succeeded: my it"));
+        });
       
       });
 
