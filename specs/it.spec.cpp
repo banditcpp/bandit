@@ -76,6 +76,24 @@ go_bandit([](){
       
       });
 
+      describe("but with a std::exception in afterEach", [&](){
+      
+        before_each([&](){
+          context->with_after_each([](){ throw std::logic_error("logic is wrong!"); });
+        });
+
+        it("tells reporter it's failed", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (exception: logic is wrong!)"));
+        });
+
+        it("doesn't report a succeeding test", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().None().EqualTo("it_succeeded: my it"));
+        });
+      
+      });
+
     });
 
     describe("with failing test", [&](){
