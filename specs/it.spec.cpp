@@ -58,7 +58,7 @@ go_bandit([](){
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_after_eaches"));
       });
 
-      describe("but with a failing afterEach", [&](){
+      describe("but with a failing after_each", [&](){
       
         before_each([&](){
           context->with_after_each([](){ AssertThat(2, Equals(3)); });
@@ -76,7 +76,7 @@ go_bandit([](){
       
       });
 
-      describe("but with a std::exception in afterEach", [&](){
+      describe("but with a std::exception in after_each", [&](){
       
         before_each([&](){
           context->with_after_each([](){ throw std::logic_error("logic is wrong!"); });
@@ -85,6 +85,78 @@ go_bandit([](){
         it("tells reporter it's failed", [&](){
           call_it();
           AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (exception: logic is wrong!)"));
+        });
+
+        it("doesn't report a succeeding test", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().None().EqualTo("it_succeeded: my it"));
+        });
+      
+      });
+
+      describe("but with an unknown error in after_each", [&](){
+      
+        before_each([&](){
+          context->with_after_each([](){ throw 25; });
+        });
+
+        it("tells reporter it's failed", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_unknown_error: my it"));
+        });
+
+        it("doesn't report a succeeding test", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().None().EqualTo("it_succeeded: my it"));
+        });
+      
+      });
+
+      describe("but with a failing before_each", [&](){
+      
+        before_each([&](){
+          context->with_before_each([](){ AssertThat(2, Equals(3)); });
+        });
+
+        it("tells reporter it's failed", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 3 Actual: 2 )"));
+        });
+
+        it("doesn't report a succeeding test", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().None().EqualTo("it_succeeded: my it"));
+        });
+      
+      });
+
+      describe("but with a std::exception in before_each", [&](){
+      
+        before_each([&](){
+          context->with_before_each([](){ throw std::logic_error("logic is wrong!"); });
+        });
+
+        it("tells reporter it's failed", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (exception: logic is wrong!)"));
+        });
+
+        it("doesn't report a succeeding test", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().None().EqualTo("it_succeeded: my it"));
+        });
+      
+      });
+
+      describe("but with an unknown error in before_each", [&](){
+      
+        before_each([&](){
+          context->with_before_each([](){ throw 25; });
+        });
+
+        it("tells reporter it's failed", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_unknown_error: my it"));
         });
 
         it("doesn't report a succeeding test", [&](){
@@ -118,11 +190,10 @@ go_bandit([](){
 
     });
 
-    struct unknown_exception {};
 
     describe("with crashing test", [&](){
       before_each([&](){
-        it_func = [](){ throw unknown_exception(); };
+        it_func = [](){ throw 44; };
       });
 
       it("tells reporter it's failed", [&](){
