@@ -81,9 +81,11 @@ go_bandit([](){
 
     });
 
+    struct unknown_exception {};
+
     describe("with crashing test", [&](){
       before_each([&](){
-        it_func = [](){ throw std::logic_error("serious crash"); };
+        it_func = [](){ throw unknown_exception(); };
       });
 
       it("tells reporter it's failed", [&](){
@@ -100,6 +102,30 @@ go_bandit([](){
         call_it();
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_after_eaches"));
       });
+    });
+
+    describe("with test throwing exception based on 'std::exception'", [&](){
+    
+      before_each([&](){
+        it_func = [](){ throw std::logic_error("logic error"); };
+      });
+
+      it("tells reporter it's failed", [&](){
+        call_it();
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (exception: logic error)"));
+      });
+
+      it("calls before_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_before_eaches"));
+      });
+
+      it("calls after_each in context", [&](){
+        call_it();
+        AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_after_eaches"));
+      });
+      
+    
     });
     
     describe("it_skip", [&](){

@@ -118,6 +118,11 @@ namespace bandit {
     {
       listener.it_failed(desc, ex);
     }
+    catch(const std::exception& ex)
+    {
+      std::string err = std::string("exception: ") + ex.what();
+      listener.it_failed(desc, bandit::detail::assertion_exception(err));
+    }
     catch(...)
     {
       listener.it_unknown_error(desc);
