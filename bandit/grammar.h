@@ -130,7 +130,13 @@ namespace bandit {
 
     try
     {
-      run_after_eaches();
+      assertion_adapter.adapt_exceptions([&](){
+          run_after_eaches();
+      });
+    }
+    catch(const bandit::detail::assertion_exception& ex)
+    {
+      listener.it_failed(desc, ex);
     }
     catch(...)
     {

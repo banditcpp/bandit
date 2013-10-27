@@ -5,7 +5,8 @@ namespace bandit { namespace fakes {
 
   struct fake_context : public bandit::detail::context, public bandit::specs::logging_fake
   {
-    fake_context() : hard_skip_(false), name_("fake_context")
+    fake_context() : hard_skip_(false), name_("fake_context"),
+      custom_after_each_([](){})
     {}
 
     const std::string& name()
@@ -37,6 +38,7 @@ namespace bandit { namespace fakes {
     void run_after_eaches()
     {
       log() << "run_after_eaches" << std::endl;
+      custom_after_each_();
     }
 
     bool hard_skip() 
@@ -45,9 +47,15 @@ namespace bandit { namespace fakes {
       return hard_skip_;
     }
 
+    void with_after_each(detail::voidfunc_t call)
+    {
+      custom_after_each_ = call;
+    }
+
     private:
     bool hard_skip_;
     std::string name_;
+    detail::voidfunc_t custom_after_each_;
   };
 }}
 

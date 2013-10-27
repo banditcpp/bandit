@@ -57,6 +57,20 @@ go_bandit([](){
         call_it();
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("run_after_eaches"));
       });
+
+      describe("but with a failing afterEach", [&](){
+      
+        before_each([&](){
+          context->with_after_each([](){ AssertThat(2, Equals(3)); });
+        });
+
+        it("tells reporter it's failed", [&](){
+          call_it();
+          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 3 Actual: 2 )"));
+        });
+      
+      });
+
     });
 
     describe("with failing test", [&](){
