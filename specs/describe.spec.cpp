@@ -102,6 +102,15 @@ go_bandit([](){
         });
       
       });
+
+      describe("xdescribe", [&](){
+
+        it("pushes a context marked as skipped on the stack", [&](){
+          xdescribe("context name", describe_fn, *reporter, *context_stack);
+          AssertThat(context_is_hard_skip, IsTrue());
+        });
+
+      });
     });
   });
 
