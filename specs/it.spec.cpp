@@ -251,6 +251,21 @@ go_bandit([](){
     
     });
 
+    describe("xit", [&](){
+
+      it("tells reporter it's skipped", [&](){
+        xit("my it", [](){}, *reporter);
+        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
+      });
+
+      it("doesn't call function", [&](){
+        bool called = false;
+        xit("my it", [&](){ called = true; }, *reporter);
+        AssertThat(called, IsFalse());
+      });
+
+    });
+
     describe("with a run policy that says to skip this 'it'", [&](){
         bool it_was_called;
 

@@ -46,6 +46,13 @@ namespace bandit {
         detail::context_stack());
   }
 
+  inline void xdescribe(const char* desc, detail::voidfunc_t func,
+      detail::listener& listener=detail::registered_listener(),
+      detail::contextstack_t& context_stack=detail::context_stack())
+  {
+    describe_skip(desc, func, listener, context_stack);
+  }
+
   inline void before_each(detail::voidfunc_t func, 
       detail::contextstack_t& context_stack)
   {
@@ -76,6 +83,11 @@ namespace bandit {
   inline void it_skip(const char* desc, detail::voidfunc_t func)
   {
     it_skip(desc, func, detail::registered_listener());
+  }
+
+  inline void xit(const char* desc, detail::voidfunc_t func, detail::listener& listener=detail::registered_listener())
+  {
+    it_skip(desc, func, listener);
   }
 
   inline void it(const char* desc, detail::voidfunc_t func, detail::listener& listener,
