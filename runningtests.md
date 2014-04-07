@@ -67,8 +67,8 @@ may look ugly. By specifying `--no-color` you can tell bandit to stop using colo
 
 ##Skipping tests
 
-You can skip tests from within your source code by using the `describe_skip()` and
-`it_skip` constructs.
+You can skip tests from within your source code by using the `describe_skip`,
+`xdescribe`, `it_skip`, and `xit` constructs.
 
 It is also possible to temporarily skip tests by using the `--skip=<substring>`
 command line option. By using this, you tell bandit to skip running all `describe`

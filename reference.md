@@ -67,7 +67,7 @@ describe("a calculator", [&](){
 });
 {% endhighlight %}
 
-##describe_skip()
+##xdescribe(), describe_skip()
 This tells bandit to skip running all `it()` functions in this `describe()` and
 all its nested describes. Bandit will report the number of skipped `it()` functions
 after the test run has completed.
@@ -78,7 +78,7 @@ describing.
 
 `it()` is similar to a test method in xUnit based frameworks.
 
-##it_skip()
+##xit(), it_skip()
 This causes the function to be skipped during a test run. The number of skipped
 functions will be reported by the bandit executable after a test run.
 
