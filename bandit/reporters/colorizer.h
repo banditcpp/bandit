@@ -31,11 +31,38 @@ namespace bandit { namespace detail {
 	  return "";
     }
 
+    const char* yellow() const
+    {
+      if(colors_enabled_)
+	  {
+		  set_console_color(FOREGROUND_YELLOW);
+	  }
+	  return "";
+    }
+
+    const char* blue() const
+    {
+      if(colors_enabled_)
+	  {
+		  set_console_color(FOREGROUND_BLUE);
+	  }
+	  return "";
+    }
+
     const char* red() const
     {
       if(colors_enabled_)
 	  {
 		  set_console_color(FOREGROUND_RED);
+	  }
+	  return "";
+    }
+
+    const char* white() const
+    {
+      if(colors_enabled_)
+	  {
+		  set_console_color(FOREGROUND_WHITE);
 	  }
 	  return "";
     }
@@ -80,9 +107,24 @@ namespace bandit { namespace detail {
       return colors_enabled_ ? "\033[1;32m" : "";
     }
 
+    const char* yellow() const
+    {
+      return colors_enabled_ ? "\033[1;33m" : "";
+    }
+
+    const char* blue() const
+    {
+      return colors_enabled_ ? "\033[1;34m" : "";
+    }
+
     const char* red() const
     {
       return colors_enabled_ ? "\033[1;31m" : "";
+    }
+
+    const char* white() const
+    {
+      return colors_enabled_ ? "\033[1;37m" : "";
     }
 
     const char* reset() const

@@ -83,7 +83,7 @@ namespace bandit { namespace detail {
                                                             "Options:" },
             {VERSION, 0, "", "version", option::Arg::None, "  --version, \tPrint version of bandit"},
             {HELP, 0, "", "help", option::Arg::None,        "  --help, \tPrint usage and exit."},
-            {REPORTER, 0, "", "reporter", option::Arg::Optional, "  --reporter=<reporter>, \tSelect reporter (dots, singleline, xunit, spec)"},
+            {REPORTER, 0, "", "reporter", option::Arg::Optional, "  --reporter=<reporter>, \tSelect reporter (dots, singleline, xunit, info, spec)"},
             {NO_COLOR, 0, "", "no-color", option::Arg::None,     "  --no-color, \tSuppress colors in output"},
             {FORMATTER, 0, "", "formatter", option::Arg::Optional, "  --formatter=<formatter>, \tSelect formatting of errors (default, vs)"},
             {SKIP, 0, "", "skip", option::Arg::Optional, "  --skip=<substring>, \tskip all 'describe' and 'it' containing substring"},
