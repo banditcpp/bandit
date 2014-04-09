@@ -26,15 +26,60 @@ struct info_reporter : public progress_reporter
 		return *this;
 	}
 
+	void summary()
+	{
+		stm_
+		  << colorizer_.white()
+		  << "Tests run: " << specs_run_
+		  << std::endl;
+		if (specs_skipped_ > 0) {
+			stm_
+			  << colorizer_.yellow()
+			  << "Skipped: " << specs_skipped_
+			  << std::endl;
+		}
+		if (specs_succeeded_ > 0) {
+			stm_
+			  << colorizer_.green()
+			  << "Passed: " << specs_succeeded_
+			  << std::endl;
+		}
+		if (specs_failed_ > 0) {
+			stm_
+			  << colorizer_.red()
+			  << "Failed: " << specs_failed_
+			  << std::endl;
+			std::for_each(failures_.begin(), failures_.end(), [&](const std::string &failure) {
+				stm_
+				 << colorizer_.white()
+				 << " (*) "
+				 << colorizer_.red()
+				 << failure << std::endl;
+			});
+		}
+		if (test_run_errors_.size() > 0) {
+			stm_
+			  << colorizer_.red()
+			  << "Errors: " << test_run_errors_.size()
+			  << std::endl;
+			std::for_each(test_run_errors_.begin(), test_run_errors_.end(), [&](const std::string &error) {
+				stm_
+				 << colorizer_.white()
+				 << " (*) "
+				 << colorizer_.red()
+				 << error << std::endl;
+			});
+		}
+		stm_
+		  << colorizer_.reset()
+		  << std::endl;
+	}
+
 	void test_run_complete()
 	{
 		progress_reporter::test_run_complete();
-
 		stm_ << std::endl;
-
-		test_run_summary summary(specs_run_, specs_failed_, specs_succeeded_, specs_skipped_, failures_,
-		  test_run_errors_, colorizer_);
-		summary.write(stm_);
+		summary();
 		stm_.flush();
 	}
 
