@@ -9,6 +9,12 @@ struct info_reporter : public progress_reporter
 	struct context_info
 	{
 		context_info(const char *d) : desc(d), total(0), skipped(0), failed(0) {}
+		void merge(const context_info &ci)
+		{
+			total += ci.total;
+			skipped += ci.skipped;
+			failed += ci.failed;
+		}
 		const char *desc;
 		int total;
 		int skipped;
@@ -131,7 +137,7 @@ struct info_reporter : public progress_reporter
 		  << "end "
 		  << colorizer_.reset()
 		  << desc;
-		const context_info &context = context_stack_.top();
+		const context_info context = context_stack_.top(); // copy
 		if (context.total > 0) {
 			stm_
 			  << colorizer_.white()
@@ -149,6 +155,9 @@ struct info_reporter : public progress_reporter
 		}
 		stm_ << colorizer_.reset() << std::endl;
 		context_stack_.pop();
+		if (!context_stack_.empty()) {
+			context_stack_.top().merge(context);
+		}
 	}
 
 	virtual void it_skip(const char *desc)
