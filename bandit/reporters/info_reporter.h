@@ -177,6 +177,7 @@ struct info_reporter : public progress_reporter
 
 	virtual void it_skip(const char *desc)
 	{
+		progress_reporter::it_skip(desc);
 		++context_stack_.top().total;
 		++context_stack_.top().skipped;
 	}
