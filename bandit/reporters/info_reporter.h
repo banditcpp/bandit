@@ -6,12 +6,21 @@ namespace detail {
 
 struct info_reporter : public progress_reporter
 {
-	info_reporter(std::ostream &stm, const failure_formatter &failure_formatter,
-	  const detail::colorizer &colorizer)
+	struct context_info
+	{
+		context_info(const char *d) : desc(d), total(0), skipped(0), failed(0) {}
+		const char *desc;
+		int total;
+		int skipped;
+		int failed;
+	};
+
+	info_reporter(std::ostream &stm, const failure_formatter &failure_formatter, const detail::colorizer &colorizer)
 	  : progress_reporter(failure_formatter)
 	  , stm_(stm)
 	  , colorizer_(colorizer)
 	  , indentation_(0)
+	  , context_stack_()
 	{}
 
 	info_reporter(const failure_formatter &failure_formatter, const detail::colorizer &colorizer)
@@ -19,6 +28,7 @@ struct info_reporter : public progress_reporter
 	  , stm_(std::cout)
 	  , colorizer_(colorizer)
 	  , indentation_(0)
+	  , context_stack_()
 	{}
 
 	info_reporter &operator=(const info_reporter &)
@@ -97,6 +107,7 @@ struct info_reporter : public progress_reporter
 	virtual void context_starting(const char *desc)
 	{
 		progress_reporter::context_starting(desc);
+		context_stack_.emplace(desc);
 
 		stm_
 		  << indent()
@@ -108,7 +119,6 @@ struct info_reporter : public progress_reporter
 		  << std::endl;
 		++indentation_;
 		stm_.flush();
-
 	}
 
 	virtual void context_ended(const char *desc)
@@ -120,7 +130,31 @@ struct info_reporter : public progress_reporter
 		  << colorizer_.blue()
 		  << "end "
 		  << colorizer_.reset()
-		  << desc << std::endl;
+		  << desc;
+		const context_info &context = context_stack_.top();
+		if (context.total > 0) {
+			stm_
+			  << colorizer_.white()
+			  << " " << context.total << " total";
+		}
+		if (context.skipped > 0) {
+			stm_
+			  << colorizer_.yellow()
+			  << " " << context.skipped << " skipped";
+		}
+		if (context.failed > 0) {
+			stm_
+			  << colorizer_.red()
+			  << " " << context.failed << " failed";
+		}
+		stm_ << colorizer_.reset() << std::endl;
+		context_stack_.pop();
+	}
+
+	virtual void it_skip(const char *desc)
+	{
+		++context_stack_.top().total;
+		++context_stack_.top().skipped;
 	}
 
 	virtual void it_starting(const char *desc)
@@ -139,6 +173,7 @@ struct info_reporter : public progress_reporter
 	virtual void it_succeeded(const char *desc)
 	{
 		progress_reporter::it_succeeded(desc);
+		++context_stack_.top().total;
 		--indentation_;
 		stm_
 		  << "\r" << indent()
@@ -153,6 +188,8 @@ struct info_reporter : public progress_reporter
 	virtual void it_failed(const char *desc, const assertion_exception &ex)
 	{
 		progress_reporter::it_failed(desc, ex);
+		++context_stack_.top().total;
+		++context_stack_.top().failed;
 		--indentation_;
 		stm_
 		  << "\r" << indent()
@@ -167,6 +204,8 @@ struct info_reporter : public progress_reporter
 	virtual void it_unknown_error(const char *desc)
 	{
 		progress_reporter::it_unknown_error(desc);
+		++context_stack_.top().total;
+		++context_stack_.top().failed;
 		--indentation_;
 		stm_
 		  << "\r" << indent()
@@ -187,6 +226,7 @@ private:
 	std::ostream &stm_;
 	const detail::colorizer &colorizer_;
 	int indentation_;
+	std::stack<context_info> context_stack_;
 };
 }
 }
