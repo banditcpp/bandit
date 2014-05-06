@@ -114,13 +114,19 @@ struct info_reporter : public progress_reporter
 	{
 		progress_reporter::context_starting(desc);
 		context_stack_.emplace(desc);
+		if (context_stack_.size() == 1) {
+			output_context_start_message();
+		}
+	}
 
+	void output_context_start_message()
+	{
 		stm_
 		  << indent()
 		  << colorizer_.blue()
 		  << "begin "
 		  << colorizer_.white()
-		  << desc
+		  << context_stack_.top().desc
 		  << colorizer_.reset()
 		  << std::endl;
 		++indentation_;
@@ -130,14 +136,27 @@ struct info_reporter : public progress_reporter
 	virtual void context_ended(const char *desc)
 	{
 		progress_reporter::context_ended(desc);
+		if (context_stack_.size() == 1
+		 || context_stack_.top().total > context_stack_.top().skipped) {
+			output_context_end_message();
+		}
+		const context_info context = context_stack_.top(); // copy
+		context_stack_.pop();
+		if (!context_stack_.empty()) {
+			context_stack_.top().merge(context);
+		}
+	}
+
+	void output_context_end_message()
+	{
+		const context_info &context = context_stack_.top();
 		--indentation_;
 		stm_
 		  << indent()
 		  << colorizer_.blue()
 		  << "end "
 		  << colorizer_.reset()
-		  << desc;
-		const context_info context = context_stack_.top(); // copy
+		  << context.desc;
 		if (context.total > 0) {
 			stm_
 			  << colorizer_.white()
@@ -154,10 +173,6 @@ struct info_reporter : public progress_reporter
 			  << " " << context.failed << " failed";
 		}
 		stm_ << colorizer_.reset() << std::endl;
-		context_stack_.pop();
-		if (!context_stack_.empty()) {
-			context_stack_.top().merge(context);
-		}
 	}
 
 	virtual void it_skip(const char *desc)
@@ -168,6 +183,11 @@ struct info_reporter : public progress_reporter
 
 	virtual void it_starting(const char *desc)
 	{
+		if (context_stack_.size() > 1
+		 && context_stack_.top().total == 0) {
+			output_context_start_message();
+		}
+
 		progress_reporter::it_starting(desc);
 		stm_
 		  << indent()
