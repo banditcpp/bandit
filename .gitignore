@@ -4,5 +4,6 @@ Makefile
 bin
 *.cmake
 builds/
+build/
 tags
-cotire
+/cotire/
