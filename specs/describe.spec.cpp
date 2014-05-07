@@ -87,7 +87,7 @@ go_bandit([](){
 
     describe("skip", [&](){
       bool context_is_hard_skip;
-      auto describe_fn = 
+      describe_fn = 
           [&](){ context_is_hard_skip = context_stack->back()->hard_skip(); };
 
       before_each([&](){
