@@ -31,6 +31,9 @@ GCC47=$?
 build_for gcc-4.8 g++-4.8
 GCC48=$?
 
+build_for gcc-4.9 g++-4.9
+GCC49=$?
+
 build_for clang clang++
 CLANG=$?
 
@@ -42,6 +45,7 @@ echo -e "gcc-4.5:\t$GCC45"
 echo -e "gcc-4.6:\t$GCC46"
 echo -e "gcc-4.7:\t$GCC47"
 echo -e "gcc-4.8:\t$GCC48"
+echo -e "gcc-4.9:\t$GCC49"
 echo -e "clang:\t$CLANG"
 echo "Done"
-exit $(( $GCC45 + $GCC46 + $GCC47 + $GCC48 + $CLANG ))
+exit $(( $GCC45 + $GCC46 + $GCC47 + $GCC48 + $GCC49 + $CLANG ))
