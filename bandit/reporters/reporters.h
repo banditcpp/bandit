@@ -7,6 +7,7 @@
 #include <bandit/reporters/dots_reporter.h>
 #include <bandit/reporters/single_line_reporter.h>
 #include <bandit/reporters/xunit_reporter.h>
+#include <bandit/reporters/info_reporter.h>
 #include <bandit/reporters/spec_reporter.h>
 
 namespace bandit { namespace detail {
