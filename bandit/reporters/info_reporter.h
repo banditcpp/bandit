@@ -26,6 +26,7 @@ struct info_reporter : public progress_reporter
 	  , stm_(stm)
 	  , colorizer_(colorizer)
 	  , indentation_(0)
+	  , not_yet_shown_(0)
 	  , context_stack_()
 	{}
 
@@ -34,6 +35,7 @@ struct info_reporter : public progress_reporter
 	  , stm_(std::cout)
 	  , colorizer_(colorizer)
 	  , indentation_(0)
+	  , not_yet_shown_(0)
 	  , context_stack_()
 	{}
 
@@ -116,6 +118,8 @@ struct info_reporter : public progress_reporter
 		context_stack_.emplace(desc);
 		if (context_stack_.size() == 1) {
 			output_context_start_message();
+		} else {
+			++not_yet_shown_;
 		}
 	}
 
@@ -133,6 +137,21 @@ struct info_reporter : public progress_reporter
 		stm_.flush();
 	}
 
+	void output_not_yet_shown_context_start_messages()
+	{
+		std::stack<context_info> temp_stack;
+		for (int i = 0; i < not_yet_shown_; ++i) {
+			temp_stack.push(context_stack_.top());
+			context_stack_.pop();
+		}
+		for (int i = 0; i < not_yet_shown_; ++i) {
+			context_stack_.push(temp_stack.top());
+			output_context_start_message();
+			temp_stack.pop();
+		}
+		not_yet_shown_ = 0;
+	}
+
 	virtual void context_ended(const char *desc)
 	{
 		progress_reporter::context_ended(desc);
@@ -144,6 +163,9 @@ struct info_reporter : public progress_reporter
 		context_stack_.pop();
 		if (!context_stack_.empty()) {
 			context_stack_.top().merge(context);
+		}
+		if (not_yet_shown_ > 0) {
+			--not_yet_shown_;
 		}
 	}
 
@@ -186,7 +208,7 @@ struct info_reporter : public progress_reporter
 	{
 		if (context_stack_.size() > 1
 		 && context_stack_.top().total == 0) {
-			output_context_start_message();
+			output_not_yet_shown_context_start_messages();
 		}
 
 		progress_reporter::it_starting(desc);
@@ -256,6 +278,7 @@ private:
 	std::ostream &stm_;
 	const detail::colorizer &colorizer_;
 	int indentation_;
+	int not_yet_shown_; // number of elements in stack that are not yet shown
 	std::stack<context_info> context_stack_;
 };
 }
