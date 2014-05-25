@@ -31,12 +31,12 @@ namespace bandit { namespace Matchers {
 
 	bool matches(char* actualValue) const
 	{
-	    return strcmp(actualValue, unwrap_pointer(_expectedValue)) == 0;
+	    return strcmp(actualValue, &*_expectedValue) == 0;
 	}
 
 	bool matches(const char* actualValue) const
 	{
-	    return strcmp(actualValue, unwrap_pointer(_expectedValue)) == 0;
+	    return strcmp(actualValue, &*_expectedValue) == 0;
 	}
 
 	template<typename U>
@@ -55,12 +55,6 @@ namespace bandit { namespace Matchers {
 
     private:
         const T& _expectedValue;
-
-	template <class U>
-	typename std::pointer_traits<U>::element_type* unwrap_pointer(const U& ptr) const
-	{
-	    return &*ptr;
-	}
     };
 
     template<typename T>
