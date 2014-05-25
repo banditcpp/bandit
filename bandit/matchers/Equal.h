@@ -1,6 +1,7 @@
 #ifndef BANDIT_EQUAL_H
 #define BANDIT_EQUAL_H
 
+#include <cstring>
 #include <memory>
 
 #include "Matcher.h"

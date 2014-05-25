@@ -1,6 +1,8 @@
 #ifndef BANDIT_CONTAIN_H
 #define BANDIT_CONTAIN_H
 
+#include <cstring>
+
 #include "Matcher.h"
 
 namespace bandit { namespace Matchers {
