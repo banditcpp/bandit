@@ -6,6 +6,7 @@ namespace bandit { namespace Matchers {
     {
     public:
 	MatcherException(const std::string& filename, const unsigned linenumber, const std::string& message) : _filename(filename), _linenumber(linenumber), _message(message) {}
+	virtual ~MatcherException() throw() {}
 
 	std::string& filename()	{ return _message; }
 	unsigned linenumber()	{ return _linenumber; }

@@ -18,7 +18,7 @@ namespace bandit { namespace Matchers
         MatchProxy& operator=(const MatchProxy<U>&);
 
     public:
-        explicit MatchProxy(const ValueProxy<T>& value, bool negate = false) : _value(value), _negate(negate) {}
+        explicit MatchProxy(const ValueProxy<T>& value, bool negate_ = false) : _value(value), _negate(negate_) {}
 
         template<typename MatcherType>
 	void operator()(const MatcherType& matcher) const
