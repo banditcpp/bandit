@@ -207,7 +207,7 @@ struct info_reporter : public progress_reporter
 	virtual void it_starting(const char *desc)
 	{
 		if (context_stack_.size() > 1
-		 && context_stack_.top().total == 0) {
+		 && context_stack_.top().total == context_stack_.top().skipped) {
 			output_not_yet_shown_context_start_messages();
 		}
 
