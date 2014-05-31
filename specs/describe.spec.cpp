@@ -3,7 +3,7 @@
 using namespace bandit::fakes;
 namespace bd = bandit::detail;
 
-go_bandit([](){
+SPEC_BEGIN(describe)
 
   describe("describe:", [](){
     bandit::detail::voidfunc_t describe_fn;
@@ -114,4 +114,4 @@ go_bandit([](){
     });
   });
 
-});
+SPEC_END
