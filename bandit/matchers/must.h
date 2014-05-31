@@ -1,7 +1,7 @@
 #ifndef BANDIT_MUST_H
 #define BANDIT_MUST_H
 
-#import "ValueProxy.h"
+#include "ValueProxy.h"
 
 namespace bandit { namespace Matchers
 {
