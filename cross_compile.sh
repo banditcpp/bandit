@@ -9,6 +9,7 @@ function build_for {
   pushd $BUILD_DIR
   CC=$CC CXX=$CXX cmake ../..
   make
+  build_result=$?
   popd
 }
 
@@ -20,22 +21,22 @@ mkdir builds
 pushd builds
 
 build_for gcc-4.5 g++-4.5
-GCC45=$?
+GCC45=$build_result
 
 build_for gcc-4.6 g++-4.6
-GCC46=$?
+GCC46=$build_result
 
 build_for gcc-4.7 g++-4.7
-GCC47=$?
+GCC47=$build_result
 
 build_for gcc-4.8 g++-4.8
-GCC48=$?
+GCC48=$build_result
 
 build_for gcc-4.9 g++-4.9
-GCC49=$?
+GCC49=$build_result
 
 build_for clang clang++
-CLANG=$?
+CLANG=$build_result
 
 popd
 
