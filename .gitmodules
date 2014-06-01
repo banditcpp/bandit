@@ -1,3 +1,6 @@
 [submodule "cmake/cotire"]
 	path = cmake/cotire
 	url = https://github.com/sakra/cotire.git
+[submodule "bandit/assertion_frameworks/snowhouse"]
+	path = bandit/assertion_frameworks/snowhouse
+	url = https://github.com/joakimkarlsson/snowhouse.git
