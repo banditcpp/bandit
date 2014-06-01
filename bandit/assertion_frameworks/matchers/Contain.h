@@ -10,9 +10,6 @@ namespace bandit { namespace Matchers {
     template<typename T>
     class Contain : public Matcher
     {
-    private:
-        Contain& operator=(const Contain&);
-
     public:
         explicit Contain(const T& element) : Matcher(), _element(element) {}
 

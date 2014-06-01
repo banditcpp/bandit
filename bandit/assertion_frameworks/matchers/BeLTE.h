@@ -8,12 +8,8 @@ namespace bandit { namespace Matchers {
     template<typename T>
     class BeLTE : public Matcher
     {
-    private:
-        BeLTE<T>& operator=(const BeLTE<T>&);
-
     public:
         explicit BeLTE(const T& expectedValue) : Matcher(), _expectedValue(expectedValue) {}
-        ~BeLTE() {}
 
         template<typename U>
         bool matches(const U& actualValue) const

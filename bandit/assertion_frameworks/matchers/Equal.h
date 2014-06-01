@@ -17,12 +17,8 @@ namespace bandit { namespace Matchers {
     template<typename T>
     class Equal : public Matcher
     {
-    private:
-        Equal<T>& operator=(const Equal<T>&);
-
     public:
         explicit Equal(const T& expectedValue) : Matcher(), _expectedValue(expectedValue) {}
-        ~Equal() {}
 
         template<typename U>
         bool matches(const U& actualValue) const

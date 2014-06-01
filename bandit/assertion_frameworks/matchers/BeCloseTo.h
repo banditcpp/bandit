@@ -8,12 +8,8 @@ namespace bandit { namespace Matchers {
     template<typename T>
     class BeCloseTo : public Matcher
     {
-    private:
-        BeCloseTo<T>& operator=(const BeCloseTo<T>&);
-
     public:
         explicit BeCloseTo(const T& expectedValue): Matcher(), _expectedValue(expectedValue), _threshold(0.01) {}
-        ~BeCloseTo() {}
 
         BeCloseTo<T>& within(float threshold)
 	{

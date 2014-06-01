@@ -8,12 +8,8 @@ namespace bandit { namespace Matchers {
     template<typename T>
     class BeLessThan : public Matcher
     {
-    private:
-        BeLessThan<T>& operator=(const BeLessThan<T>&);
-
     public:
         explicit BeLessThan(const T& expectedValue) : Matcher(), _expectedValue(expectedValue) {}
-        ~BeLessThan() {}
 
         template<typename U>
         bool matches(const U& actualValue) const

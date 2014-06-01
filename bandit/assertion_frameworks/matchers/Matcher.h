@@ -8,12 +8,8 @@
 namespace bandit { namespace Matchers {
     class Matcher
     {
-    private:
-        Matcher & operator=(const Matcher &);
-
     public:
         Matcher() {}
-        virtual ~Matcher() {};
 
         template<typename U>
 	std::string failure_message(const U& value, bool negate) const
