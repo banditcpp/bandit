@@ -44,6 +44,36 @@ struct info_reporter : public progress_reporter
 		return *this;
 	}
 
+	void list_failures_and_errors()
+	{
+		if (specs_failed_ > 0) {
+			stm_
+			  << colorizer_.red()
+			  << "List of failures:"
+			  << std::endl;
+			std::for_each(failures_.begin(), failures_.end(), [&](const std::string &failure) {
+				stm_
+				 << colorizer_.white()
+				 << " (*) "
+				 << colorizer_.red()
+				 << failure << std::endl;
+			});
+		}
+		if (test_run_errors_.size() > 0) {
+			stm_
+			  << colorizer_.red()
+			  << "List of run errors: "
+			  << std::endl;
+			std::for_each(test_run_errors_.begin(), test_run_errors_.end(), [&](const std::string &error) {
+				stm_
+				 << colorizer_.white()
+				 << " (*) "
+				 << colorizer_.red()
+				 << error << std::endl;
+			});
+		}
+	}
+
 	void summary()
 	{
 		stm_
@@ -67,26 +97,12 @@ struct info_reporter : public progress_reporter
 			  << colorizer_.red()
 			  << "Failed: " << specs_failed_
 			  << std::endl;
-			std::for_each(failures_.begin(), failures_.end(), [&](const std::string &failure) {
-				stm_
-				 << colorizer_.white()
-				 << " (*) "
-				 << colorizer_.red()
-				 << failure << std::endl;
-			});
 		}
 		if (test_run_errors_.size() > 0) {
 			stm_
 			  << colorizer_.red()
 			  << "Errors: " << test_run_errors_.size()
 			  << std::endl;
-			std::for_each(test_run_errors_.begin(), test_run_errors_.end(), [&](const std::string &error) {
-				stm_
-				 << colorizer_.white()
-				 << " (*) "
-				 << colorizer_.red()
-				 << error << std::endl;
-			});
 		}
 		stm_
 		  << colorizer_.reset()
@@ -97,6 +113,7 @@ struct info_reporter : public progress_reporter
 	{
 		progress_reporter::test_run_complete();
 		stm_ << std::endl;
+		list_failures_and_errors();
 		summary();
 		stm_.flush();
 	}
@@ -106,9 +123,7 @@ struct info_reporter : public progress_reporter
 		progress_reporter::test_run_error(desc, err);
 
 		std::stringstream ss;
-		ss << std::endl;
 		ss << "Failed to run \"" << current_context_name() << "\": error \"" << err.what() << "\"" << std::endl;
-
 		test_run_errors_.push_back(ss.str());
 	}
 
@@ -239,7 +254,12 @@ struct info_reporter : public progress_reporter
 
 	virtual void it_failed(const char *desc, const assertion_exception &ex)
 	{
-		progress_reporter::it_failed(desc, ex);
+		++specs_failed_;
+
+		std::stringstream ss;
+		ss << current_context_name() << " " << desc << ":" << std::endl << failure_formatter_.format(ex);
+		failures_.push_back(ss.str());
+
 		++context_stack_.top().total;
 		++context_stack_.top().failed;
 		--indentation_;
@@ -255,7 +275,12 @@ struct info_reporter : public progress_reporter
 
 	virtual void it_unknown_error(const char *desc)
 	{
-		progress_reporter::it_unknown_error(desc);
+		++specs_failed_;
+
+		std::stringstream ss;
+		ss << current_context_name() << " " << desc << ": Unknown exception" << std::endl;
+		failures_.push_back(ss.str());
+
 		++context_stack_.top().total;
 		++context_stack_.top().failed;
 		--indentation_;
