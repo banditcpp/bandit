@@ -1,5 +1,9 @@
-cmake_minimum_required(VERSION 2.8.8) 
+cmake_minimum_required(VERSION 2.8.8)
 project(bandit)
+
+option(BANDIT_BUILD_SPECS   "Build the Bandit specs"                ON)
+option(BANDIT_RUN_SPECS     "Run the Bandit specs"                  ON)
+option(SNOWHOUSE_IS_CPP11   "Build Snowhouse with C++11 settings"   ON)
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cotire/CMake/cotire)
@@ -35,21 +39,22 @@ if (CMAKE_HOST_APPLE AND (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 endif()
 
-FILE(GLOB BanditSpecSourceFiles specs/*.cpp specs/**/*.cpp)
-add_executable(bandit-specs ${BanditSpecSourceFiles} )
-set_target_properties(bandit-specs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "specs/specs.h")
-set_target_properties(bandit-specs PROPERTIES COTIRE_ADD_UNIT_BUILD FALSE)
-cotire(bandit-specs)
+if (BANDIT_BUILD_SPECS)
+    FILE(GLOB BanditSpecSourceFiles specs/*.cpp specs/**/*.cpp)
+    add_executable(bandit-specs ${BanditSpecSourceFiles} )
+    set_target_properties(bandit-specs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "specs/specs.h")
+    set_target_properties(bandit-specs PROPERTIES COTIRE_ADD_UNIT_BUILD FALSE)
+    cotire(bandit-specs)
+endif()
 
-set(cfg "C++11" CACHE STRING "Configuration for snowhouse")
 add_subdirectory(bandit/assertion_frameworks/snowhouse)
 
-add_custom_command(TARGET bandit-specs
-                   POST_BUILD
-                   COMMAND bandit-specs --no-color --reporter=dots
-                   WORKING_DIRECTORY ./bin)
+if (BANDIT_BUILD_SPECS AND BANDIT_RUN_SPECS)
+    add_custom_command(TARGET bandit-specs
+                       POST_BUILD
+                       COMMAND bandit-specs --no-color --reporter=dots
+                       WORKING_DIRECTORY ./bin)
+elseif (BANDIT_RUN_SPECS)
+    message(WARNING "Unable to run Bandit specs - set:\n  option(BANDIT_BUILD_SPECS, \"Build the Bandit specs\" ON)\nand clear your CMake cache")
+endif()
 
-add_custom_command(TARGET snowhouse-tests
-                   POST_BUILD
-                   COMMAND snowhouse-tests
-                   WORKING_DIRECTORY ./bin)
