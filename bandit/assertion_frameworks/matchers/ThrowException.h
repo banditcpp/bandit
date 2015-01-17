@@ -8,12 +8,9 @@ namespace bandit { namespace Matchers {
     template <typename T>
     class ThrowException : public Matcher
     {
-    private:
-        ThrowException & operator=(const ThrowException &);
-
     public:
-        explicit ThrowException(bool allow_subclasses = false) : Matcher(), _allow_subclasses(allow_subclasses) {}
-        ~ThrowException() {}
+        ThrowException() : Matcher(), _allow_subclasses(false) {}
+        explicit ThrowException(bool allow_subclasses) : Matcher(), _allow_subclasses(allow_subclasses) {}
 
 	template <typename U = std::exception>
         ThrowException<U> operator()() const

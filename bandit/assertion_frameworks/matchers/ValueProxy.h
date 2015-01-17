@@ -8,12 +8,6 @@ namespace bandit { namespace Matchers {
     template<typename T>
     class ValueProxy
     {
-    private:
-        template<typename U>
-        ValueProxy(const ValueProxy<U> &);
-        template<typename U>
-        ValueProxy & operator=(const ValueProxy<U> &);
-
     public:
         MatchProxy<T> to;
         MatchProxy<T> to_not;

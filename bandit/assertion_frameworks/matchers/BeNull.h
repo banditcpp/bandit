@@ -7,12 +7,8 @@ namespace bandit { namespace Matchers {
 
     class BeNull : public Matcher
     {
-    private:
-        BeNull& operator=(const BeNull&);
-
     public:
         BeNull() : Matcher() {}
-        ~BeNull() {}
 
         template<typename U>
         bool matches(U *const & actualValue) const
