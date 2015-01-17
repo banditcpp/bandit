@@ -41,7 +41,7 @@ set_target_properties(bandit-specs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "spe
 set_target_properties(bandit-specs PROPERTIES COTIRE_ADD_UNIT_BUILD FALSE)
 cotire(bandit-specs)
 
-set(cfg "C++11" CACHE STRING "Configuration for snowhouse")
+set(SNOWHOUSE_IS_CPP11 ON CACHE BOOL "Build Snowhouse in C++11 mode")
 add_subdirectory(bandit/assertion_frameworks/snowhouse)
 
 add_custom_command(TARGET bandit-specs

@@ -1,6 +1,11 @@
 #ifndef BANDIT_BANDIT_H
 #define BANDIT_BANDIT_H
 
+#ifdef _MSC_VER
+// Visual Studio (including 2013) does not support the noexcept keyword
+#define noexcept
+#endif
+
 #include <cassert>
 #include <functional>
 #include <iostream>
