@@ -60,7 +60,6 @@ namespace bandit { namespace Matchers {
         return Equal<T>(expectedValue);
     }
 
-#pragma mark equality operators
     template<typename T, typename U>
     bool operator==(const ValueProxy<T>& actualValue, const U& expectedValue)
     {
