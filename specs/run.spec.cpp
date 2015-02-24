@@ -11,7 +11,7 @@ go_bandit([](){
     fake_reporter_ptr reporter;
     std::unique_ptr<bd::contextstack_t> context_stack;
 
-    auto call_run = [&](){
+    auto call_run = [&]() -> int {
         bd::options opt(argv->argc(), argv->argv());
         return bandit::run(opt, *specs, *context_stack, *reporter);
     };
