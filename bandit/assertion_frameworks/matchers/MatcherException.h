@@ -1,22 +1,15 @@
 #ifndef BANDIT_MATCHER_EXCEPTION_H
 #define BANDIT_MATCHER_EXCEPTION_H
 
+#include <bandit/assertion_exception.h>
+
 namespace bandit { namespace Matchers {
-    class MatcherException : public std::exception
+    class MatcherException : public detail::assertion_exception
     {
     public:
-      MatcherException(const std::string& filename, const unsigned linenumber, const std::string& message) : _filename(filename), _linenumber(linenumber), _message(message) {}
+      MatcherException(const std::string& filename, const unsigned linenumber, const std::string& message) : detail::assertion_exception(message, filename, linenumber) {}
       MatcherException(const MatcherException&) = default;
       virtual ~MatcherException() noexcept {}
-
-	std::string& filename()	{ return _message; }
-	unsigned linenumber()	{ return _linenumber; }
-	std::string& message()	{ return _message; }
-
-    private:
-	std::string	_filename;
-	unsigned	_linenumber;
-	std::string	_message;
     };
 }}
 
