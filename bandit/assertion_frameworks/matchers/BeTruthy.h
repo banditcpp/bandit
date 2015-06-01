@@ -16,6 +16,11 @@ namespace bandit { namespace Matchers {
 	    return !!actualValue;
 	}
 
+        bool matches(const std::nullptr_t& actualValue) const
+	{
+	    return false;
+	}
+
 
     protected:
         virtual std::string failure_message_end() const
