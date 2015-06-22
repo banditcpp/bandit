@@ -2,6 +2,7 @@
 #define BANDIT_CONTAIN_H
 
 #include <cstring>
+#include <vector>
 
 #include "Matcher.h"
 
