@@ -2,7 +2,7 @@
 #define BANDIT_REPORTERS_COLORIZER_H
 
 #ifdef _WIN32
-  #ifndef MINGW32
+  #ifndef NOMINMAX
     #define NOMINMAX
   #endif
 
