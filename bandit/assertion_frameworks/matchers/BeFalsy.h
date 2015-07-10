@@ -20,7 +20,7 @@ namespace bandit { namespace Matchers {
 	    return !actualValue;
 	}
 
-        bool matches(const std::nullptr_t& actualValue) const
+        bool matches(const std::nullptr_t&) const
 	{
 	    return true;
 	}
