@@ -5,8 +5,20 @@ namespace bandit { namespace detail {
 
   struct run_policy
   {
-    virtual ~run_policy() {}
     virtual bool should_run(const char* it_name, const contextstack_t& contexts) const = 0;
+
+    virtual void encountered_failure()
+    {
+        encountered_failure_ = true;
+    }
+
+    virtual bool has_encountered_failure() const
+    {
+        return encountered_failure_;
+    }
+
+  private:
+    bool encountered_failure_;
   };
   typedef std::unique_ptr<run_policy> run_policy_ptr;
 
