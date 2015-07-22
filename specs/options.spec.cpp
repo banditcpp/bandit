@@ -6,7 +6,7 @@ namespace bd = bandit::detail;
 go_bandit([](){
 
     describe("options:", [&](){
-    
+
       it("parses the '--help' option", [&](){
         const char* args[] = {"executable", "--help"};
         argv_helper argv(2, args);
@@ -82,12 +82,20 @@ go_bandit([](){
         AssertThat(opt.only(), Equals(""));
       });
 
+      it("parses the '--break-on-failure' oprtion", [&](){
+        const char* args[] = {"executable", "--break-on-failure"};
+        argv_helper argv(2, args);
+
+        bd::options opt(argv.argc(), argv.argv());
+
+        AssertThat(opt.break_on_failure(), IsTrue());
+      });
+
       describe("with no arguments", [&](){
         const char* args[] = {"executable"};
         argv_helper argv(1, args);
         bd::options opt(argv.argc(), argv.argv());
 
-      
         it("cannot find '--help'", [&](){
           AssertThat(opt.help(), IsFalse());
         });
@@ -95,9 +103,13 @@ go_bandit([](){
         it("cannot find '--version'", [&](){
           AssertThat(opt.version(), IsFalse());
         });
-      
+
         it("cannot find '--no-color'", [&](){
           AssertThat(opt.no_color(), IsFalse());
+        });
+
+        it("cannot fine '--break-on-failure'", [&](){
+          AssertThat(opt.break_on_failure(), IsFalse())
         });
 
         it("uses default formatter for '--formatter'", [&](){

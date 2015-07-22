@@ -93,7 +93,7 @@ namespace bandit {
   inline void it(const char* desc, detail::voidfunc_t func, detail::listener& listener,
       detail::contextstack_t& context_stack, 
       bandit::adapters::assertion_adapter& assertion_adapter, 
-      const detail::run_policy& run_policy)
+      detail::run_policy& run_policy)
   {
     if(!run_policy.should_run(desc, context_stack))
     {
@@ -130,15 +130,18 @@ namespace bandit {
     catch(const bandit::detail::assertion_exception& ex)
     {
       listener.it_failed(desc, ex);
+      run_policy.encountered_failure();
     }
     catch(const std::exception& ex)
     {
       std::string err = std::string("exception: ") + ex.what();
       listener.it_failed(desc, bandit::detail::assertion_exception(err));
+      run_policy.encountered_failure();
     }
     catch(...)
     {
       listener.it_unknown_error(desc);
+      run_policy.encountered_failure();
     }
 
     try
@@ -155,15 +158,18 @@ namespace bandit {
     catch(const bandit::detail::assertion_exception& ex)
     {
       listener.it_failed(desc, ex);
+      run_policy.encountered_failure();
     }
     catch(const std::exception& ex)
     {
       std::string err = std::string("exception: ") + ex.what();
       listener.it_failed(desc, bandit::detail::assertion_exception(err));
+      run_policy.encountered_failure();
     }
     catch(...)
     {
       listener.it_unknown_error(desc);
+      run_policy.encountered_failure();
     }
   }
 
