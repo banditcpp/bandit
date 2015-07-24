@@ -1,8 +1,12 @@
 language: cpp
-sudo: false
+sudo: true
 compiler:
   - gcc
   - clang
+before_install:
+  - yes | sudo add-apt-repository ppa:kalakris/cmake
+  - sudo apt-get update -qq
+install: sudo apt-get update -qq
 before_script:
   - BUILD_DIR=`pwd`/builds
   - mkdir -p ${BUILD_DIR}
