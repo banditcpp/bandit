@@ -6,7 +6,7 @@ compiler:
 before_install:
   - yes | sudo add-apt-repository ppa:kalakris/cmake
   - sudo apt-get update -qq
-install: sudo apt-get update -qq
+install: sudo apt-get install cmake
 before_script:
   - BUILD_DIR=`pwd`/builds
   - mkdir -p ${BUILD_DIR}
