@@ -8,11 +8,11 @@ namespace bandit { namespace Matchers {
     class BeFalsy : public Matcher
     {
     private:
-        BeFalsy& operator=(const BeFalsy&);
+        // BeFalsy& operator=(const BeFalsy&);
 
     public:
-        BeFalsy() : Matcher() {}
-        ~BeFalsy() {}
+        explicit BeFalsy() : Matcher() {}
+        // ~BeFalsy() {}
 
         template<typename U>
         bool matches(const U& actualValue) const
