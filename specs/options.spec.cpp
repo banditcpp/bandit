@@ -82,13 +82,22 @@ go_bandit([](){
         AssertThat(opt.only(), Equals(""));
       });
 
-      it("parses the '--break-on-failure' oprtion", [&](){
+      it("parses the '--break-on-failure' option", [&](){
         const char* args[] = {"executable", "--break-on-failure"};
         argv_helper argv(2, args);
 
         bd::options opt(argv.argc(), argv.argv());
 
         AssertThat(opt.break_on_failure(), IsTrue());
+      });
+
+      it("parses the '--dry-run' option", [&](){
+        const char* args[] = {"executable", "--dry-run"};
+        argv_helper argv(2, args);
+
+        bd::options opt(argv.argc(), argv.argv());
+
+        AssertThat(opt.dry_run(), IsTrue());
       });
 
       describe("with no arguments", [&](){
@@ -108,8 +117,12 @@ go_bandit([](){
           AssertThat(opt.no_color(), IsFalse());
         });
 
-        it("cannot fine '--break-on-failure'", [&](){
+        it("cannot find '--break-on-failure'", [&](){
           AssertThat(opt.break_on_failure(), IsFalse())
+        });
+
+        it("cannot find '--dry-run'", [&](){
+          AssertThat(opt.dry_run(), IsFalse())
         });
 
         it("uses default formatter for '--formatter'", [&](){
