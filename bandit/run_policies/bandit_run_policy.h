@@ -5,12 +5,18 @@ namespace bandit { namespace detail {
 
   struct bandit_run_policy : public run_policy
   {
-    bandit_run_policy(const char* skip_pattern, const char* only_pattern, bool break_on_failure)
-      : run_policy(), skip_pattern_(skip_pattern), only_pattern_(only_pattern), break_on_failure_(break_on_failure)
+    bandit_run_policy(const char* skip_pattern, const char* only_pattern, bool break_on_failure, bool dry_run)
+      : run_policy(), skip_pattern_(skip_pattern), only_pattern_(only_pattern),
+      break_on_failure_(break_on_failure), dry_run_(dry_run)
     {}
 
     bool should_run(const char* it_name, const contextstack_t& contexts) const
     {
+      if(dry_run_)
+      {
+          return false;
+      }
+
       if(break_on_failure_ && has_encountered_failure())
       {
           return false;
@@ -154,6 +160,7 @@ namespace bandit { namespace detail {
     std::string skip_pattern_;
     std::string only_pattern_;
     bool break_on_failure_;
+    bool dry_run_;
   };
 
 }}

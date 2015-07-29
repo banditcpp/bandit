@@ -7,7 +7,7 @@ namespace bandit {
 
     inline run_policy_ptr create_run_policy(const options& opt)
     {
-      return run_policy_ptr(new bandit_run_policy(opt.skip(), opt.only(), opt.break_on_failure()));
+      return run_policy_ptr(new bandit_run_policy(opt.skip(), opt.only(), opt.break_on_failure(), opt.dry_run()));
     }
 
     inline listener_ptr create_reporter(const options& opt,
