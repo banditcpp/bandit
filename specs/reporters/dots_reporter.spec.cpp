@@ -191,6 +191,10 @@ go_bandit([](){
           reporter->test_run_complete();
         });
       
+        it("displays a dot for the successful test, and a 'S' for the skipped test", [&](){
+          AssertThat(output(), StartsWith(".S"));
+        });
+
         it("reports that there is one skipped test in the summary", [&](){
           AssertThat(output(), EndsWith("Test run complete. 1 tests run. 1 succeeded. 1 skipped.\n"));
         });
