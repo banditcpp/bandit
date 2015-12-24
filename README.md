@@ -1,6 +1,6 @@
 bandit
 ======
-[![Build Status](https://travis-ci.org/joakimkarlsson/bandit.png)](https://travis-ci.org/joakimkarlsson/bandit)
+[![Build Status](https://travis-ci.org/joakimkarlsson/bandit.svg)](https://travis-ci.org/joakimkarlsson/bandit)
 
 Human friendly unit testing for C++11
 
