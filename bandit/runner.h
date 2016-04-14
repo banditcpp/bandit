@@ -91,7 +91,7 @@ namespace bandit {
     bandit::detail::colorizer colorizer(!opt.no_color());
     detail::listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
-    detail::registered_listener(reporter.get());
+    detail::register_listener(reporter.get());
 
     detail::run_policy_ptr run_policy = create_run_policy(opt);
     registered_run_policy(run_policy.get());
