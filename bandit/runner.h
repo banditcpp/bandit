@@ -94,7 +94,7 @@ namespace bandit {
     detail::register_listener(reporter.get());
 
     detail::run_policy_ptr run_policy = create_run_policy(opt);
-    registered_run_policy(run_policy.get());
+    register_run_policy(run_policy.get());
 
     return run(opt, detail::specs(), detail::context_stack(), *reporter);
   }
