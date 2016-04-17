@@ -1,7 +1,7 @@
 #ifndef BANDIT_REPORTERS_COLORIZER_H
 #define BANDIT_REPORTERS_COLORIZER_H
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(BANDIT_CONFIG_COLOR_ANSI)
   #ifndef NOMINMAX
     #define NOMINMAX
   #endif
@@ -12,7 +12,7 @@
 
 namespace bandit { namespace detail {
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(BANDIT_CONFIG_COLOR_ANSI)
   struct colorizer
   {
     colorizer(bool colors_enabled = true)
