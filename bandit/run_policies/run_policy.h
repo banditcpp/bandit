@@ -33,18 +33,34 @@ namespace bandit { namespace detail {
   };
   typedef std::unique_ptr<run_policy> run_policy_ptr;
 
-  inline run_policy& registered_run_policy(run_policy* policy = NULL)
+  struct policy_runner
   {
-    static struct run_policy* policy_;
-
-    if(policy)
-    {
-      policy_ = policy;
+    // A function is required to initialize a static run_policy variable in a header file
+    // and this struct aims at encapsulating this function
+    static void register_run_policy(run_policy* policy) {
+      if(policy == nullptr) {
+        throw std::runtime_error("Invalid null policy passed to "
+          "bandit::detail::register_run_policy");
+      }
+      get_run_policy_address() = policy;
     }
-
-    return *policy_;
-  }
-
+    static run_policy& registered_run_policy()
+    {
+      auto policy = get_run_policy_address();
+      if(policy == nullptr) {
+        throw std::runtime_error("No policy set. Please call "
+          "bandit::detail::register_run_policy with a non-null reporter");
+      }
+      return *policy;
+    }
+  private:
+    static run_policy*& get_run_policy_address() {
+      static run_policy* policy = nullptr;
+      return policy;
+    }
+  };
+  inline void register_run_policy(run_policy* policy) {policy_runner::register_run_policy(policy);}
+  inline run_policy& registered_run_policy() {return policy_runner::registered_run_policy();}
 }}
 
 #endif
