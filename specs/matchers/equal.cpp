@@ -2,6 +2,8 @@
 
 using namespace bandit::Matchers;
 
+static char *stpcpy(char *dest, const char *src) { strcpy(dest, src); return dest + strlen(dest); }
+
 SPEC_BEGIN(Matchers::Equal)
 
 describe("when the actual value is a built-in type", []{

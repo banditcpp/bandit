@@ -78,11 +78,11 @@ describe("throw_exception", []{
         describe("when the block throws an unrelated exception", [&]{
 	    std::function<void()> unrelated_block = [&]{ throw std::range_error("range error"); };
 
-	    it("must pass a negative match", [&]{
+	    it("must pass a negative match", [&unrelated_block, &expected_exception]{
 		unrelated_block must_not throw_exception.operator()<decltype(expected_exception)>();
 	    });
 
-	    it("must reject a positive match", [&]{
+	    it("must reject a positive match", [&unrelated_block, &expected_exception]{
 		AssertThrows(std::exception, [&]{ unrelated_block must throw_exception.operator()<decltype(expected_exception)>(); }());
 	    });
         });
@@ -90,11 +90,11 @@ describe("throw_exception", []{
         describe("when the block does not throw an exception", [&]{
 	    std::function<void()> quiet_block = [&]{};
 
-	    it("must pass a negative match", [&]{
+	    it("must pass a negative match", [&quiet_block, &expected_exception]{
 		quiet_block must_not throw_exception.operator()<decltype(expected_exception)>();
 	    });
 
-	    it("must reject a positive match", [&]{
+	    it("must reject a positive match", [&quiet_block, &expected_exception]{
 		AssertThrows(std::exception, [&]{ quiet_block must throw_exception.operator()<decltype(expected_exception)>(); }());
 	    });
         });
