@@ -2,8 +2,10 @@
 
 using namespace bandit::Matchers;
 
-#ifdef _MSC_VER && !defined(__clang__)
+#ifndef __clang__
+#ifdef _MSC_VER 
 	static char *stpcpy(char *dest, const char *src) { strcpy(dest, src); return dest + strlen(dest); }
+#endif
 #endif
 
 SPEC_BEGIN(Matchers::Equal)
