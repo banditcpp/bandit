@@ -62,7 +62,7 @@ struct info_reporter : public progress_reporter
 		if (test_run_errors_.size() > 0) {
 			stm_
 			  << colorizer_.red()
-			  << "List of run errors: "
+			  << "List of run errors:"
 			  << std::endl;
 			std::for_each(test_run_errors_.begin(), test_run_errors_.end(), [&](const std::string &error) {
 				stm_
