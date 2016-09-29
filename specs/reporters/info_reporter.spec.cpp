@@ -25,7 +25,7 @@ go_bandit([](){
         AssertThat(output(), Equals("\nTests run: 0\n\n"));
       });
 
-      it_skip("is considered successful", [&](){
+      it("is considered successful", [&](){
         AssertThat(reporter->did_we_pass(), IsTrue());
       });
     });
@@ -329,7 +329,7 @@ go_bandit([](){
         AssertThat(output(), Contains("Skipped: 3"));
       });
 
-      it_skip("ends successfully", [&](){
+      it("ends successfully", [&](){
         AssertThat(reporter->did_we_pass(), IsTrue());
       });
     });

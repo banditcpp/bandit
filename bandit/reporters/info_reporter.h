@@ -294,6 +294,13 @@ struct info_reporter : public progress_reporter
 		stm_.flush();
 	}
 
+	bool did_we_pass() const
+	{
+		return
+		  specs_failed_ == 0 &&
+		  test_run_errors_.size() == 0;
+	}
+
 private:
 	std::string indent()
 	{
