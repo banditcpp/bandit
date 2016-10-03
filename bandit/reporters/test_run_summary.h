@@ -1,6 +1,11 @@
 #ifndef BANDIT_TEST_RUN_SUMMARY_H
 #define BANDIT_TEST_RUN_SUMMARY_H
 
+#include <algorithm>
+#include <list>
+#include <iostream>
+#include <bandit/reporters/colorizer.h>
+
 namespace bandit { namespace detail {
 
   struct test_run_summary
