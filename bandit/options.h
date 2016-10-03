@@ -15,6 +15,8 @@ namespace bandit { namespace detail {
         std::vector<option::Option> buffer(stats.buffer_max);
         option::Parser parse(usage(), argc, argv, options_.data(), buffer.data());
         parsed_ok_ = !parse.error();
+        has_further_arguments_ = (parse.nonOptionsCount() != 0);
+        has_unknown_options_ = (options_[UNKNOWN] != nullptr);
       }
 
       bool help() const
@@ -25,6 +27,16 @@ namespace bandit { namespace detail {
       bool parsed_ok() const
       {
         return parsed_ok_;
+      }
+
+      bool has_further_arguments() const
+      {
+        return has_further_arguments_;
+      }
+
+      bool has_unknown_options() const
+      {
+        return has_unknown_options_;
       }
 
       void print_usage() const
@@ -113,6 +125,8 @@ namespace bandit { namespace detail {
       private:
         std::vector<option::Option> options_;
         bool parsed_ok_;
+        bool has_further_arguments_;
+        bool has_unknown_options_;
 
     };
 
