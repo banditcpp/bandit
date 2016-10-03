@@ -1,6 +1,8 @@
 #ifndef BANDIT_ADAPTERS_SNOWHOUSE_H
 #define BANDIT_ADAPTERS_SNOWHOUSE_H
 
+#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>
+
 namespace bandit { namespace adapters {
 
   struct snowhouse_adapter : public assertion_adapter

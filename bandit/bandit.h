@@ -9,21 +9,22 @@
 #endif
 #endif
 
+#include <algorithm>
 #include <cassert>
 #include <functional>
 #include <iostream>
 #include <list>
+#include <memory>
 #include <deque>
+#include <sstream>
 #include <stdexcept>
+#include <vector>
 
 #define BANDIT_VERSION "2.0.0"
 
 namespace bandit { namespace detail {
   typedef std::function<void ()> voidfunc_t;
 }}
-
-#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>
-using namespace snowhouse;
 
 #include <bandit/external/optionparser.h>
 #include <bandit/options.h>
