@@ -1,6 +1,11 @@
 #ifndef BANDIT_OPTIONS_H
 #define BANDIT_OPTIONS_H
 
+#include <vector>
+#include <iostream>
+
+#include <bandit/external/optionparser.h>
+
 namespace bandit { namespace detail {
 
     // TODO: print any unknown options

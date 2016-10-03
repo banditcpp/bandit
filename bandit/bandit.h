@@ -26,7 +26,6 @@ namespace bandit { namespace detail {
   typedef std::function<void ()> voidfunc_t;
 }}
 
-#include <bandit/external/optionparser.h>
 #include <bandit/options.h>
 #include <bandit/test_run_error.h>
 #include <bandit/registration/registration.h>
