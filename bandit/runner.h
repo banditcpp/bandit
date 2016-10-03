@@ -1,6 +1,8 @@
 #ifndef BANDIT_RUNNER_H
 #define BANDIT_RUNNER_H
 
+#include <bandit/options.h>
+
 namespace bandit {
 
   namespace detail {
