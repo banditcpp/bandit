@@ -1,6 +1,13 @@
 #ifndef BANDIT_CONTEXT_H
 #define BANDIT_CONTEXT_H
 
+#include <algorithm>
+#include <deque>
+#include <list>
+#include <string>
+#include <bandit/types.h>
+#include <bandit/test_run_error.h>
+
 namespace bandit {
   namespace detail {
 
