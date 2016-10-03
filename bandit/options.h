@@ -4,7 +4,6 @@
 namespace bandit { namespace detail {
 
     // TODO: print any unknown options
-    // TODO: check for parser errors
     struct options
     {
 
@@ -21,6 +20,11 @@ namespace bandit { namespace detail {
       bool help() const
       {
         return options_[HELP] != NULL;
+      }
+
+      bool parsed_ok() const
+      {
+        return parsed_ok_;
       }
 
       void print_usage() const

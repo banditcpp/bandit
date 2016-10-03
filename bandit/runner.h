@@ -55,10 +55,10 @@ namespace bandit {
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
       detail::contextstack_t& context_stack, detail::listener& listener)
   {
-    if(opt.help())
+    if(opt.help() || !opt.parsed_ok())
     {
       opt.print_usage();
-      return 0;
+      return !opt.parsed_ok();
     }
 
     if(opt.version())
