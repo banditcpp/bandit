@@ -2,6 +2,11 @@
 #define BANDIT_RUNNER_H
 
 #include <bandit/options.h>
+#include <bandit/registration/registrar.h>
+#include <bandit/reporters/reporters.h>
+#include <bandit/failure_formatters/failure_formatters.h>
+#include <bandit/run_policies/run_policies.h>
+#include <bandit/version.h>
 
 namespace bandit {
 
