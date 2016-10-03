@@ -11,7 +11,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -22,10 +21,7 @@
 
 #define BANDIT_VERSION "2.0.0"
 
-namespace bandit { namespace detail {
-  typedef std::function<void ()> voidfunc_t;
-}}
-
+#include <bandit/types.h>
 #include <bandit/test_run_error.h>
 #include <bandit/registration/registration.h>
 #include <bandit/assertion_exception.h>
