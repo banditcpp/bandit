@@ -1,6 +1,8 @@
 #ifndef BANDIT_TEST_RUN_ERROR
 #define BANDIT_TEST_RUN_ERROR
 
+#include <stdexcept>
+
 namespace bandit { namespace detail {
 
   struct test_run_error : public std::runtime_error
