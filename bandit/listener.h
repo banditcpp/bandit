@@ -1,6 +1,10 @@
 #ifndef BANDIT_LISTENER_H
 #define BANDIT_LISTENER_H
 
+#include <memory>
+#include <bandit/assertion_exception.h>
+#include <bandit/test_run_error.h>
+
 namespace bandit { namespace detail {
   struct listener
   {
