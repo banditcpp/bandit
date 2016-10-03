@@ -1,6 +1,9 @@
 #ifndef BANDIT_REPORTERS_XUNIT_REPORTER_H
 #define BANDIT_REPORTERS_XUNIT_REPORTER_H
 
+#include <iostream>
+#include <bandit/reporters/progress_reporter.h>
+
 namespace bandit { namespace detail {
 
   struct xunit_reporter : public progress_reporter
