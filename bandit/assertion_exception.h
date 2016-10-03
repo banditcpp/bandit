@@ -1,6 +1,8 @@
 #ifndef BANDIT_ASSERTION_EXCEPTION_H
 #define BANDIT_ASSERTION_EXCEPTION_H
 
+#include <stdexcept>
+
 namespace bandit { namespace detail {
 
   struct assertion_exception : public std::runtime_error
