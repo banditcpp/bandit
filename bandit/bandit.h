@@ -23,7 +23,7 @@
 
 #include <bandit/types.h>
 #include <bandit/test_run_error.h>
-#include <bandit/registration/registration.h>
+#include <bandit/registration/registrar.h>
 #include <bandit/assertion_exception.h>
 #include <bandit/failure_formatters/failure_formatters.h>
 #include <bandit/adapters/adapters.h>
