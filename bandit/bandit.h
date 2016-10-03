@@ -19,7 +19,7 @@
 #include <stdexcept>
 #include <vector>
 
-#define BANDIT_VERSION "2.0.0"
+#include <bandit/version.h>
 
 #include <bandit/types.h>
 #include <bandit/test_run_error.h>
