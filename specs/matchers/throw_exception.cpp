@@ -35,16 +35,17 @@ describe("throw_exception", []{
 
     describe("with an exception class specified", [&]{
 	std::logic_error expected_exception("logic_error");
+	using exp_type = decltype(expected_exception);
 
         describe("when the block throws the expected exception", [&]{
 	    std::function<void()> exception_block = [&]{ throw expected_exception; };
 
 	    it("must pass a positive match", [&]{
-		exception_block must throw_exception.operator()<decltype(expected_exception)>();
+		exception_block must throw_exception.operator()<exp_type>();
 	    });
 
 	    it("must reject a negative match", [&]{
-		AssertThrows(std::exception, [&]{ exception_block must_not throw_exception.operator()<decltype(expected_exception)>(); }());
+		AssertThrows(std::exception, [&]{ exception_block must_not throw_exception.operator()<exp_type>(); }());
 	    });
         });
 
@@ -56,21 +57,21 @@ describe("throw_exception", []{
 
             describe("when subclasses are expected", [&]{
 		it("must pass a positive match", [&]{
-		    subclass_block must throw_exception.operator()<std::logic_error>().or_subclass();
+		    subclass_block must throw_exception.operator()<exp_type>().or_subclass();
 		});
 
 		it("must reject a negative match", [&]{
-		    AssertThrows(std::exception, [&]{ subclass_block must_not throw_exception.operator()<std::logic_error>().or_subclass(); }());
+		    AssertThrows(std::exception, [&]{ subclass_block must_not throw_exception.operator()<exp_type>().or_subclass(); }());
 		});
             });
 
             describe("when subclasses are not expected", [&]{
 		it("must pass a negative match", [&]{
-		    subclass_block must_not throw_exception.operator()<std::logic_error>();
+		    subclass_block must_not throw_exception.operator()<exp_type>();
 		});
 
 		it("must reject a positive match", [&]{
-		    AssertThrows(std::exception, [&]{ subclass_block must throw_exception.operator()<std::logic_error>(); }());
+		    AssertThrows(std::exception, [&]{ subclass_block must throw_exception.operator()<exp_type>(); }());
 		});
             });
         });
@@ -79,11 +80,11 @@ describe("throw_exception", []{
 	    std::function<void()> unrelated_block = [&]{ throw std::range_error("range error"); };
 
 	    it("must pass a negative match", [&]{
-		unrelated_block must_not throw_exception.operator()<decltype(expected_exception)>();
+		unrelated_block must_not throw_exception.operator()<exp_type>();
 	    });
 
 	    it("must reject a positive match", [&]{
-		AssertThrows(std::exception, [&]{ unrelated_block must throw_exception.operator()<decltype(expected_exception)>(); }());
+		AssertThrows(std::exception, [&]{ unrelated_block must throw_exception.operator()<exp_type>(); }());
 	    });
         });
 
@@ -91,11 +92,11 @@ describe("throw_exception", []{
 	    std::function<void()> quiet_block = [&]{};
 
 	    it("must pass a negative match", [&]{
-		quiet_block must_not throw_exception.operator()<decltype(expected_exception)>();
+		quiet_block must_not throw_exception.operator()<exp_type>();
 	    });
 
 	    it("must reject a positive match", [&]{
-		AssertThrows(std::exception, [&]{ quiet_block must throw_exception.operator()<decltype(expected_exception)>(); }());
+		AssertThrows(std::exception, [&]{ quiet_block must throw_exception.operator()<exp_type>(); }());
 	    });
         });
     });
