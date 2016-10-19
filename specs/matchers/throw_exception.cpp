@@ -35,7 +35,7 @@ describe("throw_exception", []{
 
     describe("with an exception class specified", [&]{
 	std::logic_error expected_exception("logic_error");
-	using exp_type = decltype(expected_exception);
+	typedef decltype(expected_exception) exp_type;
 
         describe("when the block throws the expected exception", [&]{
 	    std::function<void()> exception_block = [&]{ throw expected_exception; };
