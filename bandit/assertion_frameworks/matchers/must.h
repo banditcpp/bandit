@@ -30,7 +30,7 @@ namespace bandit { namespace Matchers
     }
 }}
 
-#define must	    ,(bandit::Matchers::ValueMarker){__FILE__, __LINE__},false,
-#define must_not    ,(bandit::Matchers::ValueMarker){__FILE__, __LINE__},true,
+#define must     ,bandit::Matchers::ValueMarker{__FILE__, __LINE__},false,
+#define must_not ,bandit::Matchers::ValueMarker{__FILE__, __LINE__},true,
 
 #endif	//BANDIT_MUST_H
