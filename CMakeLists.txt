@@ -3,7 +3,6 @@ project(bandit)
 
 option(BANDIT_BUILD_SPECS   "Build the Bandit specs"                ON)
 option(BANDIT_RUN_SPECS     "Run the Bandit specs"                  ON)
-option(SNOWHOUSE_IS_CPP11   "Build Snowhouse with C++11 settings"   ON)
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cotire/CMake/cotire)
@@ -46,8 +45,6 @@ if (BANDIT_BUILD_SPECS)
     set_target_properties(bandit-specs PROPERTIES COTIRE_ADD_UNIT_BUILD FALSE)
     cotire(bandit-specs)
 endif()
-
-add_subdirectory(bandit/assertion_frameworks/snowhouse)
 
 if (BANDIT_BUILD_SPECS AND BANDIT_RUN_SPECS)
     add_custom_command(TARGET bandit-specs
