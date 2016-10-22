@@ -1,6 +1,7 @@
 bandit
 ======
-[![Build Status](https://travis-ci.org/joakimkarlsson/bandit.svg)](https://travis-ci.org/joakimkarlsson/bandit)
+[![Travis CI Status](https://travis-ci.org/banditcpp/bandit.svg)](https://travis-ci.org/banditcpp/bandit)
+[![AppVeyor Status](https://ci.appveyor.com/api/projects/status/github/banditcpp/bandit?branch=master&svg=true)](https://ci.appveyor.com/project/banditcpp/bandit)
 
 Human friendly unit testing for C++11
 
