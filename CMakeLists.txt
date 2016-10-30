@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.1)
 project(bandit)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 option(BANDIT_BUILD_SPECS   "Build the Bandit specs"                ON)
 option(BANDIT_RUN_SPECS     "Run the Bandit specs"                  ON)
-set(CMAKE_CXX_STANDARD 11)
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cotire/CMake/cotire)
