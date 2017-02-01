@@ -81,12 +81,14 @@ namespace bandit {
         INFO,
         SPEC,
         DOTS,
+        CRASH,
         UNKNOWN
       };
 
       struct argument : public option::Arg {
         static const argstrs<reporters> reporter_list() {
           return {
+              {reporters::CRASH, "crash"},
               {reporters::DOTS, "dots"},
               {reporters::SINGLELINE, "singleline"},
               {reporters::XUNIT, "xunit"},
