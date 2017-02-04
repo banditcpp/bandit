@@ -61,19 +61,9 @@ include directories and you're ready to go.
 
 Bandit has been tested with the following compilers:
 
----
-
-| Compiler | Works  |
-| -------- | -----: |
-| GCC 4.5  | Yes    |
-| GCC 4.6  | Yes    |
-| GCC 4.7  | Yes    |
-| GCC 4.8  | Yes    |
-| Clang 3.2| Yes    |
-| VS2010   | No     |
-| VS2012   | Yes    |
-
----
+ * GCC ≥ 4.5
+ * Clang ≥ 3.2
+ * MSVC ≥ 2012
 
 If you want to see if bandit works for your compiler, bandit is shipped with a
 cmake project for generating bandit's self tests. Let us know how it goes.
