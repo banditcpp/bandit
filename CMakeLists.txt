@@ -15,7 +15,7 @@ if (MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /MP ")
 else()
   # Assume GCC-style arguments
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdeprecated -Wdeprecated-declarations -Wshadow -Wall -W -Werror -Wfloat-equal -Wundef -Wendif-labels")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdeprecated -Wdeprecated-declarations -Wshadow -Wall -W -Werror -Wno-error=unknown-pragmas -Wfloat-equal -Wundef -Wendif-labels")
 
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
