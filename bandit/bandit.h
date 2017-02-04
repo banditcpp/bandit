@@ -26,6 +26,7 @@ namespace bandit { namespace detail {
 using namespace snowhouse;
 
 #include <bandit/assertion_frameworks/matchers/matchers/matchers.h>
+using namespace Matchers;
 
 #include <bandit/external/optionparser.h>
 #include <bandit/options.h>
