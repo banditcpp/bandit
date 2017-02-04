@@ -1,41 +1,40 @@
 ---
 layout: index
 ---
-#Writing Tests
+# Writing Tests
 
-With bandit you create a command line application that runs all registered 
+With bandit you create a command line application that runs all registered
 tests, reports the result on stdout, and then exits with an error level 0 if all
 tests passed, and an error level greater than 0 if some tests did not passed.
 
 Every application needs an entry point, and for bandit it should look like this:
 
-{% highlight cpp %}
+```c++
 #include <bandit/bandit.h>
 
 int main(int argc, char* argv[])
 {
   return bandit::run(argc, argv);
 }
-{% endhighlight %}
+```
 
-The ```run()``` function will run all registered tests and report the result.
+The `run()` function will run all registered tests and report the result.
 
 If you build and run this, bandit will report the following and exit with an
 error code:
 
-{% highlight bash %}
+```bash
 $ specs
 
 Could not find any tests.
-$
-{% endhighlight %}
+```
 
 This means bandit is running fine, we just haven't added any tests for it to
 run yet.
 
-##Adding Tests
+## Adding Tests
 
-Once you have a command line application with an entry point that delegates to 
+Once you have a command line application with an entry point that delegates to
 bandit, it's time to start writing some tests.
 
 To make sure everything is working, we begin by creating a failing test. That
@@ -44,7 +43,7 @@ for the right reasons.
 
 We add a new .cpp file to our project with the following content:
 
-{% highlight cpp %}
+```c++
 #include <bandit/bandit.h>
 using namespace bandit;
 
@@ -57,11 +56,11 @@ go_bandit([](){
   });
 
 });
-{% endhighlight %}
+```
 
 If we compile and run this, we get the following response:
 
-{% highlight bash %}
+```bash
 $ specs
 F
 There were failures!
@@ -71,12 +70,11 @@ our first test should fail:
 Actual: 5
 
 Test run complete. 1 tests run. 0 succeeded. 1 failed.
-$ 
-{% endhighlight %}
+```
 
 This means bandit was able to find our test and execute it.
 
-##What we did
+## What we did
 
 After including bandit and using its namespace by default, we tell bandit that
 this file includes tests that we want to be part of the execution by using the
@@ -95,7 +93,7 @@ true for that thing.
 
 A slightly more elaborate example:
 
-{% highlight bash %}
+```c++
 describe("a calculator", [](){
   calculator calc;
 
@@ -107,11 +105,11 @@ describe("a calculator", [](){
     AssertThat(calc.subtract(2, 3), Equals(-1));
   });
 });
-{% endhighlight %}
+```
 
 Here we describe a calculator and specify that it can add and subtract.
 
-##Assertions
+## Assertions
 
 Bandit uses the [snowhouse](https://github.com/banditcpp/snowhouse#assertions)
 assertion framework to verify that things works as expected. Snowhouse contains
