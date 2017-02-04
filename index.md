@@ -5,9 +5,10 @@ Bandit is a framework for C++11 that wants to make working with unit tests a
 pleasant experience.
 
 Bandit is released under the 
-[MIT license](https://github.com/joakimkarlsson/bandit/blob/master/LICENSE.md)
+[MIT license](https://github.com/banditcpp/bandit/blob/master/LICENSE.md)
 
-[![Build Status](https://travis-ci.org/joakimkarlsson/bandit.png)](https://travis-ci.org/joakimkarlsson/bandit)
+[![Travis CI Status](https://travis-ci.org/banditcpp/bandit.svg?branch=master)](https://travis-ci.org/banditcpp/bandit)
+[![AppVeyor Status](https://ci.appveyor.com/api/projects/status/github/banditcpp/bandit?branch=master&svg=true)](https://ci.appveyor.com/project/banditcpp/bandit)
 
 #An example
 
@@ -62,7 +63,7 @@ Bandit has been tested with the following compilers:
 
 ---
 
-| Compiler | Works |
+| Compiler | Works  |
 | -------- | -----: |
 | GCC 4.5  | Yes    |
 | GCC 4.6  | Yes    |

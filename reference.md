@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 {% endhighlight %}
 
 ##Assertions
-Bandit uses the [snowhouse](https://github.com/joakimkarlsson/snowhouse#assertions) 
+Bandit uses the [snowhouse](https://github.com/banditcpp/snowhouse#assertions)
 assertion library. Go there for references on how to write assertions.
 
 ##go_bandit()

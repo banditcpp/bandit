@@ -113,6 +113,6 @@ Here we describe a calculator and specify that it can add and subtract.
 
 ##Assertions
 
-Bandit uses the [snowhouse](https://github.com/joakimkarlsson/snowhouse#assertions)
+Bandit uses the [snowhouse](https://github.com/banditcpp/snowhouse#assertions)
 assertion framework to verify that things works as expected. Snowhouse contains
 a lot of helpers that aims to create readable tests.
