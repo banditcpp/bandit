@@ -1,2 +1,2 @@
-name: Your New Jekyll Site
-pygments: true
+name: bandit
+highlighter: rouge
