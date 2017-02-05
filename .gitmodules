@@ -4,6 +4,3 @@
 [submodule "bandit/assertion_frameworks/snowhouse"]
 	path = bandit/assertion_frameworks/snowhouse
 	url = https://github.com/banditcpp/snowhouse.git
-[submodule "bandit/assertion_frameworks/matchers"]
-	path = bandit/assertion_frameworks/matchers
-	url = https://github.com/banditcpp/matchers
