@@ -23,7 +23,7 @@ go_bandit([](){
 
         it("registers itself for the current context in the stack", [&](){
           before_each(before_each_fn, *context_stack); 
-          Assert::That(context->call_log(), Has().Exactly(1).EqualTo("register_before_each"));
+          AssertThat(context->call_log(), Has().Exactly(1).EqualTo("register_before_each"));
           });
 
       }); 
@@ -37,7 +37,7 @@ go_bandit([](){
       
         it("registers itself for the current context in the stack", [&](){
           after_each(after_each_fn, *context_stack); 
-          Assert::That(context->call_log(), Has().Exactly(1).EqualTo("register_after_each"));
+          AssertThat(context->call_log(), Has().Exactly(1).EqualTo("register_after_each"));
         });
       
       });
@@ -63,16 +63,16 @@ go_bandit([](){
       });
 
       it("should only have called the before_each functions for the first test", [&](){
-        Assert::That(logger.call_log(), Has().Exactly(1).EqualTo("first before_each called"));
-        Assert::That(logger.call_log(), Has().Exactly(1).EqualTo("second before_each called"));
-        Assert::That(logger.call_log(), Has().None().Containing("after_each"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second before_each called"));
+        AssertThat(logger.call_log(), Has().None().Containing("after_each"));
       });
 
       it("should have called 'before_each' function twice, and 'after_each' functions once for the second test", [&](){
-        Assert::That(logger.call_log(), Has().Exactly(2).EqualTo("first before_each called"));
-        Assert::That(logger.call_log(), Has().Exactly(2).EqualTo("second before_each called"));
-        Assert::That(logger.call_log(), Has().Exactly(1).EqualTo("first after_each called"));
-        Assert::That(logger.call_log(), Has().Exactly(1).EqualTo("second after_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("first before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("second before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first after_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second after_each called"));
       });
     });
 });
