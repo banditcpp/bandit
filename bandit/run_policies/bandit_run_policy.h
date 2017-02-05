@@ -1,6 +1,8 @@
 #ifndef BANDIT_BANDIT_RUN_POLICY_H
 #define BANDIT_BANDIT_RUN_POLICY_H
 
+#include <bandit/run_policies/run_policy.h>
+
 namespace bandit { namespace detail {
 
   struct bandit_run_policy : public run_policy

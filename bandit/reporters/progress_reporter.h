@@ -1,6 +1,12 @@
 #ifndef BANDIT_PROGRESS_REPORTER_H
 #define BANDIT_PROGRESS_REPORTER_H
 
+#include <algorithm>
+#include <list>
+#include <sstream>
+#include <bandit/failure_formatters/failure_formatter.h>
+#include <bandit/listener.h>
+
 namespace bandit { namespace detail {
 
   struct progress_reporter : public listener

@@ -1,6 +1,10 @@
 #ifndef BANDIT_RUN_POLICY_H
 #define BANDIT_RUN_POLICY_H
 
+#include <memory>
+#include <stdexcept>
+#include <bandit/context.h>
+
 namespace bandit { namespace detail {
 
   struct run_policy

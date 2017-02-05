@@ -1,6 +1,10 @@
 #ifndef BANDIT_GRAMMAR_H
 #define BANDIT_GRAMMAR_H
 
+#include <bandit/adapters/adapters.h>
+#include <bandit/reporters/reporters.h>
+#include <bandit/run_policies/run_policy.h>
+
 namespace bandit {
 
   inline void describe(const char* desc, detail::voidfunc_t func,

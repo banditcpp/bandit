@@ -1,6 +1,9 @@
 #ifndef BANDIT_DEFAULT_FAILURE_FORMATTER_H
 #define BANDIT_DEFAULT_FAILURE_FORMATTER_H
 
+#include <sstream>
+#include <bandit/failure_formatters/failure_formatter.h>
+
 namespace bandit { namespace detail {
 
   struct default_failure_formatter : public failure_formatter

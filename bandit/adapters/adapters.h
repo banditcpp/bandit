@@ -1,7 +1,6 @@
 #ifndef BANDIT_ADAPTERS_H
 #define BANDIT_ADAPTERS_H
 
-#include <bandit/adapters/adapter.h>
 #include <bandit/adapters/snowhouse.h>
 
 namespace bandit { namespace detail {

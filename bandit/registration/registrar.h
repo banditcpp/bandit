@@ -1,6 +1,8 @@
 #ifndef BANDIT_REGISTRAR_H
 #define BANDIT_REGISTRAR_H
 
+#include <bandit/registration/spec_registry.h>
+
 namespace bandit { namespace detail {
 
     struct spec_registrar

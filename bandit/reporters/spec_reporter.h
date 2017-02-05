@@ -1,6 +1,9 @@
 #ifndef BANDIT_SPEC_REPORTER_H
 #define BANDIT_SPEC_REPORTER_H
 
+#include <bandit/reporters/progress_reporter.h>
+#include <bandit/reporters/test_run_summary.h>
+
 namespace bandit { namespace detail {
 
   struct spec_reporter : public progress_reporter

@@ -1,6 +1,10 @@
 #ifndef BANDIT_ADAPTERS_SNOWHOUSE_H
 #define BANDIT_ADAPTERS_SNOWHOUSE_H
 
+#include <bandit/adapters/adapter.h>
+#include <bandit/assertion_exception.h>
+#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>
+
 namespace bandit { namespace adapters {
 
   struct snowhouse_adapter : public assertion_adapter
