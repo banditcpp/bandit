@@ -13,7 +13,7 @@ go_bandit([](){
 
         bd::options opt(argv.argc(), argv.argv());
 
-        AssertThat(opt.help(), IsTrue());
+        opt.help() must be_truthy;
       });
 
       it("parses the '--version' option", [&](){
@@ -22,7 +22,7 @@ go_bandit([](){
 
         bd::options opt(argv.argc(), argv.argv());
 
-        AssertThat(opt.version(), IsTrue());
+        opt.version() must be_truthy;
       });
 
       it("parses the '--no-color' option", [&](){
@@ -31,7 +31,7 @@ go_bandit([](){
 
         bd::options opt(argv.argc(), argv.argv());
 
-        AssertThat(opt.no_color(), IsTrue());
+        opt.no_color() must be_truthy;
       });
 
       it("parser the '--formatter=vs' option", [&](){
@@ -39,7 +39,7 @@ go_bandit([](){
         argv_helper argv(2, args);
 
         bd::options opt(argv.argc(), argv.argv());
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
+        opt.formatter() must equal(bd::options::formatters::FORMATTER_VS);
       });
 
       it("parser the '--formatter=default' option", [&](){
@@ -47,7 +47,7 @@ go_bandit([](){
         argv_helper argv(2, args);
 
         bd::options opt(argv.argc(), argv.argv());
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
+        opt.formatter() must equal(bd::options::formatters::FORMATTER_DEFAULT);
       });
 
       it("parses the '--skip=\"substring\"' option", [&](){
@@ -55,7 +55,7 @@ go_bandit([](){
         argv_helper argv(2, args);
 
         bd::options opt(argv.argc(), argv.argv());
-        AssertThat(opt.skip(), Equals("substring"));
+        opt.skip() must equal("substring");
       });
 
       it("parses skip as empty string if not present", [&](){
@@ -63,7 +63,8 @@ go_bandit([](){
         argv_helper argv(1, args);
 
         bd::options opt(argv.argc(), argv.argv());
-        AssertThat(opt.skip(), Equals(""));
+        //opt.skip() must equal("");
+        opt.skip() must equal("");
       });
 
       it("parses the '--only=\"substring\"' option", [&](){
@@ -71,7 +72,7 @@ go_bandit([](){
         argv_helper argv(2, args);
 
         bd::options opt(argv.argc(), argv.argv());
-        AssertThat(opt.only(), Equals("substring"));
+        opt.only() must equal("substring");
       });
 
       it("parses only as empty string if not present", [&](){
@@ -79,7 +80,7 @@ go_bandit([](){
         argv_helper argv(1, args);
 
         bd::options opt(argv.argc(), argv.argv());
-        AssertThat(opt.only(), Equals(""));
+        opt.only() must equal("");
       });
 
       it("parses the '--break-on-failure' option", [&](){
@@ -88,7 +89,7 @@ go_bandit([](){
 
         bd::options opt(argv.argc(), argv.argv());
 
-        AssertThat(opt.break_on_failure(), IsTrue());
+        opt.break_on_failure() must be_truthy;
       });
 
       it("parses the '--dry-run' option", [&](){
@@ -97,7 +98,7 @@ go_bandit([](){
 
         bd::options opt(argv.argc(), argv.argv());
 
-        AssertThat(opt.dry_run(), IsTrue());
+        opt.dry_run() must be_truthy;
       });
 
       describe("with no arguments", [&](){
@@ -106,27 +107,27 @@ go_bandit([](){
         bd::options opt(argv.argc(), argv.argv());
 
         it("cannot find '--help'", [&](){
-          AssertThat(opt.help(), IsFalse());
+          opt.help() must be_falsy;
         });
 
         it("cannot find '--version'", [&](){
-          AssertThat(opt.version(), IsFalse());
+          opt.version() must be_falsy;
         });
 
         it("cannot find '--no-color'", [&](){
-          AssertThat(opt.no_color(), IsFalse());
+          opt.no_color() must be_falsy;
         });
 
         it("cannot find '--break-on-failure'", [&](){
-          AssertThat(opt.break_on_failure(), IsFalse())
+          opt.break_on_failure() must be_falsy;
         });
 
         it("cannot find '--dry-run'", [&](){
-          AssertThat(opt.dry_run(), IsFalse())
+          opt.dry_run() must be_falsy;
         });
 
         it("uses default formatter for '--formatter'", [&](){
-          AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
+          opt.formatter() must equal(bd::options::formatters::FORMATTER_DEFAULT);
         });
       });
     });

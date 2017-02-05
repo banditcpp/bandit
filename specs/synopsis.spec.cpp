@@ -9,7 +9,7 @@ go_bandit([](){
     });
 
     it("should be initialized", [&](){
-      AssertThat(a, Equals(99));
+      a must equal(99);
       a = 102;
     });
 
@@ -20,19 +20,19 @@ go_bandit([](){
       });
 
       it("should build on outer spec", [&](){
-        AssertThat(a, Equals(102));
+        a must equal(102);
         a = 666;
       });
 
       it("should build on outer spec yet again", [&](){
-        AssertThat(a, Equals(102));
+        a must equal(102);
         a = 667;
       });
 
     });
 
     it("should be initialized before each it", [&](){
-      AssertThat(a, Equals(99));
+      a must equal(99);
     });
   });
 
@@ -48,7 +48,7 @@ go_bandit([](){
     });
 
     it("should be 25", [&](){
-      AssertThat(b, Equals(25));
+      b must equal(25);
     });
   });
 });
