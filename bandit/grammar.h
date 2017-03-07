@@ -109,72 +109,41 @@ namespace bandit {
 
     context_stack.back()->execution_is_starting();
 
-    auto run_before_eaches = [&](){
-      for_each(context_stack.begin(), context_stack.end(), [](detail::context* ctxt){
-          ctxt->run_before_eaches();
-      });
+    auto try_with_adapter = [&](detail::voidfunc_t do_it) {
+      try {
+        assertion_adapter.adapt_exceptions([&] { do_it(); });
+      } catch (const bandit::detail::assertion_exception& ex) {
+        listener.it_failed(desc, ex);
+        run_policy.encountered_failure();
+      } catch (const std::exception& ex) {
+        std::string err = std::string("exception: ") + ex.what();
+        listener.it_failed(desc, bandit::detail::assertion_exception(err));
+        run_policy.encountered_failure();
+      } catch (...) {
+        listener.it_unknown_error(desc);
+        run_policy.encountered_failure();
+      }
     };
 
-    auto run_after_eaches = [&](){
-      for_each(context_stack.begin(), context_stack.end(), [](detail::context* ctxt){
-          ctxt->run_after_eaches();
-      });
-    };
+    bool success = false;
+    try_with_adapter([&] {
+      for (auto context : context_stack) {
+        context->run_before_eaches();
+      }
 
-    bool we_have_been_successful_so_far = false;
-    try
-    {
-      assertion_adapter.adapt_exceptions([&](){
-          run_before_eaches();
+      func();
+      success = true;
+    });
 
-          func();
-          we_have_been_successful_so_far = true;
-      });
-    }
-    catch(const bandit::detail::assertion_exception& ex)
-    {
-      listener.it_failed(desc, ex);
-      run_policy.encountered_failure();
-    }
-    catch(const std::exception& ex)
-    {
-      std::string err = std::string("exception: ") + ex.what();
-      listener.it_failed(desc, bandit::detail::assertion_exception(err));
-      run_policy.encountered_failure();
-    }
-    catch(...)
-    {
-      listener.it_unknown_error(desc);
-      run_policy.encountered_failure();
-    }
+    try_with_adapter([&] {
+      for (auto context : context_stack) {
+        context->run_after_eaches();
+      }
 
-    try
-    {
-      assertion_adapter.adapt_exceptions([&](){
-          run_after_eaches();
-
-          if(we_have_been_successful_so_far) 
-          {
-            listener.it_succeeded(desc);
-          }
-      });
-    }
-    catch(const bandit::detail::assertion_exception& ex)
-    {
-      listener.it_failed(desc, ex);
-      run_policy.encountered_failure();
-    }
-    catch(const std::exception& ex)
-    {
-      std::string err = std::string("exception: ") + ex.what();
-      listener.it_failed(desc, bandit::detail::assertion_exception(err));
-      run_policy.encountered_failure();
-    }
-    catch(...)
-    {
-      listener.it_unknown_error(desc);
-      run_policy.encountered_failure();
-    }
+      if (success) {
+        listener.it_succeeded(desc);
+      }
+    });
   }
 
   inline void it(const char* desc, detail::voidfunc_t func)
