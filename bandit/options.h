@@ -33,6 +33,18 @@ namespace bandit { namespace detail {
           };
         }
 
+        static std::string comma_separated_list(std::vector<std::string> list) {
+          std::string csl;
+          auto first = list.begin();
+          if (first != list.end()) {
+            csl += *first;
+            std::for_each(++first, list.end(), [&](std::string reporter) {
+              csl += ", " + reporter;
+            });
+          }
+          return csl;
+        }
+
         static option::ArgStatus Required(const option::Option& option, bool msg)
         {
           if (option.arg != nullptr) {
@@ -50,10 +62,10 @@ namespace bandit { namespace detail {
           if (status == option::ARG_OK
            && std::find(list.begin(), list.end(), option.arg) == list.end()) {
             if (msg) {
-              std::cerr << "Option argument of '" << option.name << "' must be one of:\n";
-              for (auto item : list) {
-                std::cerr << " * " << item << std::endl;
-              }
+              std::cerr
+                << "Option argument of '" << option.name << "' must be one of: "
+                << comma_separated_list(list)
+                << std::endl;
             }
             status = option::ARG_ILLEGAL;
           }
@@ -158,8 +170,14 @@ namespace bandit { namespace detail {
         DRY_RUN,
       };
 
+      static std::string append_list(std::string desc, std::vector<std::string> list) {
+        return desc + ": " + argument::comma_separated_list(list);
+      };
+
       static const option::Descriptor* usage()
       {
+        static std::string reporter_help = append_list("  --reporter=<reporter>, \tSelect reporter", argument::reporter_list());
+        static std::string formatter_help = append_list("  --formatter=<formatter>, \tSelect error formatter", argument::formatter_list());
         static const option::Descriptor usage[] = {
           { UNKNOWN, 0, "", "", argument::None,
             "USAGE: <executable> [options]\n\n"
@@ -168,12 +186,10 @@ namespace bandit { namespace detail {
             "  --version, \tPrint version of bandit" },
           { HELP, 0, "", "help", argument::None,
             "  --help, \tPrint usage and exit." },
-          { REPORTER, 0, "", "reporter", argument::Reporter,
-            "  --reporter=<reporter>, \tSelect reporter" },
+          { REPORTER, 0, "", "reporter", argument::Reporter, reporter_help.c_str() },
           { NO_COLOR, 0, "", "no-color", argument::None,
             "  --no-color, \tSuppress colors in output" },
-          { FORMATTER, 0, "", "formatter", argument::Formatter,
-            "  --formatter=<formatter>, \tSelect formatting of errors" },
+          { FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help.c_str() },
           { SKIP, 0, "", "skip", argument::Required,
             "  --skip=<substring>, \tskip all 'describe' and 'it' containing substring" },
           { ONLY, 0, "", "only", argument::Required,
