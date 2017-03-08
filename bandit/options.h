@@ -45,13 +45,19 @@ namespace bandit { namespace detail {
           return csl;
         }
 
+        static std::string name(const option::Option& option)
+        {
+          std::string copy(option.name);
+          return copy.substr(0, option.namelen);
+        }
+
         static option::ArgStatus Required(const option::Option& option, bool msg)
         {
           if (option.arg != nullptr) {
             return option::ARG_OK;
           }
           if (msg) {
-            std::cerr << "Option '" << option.name << "' requires an argument\n";
+            std::cerr << "Option '" << name(option) << "' requires an argument\n";
           }
           return option::ARG_ILLEGAL;
         }
@@ -63,7 +69,7 @@ namespace bandit { namespace detail {
            && std::find(list.begin(), list.end(), option.arg) == list.end()) {
             if (msg) {
               std::cerr
-                << "Option argument of '" << option.name << "' must be one of: "
+                << "Option argument of '" << name(option) << "' must be one of: "
                 << comma_separated_list(list)
                 << std::endl;
             }
