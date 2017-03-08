@@ -62,10 +62,10 @@ namespace bandit {
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
       detail::contextstack_t& context_stack, detail::listener& listener)
   {
-    if(opt.help())
+    if(opt.help() || !opt.parsed_ok())
     {
       opt.print_usage();
-      return 0;
+      return !opt.parsed_ok();
     }
 
     if(opt.version())
@@ -91,9 +91,14 @@ namespace bandit {
     return listener.did_we_pass() ? 0 : 1;
   }
 
-  inline int run(int argc, char* argv[])
+  inline int run(int argc, char* argv[], int allow_further = true)
   {
     detail::options opt(argc, argv);
+    if (!allow_further &&
+        (opt.has_further_arguments() || opt.has_unknown_options())) {
+      opt.print_usage();
+      return 1;
+    }
     detail::failure_formatter_ptr formatter(create_formatter(opt));
     bandit::detail::colorizer colorizer(!opt.no_color());
     detail::listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
