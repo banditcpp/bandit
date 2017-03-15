@@ -19,14 +19,15 @@ namespace bandit { namespace detail {
       : colors_enabled_(colors_enabled),
 		stdout_handle_(GetStdHandle(STD_OUTPUT_HANDLE))
     {
-		original_color_ = get_console_color();
+		background_color_ = original_color_ = get_console_color();
+		background_color_ &= BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY;
 	}
 
     const char* green() const
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_GREEN);
+		  set_console_color(FOREGROUND_GREEN | background_color_);
 	  }
 	  return "";
     }
@@ -35,7 +36,7 @@ namespace bandit { namespace detail {
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+		  set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY | background_color_);
 	  }
 	  return "";
     }
@@ -44,7 +45,7 @@ namespace bandit { namespace detail {
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_BLUE);
+		  set_console_color(FOREGROUND_BLUE | background_color_);
 	  }
 	  return "";
     }
@@ -53,7 +54,7 @@ namespace bandit { namespace detail {
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_RED);
+		  set_console_color(FOREGROUND_RED | background_color_);
 	  }
 	  return "";
     }
@@ -62,7 +63,7 @@ namespace bandit { namespace detail {
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		  set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY | background_color_);
 	  }
 	  return "";
     }
@@ -93,6 +94,7 @@ namespace bandit { namespace detail {
     bool colors_enabled_;
 	HANDLE stdout_handle_;
 	WORD original_color_;
+	WORD background_color_;
   };
 
 #else
