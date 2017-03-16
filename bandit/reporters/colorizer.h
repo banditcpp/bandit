@@ -27,7 +27,7 @@ namespace bandit { namespace detail {
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_GREEN | background_color_);
+		  set_console_color(FOREGROUND_GREEN | FOREGROUND_INTENSITY | background_color_);
 	  }
 	  return "";
     }
@@ -45,7 +45,7 @@ namespace bandit { namespace detail {
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_BLUE | background_color_);
+		  set_console_color(FOREGROUND_BLUE | FOREGROUND_INTENSITY | background_color_);
 	  }
 	  return "";
     }
@@ -54,7 +54,7 @@ namespace bandit { namespace detail {
     {
       if(colors_enabled_)
 	  {
-		  set_console_color(FOREGROUND_RED | background_color_);
+		  set_console_color(FOREGROUND_RED | FOREGROUND_INTENSITY | background_color_);
 	  }
 	  return "";
     }
