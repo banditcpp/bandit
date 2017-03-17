@@ -1,4 +1,7 @@
+#include <specs/fakes/fake_reporter.h>
+#include <specs/util/argv_helper.h>
 #include <specs/specs.h>
+
 using namespace bandit::fakes;
 using namespace bandit::specs::util;
 namespace bd = bandit::detail;

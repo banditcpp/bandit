@@ -1,6 +1,9 @@
 #ifndef BANDIT_SPECS_FAKE_REPORTER_H
 #define BANDIT_SPECS_FAKE_REPORTER_H
 
+#include <bandit/bandit.h>
+#include <specs/fakes/logging_fake.h>
+
 namespace bandit { namespace fakes {
   struct fake_reporter : 
     public bandit::detail::listener, 

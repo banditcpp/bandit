@@ -1,3 +1,5 @@
+#include <specs/fakes/fake_context.h>
+#include <specs/fakes/fake_reporter.h>
 #include <specs/specs.h>
 
 using namespace bandit::fakes;

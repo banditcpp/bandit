@@ -1,5 +1,7 @@
 #ifndef BANDIT_SPECS_LOGGING_FAKE_H
 #define BANDIT_SPECS_LOGGING_FAKE_H
+
+#include <algorithm>
 #include <sstream>
 
 namespace bandit { namespace specs {

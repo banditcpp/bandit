@@ -1,3 +1,4 @@
+#include <specs/fakes/fake_context.h>
 #include <specs/specs.h>
 
 namespace bf = bandit::fakes;

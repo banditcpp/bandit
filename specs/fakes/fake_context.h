@@ -1,6 +1,9 @@
 #ifndef BANDIT_FAKE_CONTEXT_H
 #define BANDIT_FAKE_CONTEXT_H
 
+#include <bandit/bandit.h>
+#include <specs/fakes/logging_fake.h>
+
 namespace bandit { namespace fakes {
 
   struct fake_context : public bandit::detail::context, public bandit::specs::logging_fake

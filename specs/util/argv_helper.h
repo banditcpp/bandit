@@ -1,7 +1,7 @@
 #ifndef BANDIT_SPECS_ARGV_HELPER_H
 #define BANDIT_SPECS_ARGV_HELPER_H
 
-#include <string.h>
+#include <string>
 
 namespace bandit { namespace specs { namespace util {
 

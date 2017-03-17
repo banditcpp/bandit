@@ -1,3 +1,4 @@
+#include <specs/util/argv_helper.h>
 #include <specs/specs.h>
 
 using namespace bandit::specs::util;
