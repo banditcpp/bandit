@@ -26,8 +26,7 @@ go_bandit([](){
 
       context_stack = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
 
-      const char* args[] = {"executable"};
-      argv = std::unique_ptr<argv_helper>(new argv_helper(1, args));
+      argv = std::unique_ptr<argv_helper>(new argv_helper({"executable"}));
     });
 
     it("pushes the global context on the context stack", [&](){

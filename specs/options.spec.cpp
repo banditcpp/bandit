@@ -15,8 +15,7 @@ go_bandit([](){
     describe("options:", [&](){
 
       it("parses the '--help' option", [&](){
-        const char* args[] = {"executable", "--help"};
-        argv_helper argv(2, args);
+        argv_helper argv({"executable", "--help"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -25,8 +24,7 @@ go_bandit([](){
       });
 
       it("parses the '--version' option", [&](){
-        const char* args[] = {"executable", "--version"};
-        argv_helper argv(2, args);
+        argv_helper argv({"executable", "--version"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -35,8 +33,7 @@ go_bandit([](){
       });
 
       it("parses the '--no-color' option", [&](){
-        const char* args[] = {"executable", "--no-color"};
-        argv_helper argv(2, args);
+        argv_helper argv({"executable", "--no-color"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -44,18 +41,16 @@ go_bandit([](){
         all_ok(opt);
       });
 
-      it("parser the '--formatter=vs' option", [&](){
-        const char* args[] = {"executable", "--formatter=vs"};
-        argv_helper argv(2, args);
+      it("parses the '--formatter=vs' option", [&](){
+        argv_helper argv({"executable", "--formatter=vs"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
         all_ok(opt);
       });
 
-      it("parser the '--formatter=default' option", [&](){
-        const char* args[] = {"executable", "--formatter=default"};
-        argv_helper argv(2, args);
+      it("parses the '--formatter=default' option", [&](){
+        argv_helper argv({"executable", "--formatter=default"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
@@ -63,8 +58,7 @@ go_bandit([](){
       });
 
       it("parses the '--skip=\"substring\"' option", [&](){
-        const char* args[] = {"executable", "--skip=substring"};
-        argv_helper argv(2, args);
+        argv_helper argv({"executable", "--skip=substring"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.skip(), Equals("substring"));
@@ -72,8 +66,7 @@ go_bandit([](){
       });
 
       it("parses skip as empty string if not present", [&](){
-        const char* args[] = {"executable"};
-        argv_helper argv(1, args);
+        argv_helper argv({"executable"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.skip(), Equals(""));
@@ -81,8 +74,7 @@ go_bandit([](){
       });
 
       it("parses the '--only=\"substring\"' option", [&](){
-        const char* args[] = {"executable", "--only=substring"};
-        argv_helper argv(2, args);
+        argv_helper argv({"executable", "--only=substring"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.only(), Equals("substring"));
@@ -90,8 +82,7 @@ go_bandit([](){
       });
 
       it("parses only as empty string if not present", [&](){
-        const char* args[] = {"executable"};
-        argv_helper argv(1, args);
+        argv_helper argv({"executable"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.only(), Equals(""));
@@ -99,8 +90,7 @@ go_bandit([](){
       });
 
       it("parses the '--break-on-failure' option", [&](){
-        const char* args[] = {"executable", "--break-on-failure"};
-        argv_helper argv(2, args);
+        argv_helper argv({"executable", "--break-on-failure"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -109,8 +99,7 @@ go_bandit([](){
       });
 
       it("parses the '--dry-run' option", [&](){
-        const char* args[] = {"executable", "--dry-run"};
-        argv_helper argv(2, args);
+        argv_helper argv({"executable", "--dry-run"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -119,8 +108,7 @@ go_bandit([](){
       });
 
       describe("with no arguments", [&](){
-        const char* args[] = {"executable"};
-        argv_helper argv(1, args);
+        argv_helper argv({"executable"});
         bd::options opt(argv.argc(), argv.argv());
 
         it("is valid", [&] {
