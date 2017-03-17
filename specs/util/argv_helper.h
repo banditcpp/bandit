@@ -2,6 +2,7 @@
 #define BANDIT_SPECS_ARGV_HELPER_H
 
 #include <algorithm>
+#include <list>
 #include <string>
 
 namespace bandit { namespace specs { namespace util {
@@ -9,12 +10,14 @@ namespace bandit { namespace specs { namespace util {
   // main() is supposed to receive its arguments as a non const 'char* argv[]'.
   // This is a pain to create for each test.
   //
-  // This class makes up an argc/argv pair from a simple std::initializer_list
+  // This class makes up an argc/argv pair from a simple brace-enclosed initializer list.
+  // The first executable "argument" is already included.
   struct argv_helper
   {
-    argv_helper(std::initializer_list<std::string> args)
-      : argc_(args.size())
+    argv_helper(std::list<std::string>&& args)
+      : argc_(args.size() + 1)
     {
+      args.emplace_front("executable");
       non_const_argv_ = new char*[argc_];
       size_t i = 0;
       for (auto arg : args) {

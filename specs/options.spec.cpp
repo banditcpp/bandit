@@ -15,7 +15,7 @@ go_bandit([](){
     describe("options:", [&](){
 
       it("parses the '--help' option", [&](){
-        argv_helper argv({"executable", "--help"});
+        argv_helper argv({"--help"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -24,7 +24,7 @@ go_bandit([](){
       });
 
       it("parses the '--version' option", [&](){
-        argv_helper argv({"executable", "--version"});
+        argv_helper argv({"--version"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -33,7 +33,7 @@ go_bandit([](){
       });
 
       it("parses the '--no-color' option", [&](){
-        argv_helper argv({"executable", "--no-color"});
+        argv_helper argv({"--no-color"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -42,7 +42,7 @@ go_bandit([](){
       });
 
       it("parses the '--formatter=vs' option", [&](){
-        argv_helper argv({"executable", "--formatter=vs"});
+        argv_helper argv({"--formatter=vs"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
@@ -50,7 +50,7 @@ go_bandit([](){
       });
 
       it("parses the '--formatter=default' option", [&](){
-        argv_helper argv({"executable", "--formatter=default"});
+        argv_helper argv({"--formatter=default"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
@@ -58,7 +58,7 @@ go_bandit([](){
       });
 
       it("parses the '--skip=\"substring\"' option", [&](){
-        argv_helper argv({"executable", "--skip=substring"});
+        argv_helper argv({"--skip=substring"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.skip(), Equals("substring"));
@@ -66,7 +66,7 @@ go_bandit([](){
       });
 
       it("parses skip as empty string if not present", [&](){
-        argv_helper argv({"executable"});
+        argv_helper argv({});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.skip(), Equals(""));
@@ -74,7 +74,7 @@ go_bandit([](){
       });
 
       it("parses the '--only=\"substring\"' option", [&](){
-        argv_helper argv({"executable", "--only=substring"});
+        argv_helper argv({"--only=substring"});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.only(), Equals("substring"));
@@ -82,7 +82,7 @@ go_bandit([](){
       });
 
       it("parses only as empty string if not present", [&](){
-        argv_helper argv({"executable"});
+        argv_helper argv({});
 
         bd::options opt(argv.argc(), argv.argv());
         AssertThat(opt.only(), Equals(""));
@@ -90,7 +90,7 @@ go_bandit([](){
       });
 
       it("parses the '--break-on-failure' option", [&](){
-        argv_helper argv({"executable", "--break-on-failure"});
+        argv_helper argv({"--break-on-failure"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -99,7 +99,7 @@ go_bandit([](){
       });
 
       it("parses the '--dry-run' option", [&](){
-        argv_helper argv({"executable", "--dry-run"});
+        argv_helper argv({"--dry-run"});
 
         bd::options opt(argv.argc(), argv.argv());
 
@@ -108,7 +108,7 @@ go_bandit([](){
       });
 
       describe("with no arguments", [&](){
-        argv_helper argv({"executable"});
+        argv_helper argv({});
         bd::options opt(argv.argc(), argv.argv());
 
         it("is valid", [&] {
