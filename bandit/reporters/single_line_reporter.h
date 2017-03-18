@@ -14,8 +14,8 @@ namespace bandit { namespace detail {
     {}
 
     single_line_reporter(const failure_formatter& failure_formatter,
-        const detail::colorizer& colorizer)
-      : progress_reporter(failure_formatter), stm_(std::cout), colorizer_(colorizer)
+        const colorizer& colorizer)
+      : single_line_reporter(std::cout, failure_formatter, colorizer)
     {}
 
 	single_line_reporter& operator=(const single_line_reporter&) { return *this; }

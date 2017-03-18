@@ -34,13 +34,8 @@ struct info_reporter : public progress_reporter
 	  , context_stack_()
 	{}
 
-	info_reporter(const failure_formatter &failure_formatter, const detail::colorizer &colorizer)
-	  : progress_reporter(failure_formatter)
-	  , stm_(std::cout)
-	  , colorizer_(colorizer)
-	  , indentation_(0)
-	  , not_yet_shown_(0)
-	  , context_stack_()
+	info_reporter(const failure_formatter &failure_formatter, const colorizer &colorizer)
+	  : info_reporter(std::cout, failure_formatter, colorizer)
 	{}
 
 	info_reporter &operator=(const info_reporter &)

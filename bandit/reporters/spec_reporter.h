@@ -13,8 +13,8 @@ namespace bandit { namespace detail {
       : progress_reporter(failure_formatter),  stm_(stm), colorizer_(colorizer), indentation_(0)
     {}
 
-    spec_reporter(const failure_formatter& failure_formatter, const detail::colorizer& colorizer)
-      : progress_reporter(failure_formatter), stm_(std::cout), colorizer_(colorizer), indentation_(0)
+    spec_reporter(const failure_formatter& failure_formatter, const colorizer& colorizer)
+      : spec_reporter(std::cout, failure_formatter, colorizer)
     {}
 
 	spec_reporter& operator=(const spec_reporter&) { return *this; }
