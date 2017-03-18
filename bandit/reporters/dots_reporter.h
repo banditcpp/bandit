@@ -1,16 +1,16 @@
 #ifndef BANDIT_DOTS_REPORTER_H
 #define BANDIT_DOTS_REPORTER_H
 
-#include <bandit/reporters/progress_reporter.h>
+#include <bandit/reporters/colored_reporter.h>
 #include <bandit/reporters/test_run_summary.h>
 
 namespace bandit { namespace detail {
 
-  struct dots_reporter : public progress_reporter
+  struct dots_reporter : public colored_reporter
   {
-    dots_reporter(std::ostream& stm, const failure_formatter& failure_formatter, 
-        const detail::colorizer& colorizer)
-      : progress_reporter(failure_formatter), stm_(stm), colorizer_(colorizer)
+    dots_reporter(std::ostream& stm, const failure_formatter& failure_formatter,
+        const colorizer& colorizer)
+      : colored_reporter(stm, failure_formatter, colorizer)
     {}
 
     dots_reporter(const failure_formatter& failure_formatter, const colorizer& colorizer)
@@ -69,10 +69,6 @@ namespace bandit { namespace detail {
       stm_ << colorizer_.red() << "E" << colorizer_.reset();
       stm_.flush();
     }
-
-    private:
-    std::ostream& stm_;
-    const detail::colorizer& colorizer_;
   };
 }}
 
