@@ -2,10 +2,10 @@
 
 namespace fuzzbox {
 
-  typedef enum {
+  enum class sounds {
     clean,
     distorted
-  } sounds;
+  };
 
   struct fuzzbox
   {
