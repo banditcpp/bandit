@@ -87,37 +87,36 @@ go_bandit([](){
       });
     });
 
-      describe("with no arguments", [&](){
-        options opt({});
+    describe("with no arguments", [&](){
+      options opt({});
 
-        it("is valid", [&] {
-          all_ok(opt);
-        });
+      it("is valid", [&] {
+        all_ok(opt);
+      });
 
-        it("cannot find '--help'", [&](){
-          AssertThat(opt.help(), IsFalse());
-        });
+      it("cannot find '--help'", [&](){
+        AssertThat(opt.help(), IsFalse());
+      });
 
-        it("cannot find '--version'", [&](){
-          AssertThat(opt.version(), IsFalse());
-        });
+      it("cannot find '--version'", [&](){
+        AssertThat(opt.version(), IsFalse());
+      });
 
-        it("cannot find '--no-color'", [&](){
-          AssertThat(opt.no_color(), IsFalse());
-        });
+      it("cannot find '--no-color'", [&](){
+        AssertThat(opt.no_color(), IsFalse());
+      });
 
-        it("cannot find '--break-on-failure'", [&](){
-          AssertThat(opt.break_on_failure(), IsFalse())
-        });
+      it("cannot find '--break-on-failure'", [&](){
+        AssertThat(opt.break_on_failure(), IsFalse())
+      });
 
-        it("cannot find '--dry-run'", [&](){
-          AssertThat(opt.dry_run(), IsFalse())
-        });
+      it("cannot find '--dry-run'", [&](){
+        AssertThat(opt.dry_run(), IsFalse())
+      });
 
-        it("uses default formatter for '--formatter'", [&](){
-          AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
-        });
+      it("uses default formatter for '--formatter'", [&](){
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
       });
     });
-
+  });
 });
