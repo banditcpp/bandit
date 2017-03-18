@@ -15,6 +15,11 @@ namespace bandit { namespace detail {
       : progress_reporter(failure_formatter), stm_(stm), colorizer_(colorizer)
     {}
 
+    virtual ~colored_reporter()
+    {
+      stm_ << colorizer_.reset();
+    }
+
   protected:
     std::ostream& stm_;
     const detail::colorizer& colorizer_;
