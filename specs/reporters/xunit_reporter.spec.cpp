@@ -4,15 +4,15 @@ namespace bd = bandit::detail;
 go_bandit([](){
 
   describe("xunit_reporter:", [&](){
-    std::unique_ptr<std::stringstream> stm;
+    std::stringstream stm;
     bd::default_failure_formatter formatter;
     std::unique_ptr<bd::xunit_reporter> reporter;
 
-    auto output = [&](){ return stm->str(); };
+    auto output = [&](){ return stm.str(); };
 
     before_each([&](){
-      stm = std::unique_ptr<std::stringstream>(new std::stringstream());
-      reporter = std::unique_ptr<bd::xunit_reporter>(new bd::xunit_reporter(*stm, formatter));
+      stm.str(std::string());
+      reporter = std::unique_ptr<bd::xunit_reporter>(new bd::xunit_reporter(stm, formatter));
     });
 
     describe("an empty test run", [&](){
