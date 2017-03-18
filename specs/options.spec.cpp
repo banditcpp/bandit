@@ -18,9 +18,8 @@ struct options : private argv_helper, public bd::options {
 };
 
 go_bandit([](){
-
-    describe("options:", [&](){
-
+  describe("options:", [&](){
+    describe("with valid options", [&] {
       it("parses the '--help' option", [&](){
         options opt({"--help"});
         AssertThat(opt.help(), IsTrue());
@@ -86,6 +85,7 @@ go_bandit([](){
         AssertThat(opt.dry_run(), IsTrue());
         all_ok(opt);
       });
+    });
 
       describe("with no arguments", [&](){
         options opt({});
