@@ -1,16 +1,16 @@
 #ifndef BANDIT_REPORTERS_SINGLE_LINE_REPORTER_H
 #define BANDIT_REPORTERS_SINGLE_LINE_REPORTER_H
 
-#include <bandit/reporters/progress_reporter.h>
+#include <bandit/reporters/colored_reporter.h>
 #include <bandit/reporters/test_run_summary.h>
 
 namespace bandit { namespace detail {
 
-  struct single_line_reporter : public progress_reporter
+  struct single_line_reporter : public colored_reporter
   {
     single_line_reporter(std::ostream& stm, const failure_formatter& failure_formatter,
-        const detail::colorizer& colorizer)
-      : progress_reporter(failure_formatter), stm_(stm), colorizer_(colorizer)
+        const colorizer& colorizer)
+      : colored_reporter(stm, failure_formatter, colorizer)
     {}
 
     single_line_reporter(const failure_formatter& failure_formatter,
@@ -79,10 +79,6 @@ namespace bandit { namespace detail {
       }
       stm_.flush();
     }
-
-    private:
-    std::ostream& stm_;
-    const detail::colorizer& colorizer_;
   };
 }}
 

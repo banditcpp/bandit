@@ -2,13 +2,13 @@
 #define BANDIT_INFO_REPORTER_H
 
 #include <stack>
-#include <bandit/reporters/progress_reporter.h>
+#include <bandit/reporters/colored_reporter.h>
 #include <bandit/reporters/test_run_summary.h>
 
 namespace bandit {
 namespace detail {
 
-struct info_reporter : public progress_reporter
+struct info_reporter : public colored_reporter
 {
 	struct context_info
 	{
@@ -25,10 +25,8 @@ struct info_reporter : public progress_reporter
 		int failed;
 	};
 
-	info_reporter(std::ostream &stm, const failure_formatter &failure_formatter, const detail::colorizer &colorizer)
-	  : progress_reporter(failure_formatter)
-	  , stm_(stm)
-	  , colorizer_(colorizer)
+	info_reporter(std::ostream &stm, const failure_formatter &failure_formatter, const colorizer &colorizer)
+	  : colored_reporter(stm, failure_formatter, colorizer)
 	  , indentation_(0)
 	  , not_yet_shown_(0)
 	  , context_stack_()
@@ -306,8 +304,6 @@ private:
 		return std::string(2*indentation_, ' ');
 	}
 
-	std::ostream &stm_;
-	const detail::colorizer &colorizer_;
 	int indentation_;
 	int not_yet_shown_; // number of elements in stack that are not yet shown
 	std::stack<context_info> context_stack_;
