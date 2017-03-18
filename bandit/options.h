@@ -12,33 +12,85 @@ namespace bandit { namespace detail {
     // TODO: print any unknown options
     struct options
     {
+      template<typename ENUM>
+      struct argstr {
+        ENUM id;
+        std::string str;
+      };
+
+      // a vector of argstr that allows to iterate over the strings only
+      template<typename ENUM>
+      struct argstrs : std::vector<argstr<ENUM>> {
+        using std::vector<argstr<ENUM>>::vector;
+
+        struct str_iterator : public std::iterator<std::input_iterator_tag, std::string, int, const std::string*, std::string> {
+          using base_iterator = typename std::vector<argstr<ENUM>>::const_iterator;
+          str_iterator() = delete;
+          explicit str_iterator(base_iterator it) : it_(it) { }
+          str_iterator &operator++() {
+            ++it_;
+            return *this;
+          }
+          str_iterator operator++(int) {
+            str_iterator it(*this);
+            ++(*this);
+            return it;
+          }
+          bool operator==(const str_iterator& other) const { return it_ == other.it_; }
+          bool operator!=(const str_iterator& other) const { return it_ != other.it_; }
+          reference operator*() const { return it_->str; }
+
+          ENUM id() {
+            return it_->id;
+          }
+
+        private:
+          base_iterator it_;
+        };
+
+        str_iterator strbegin() const {
+          return str_iterator(this->begin());
+        };
+
+        str_iterator strend() const {
+          return str_iterator(this->end());
+        };
+      };
+
+      enum class formatters {
+        DEFAULT,
+        VS,
+        UNKNOWN
+      };
+
       struct argument : public option::Arg {
-        static const std::vector<std::string> reporter_list()
+        static const argstrs<nullptr_t> reporter_list()
         {
           return {
-            "dots",
-            "singleline",
-            "xunit",
-            "info",
-            "spec",
+            { nullptr, "dots" },
+            { nullptr, "singleline" },
+            { nullptr, "xunit" },
+            { nullptr, "info" },
+            { nullptr, "spec" },
           };
         }
 
-        static const std::vector<std::string> formatter_list()
+        static const argstrs<formatters> formatter_list()
         {
           return {
-            "default",
-            "vs",
+            { formatters::DEFAULT, "default" },
+            { formatters::VS, "vs" },
           };
         }
 
-        static std::string comma_separated_list(std::vector<std::string> list) {
+        template<typename ENUM>
+        static std::string comma_separated_list(argstrs<ENUM> list) {
           std::string csl;
-          auto first = list.begin();
-          if (first != list.end()) {
+          auto first = list.strbegin();
+          if (first != list.strend()) {
             csl += *first;
-            std::for_each(++first, list.end(), [&](std::string reporter) {
-              csl += ", " + reporter;
+            std::for_each(++first, list.strend(), [&](const std::string& elem) {
+              csl += ", " + elem;
             });
           }
           return csl;
@@ -61,11 +113,12 @@ namespace bandit { namespace detail {
           return option::ARG_ILLEGAL;
         }
 
-        static option::ArgStatus OneOf(const option::Option& option, bool msg, const std::vector<std::string> &&list)
+        template<typename ENUM>
+        static option::ArgStatus OneOf(const option::Option& option, bool msg, const argstrs<ENUM> &&list)
         {
           auto status = Required(option, msg);
           if (status == option::ARG_OK
-           && std::find(list.begin(), list.end(), option.arg) == list.end()) {
+           && std::find(list.strbegin(), list.strend(), option.arg) == list.strend()) {
             if (msg) {
               std::cerr
                 << "Option argument of '" << name(option) << "' must be one of: "
@@ -140,20 +193,15 @@ namespace bandit { namespace detail {
         return options_[NO_COLOR] != nullptr;
       }
 
-      enum class formatters {
-        DEFAULT,
-        VS,
-        UNKNOWN
-      };
-
       formatters formatter() const
       {
-        std::string arg = options_[FORMATTER].arg ? options_[FORMATTER].arg : "";
-        if(arg == "vs")
-        {
-          return formatters::VS;
+        const auto list(argument::formatter_list());
+        if (options_[FORMATTER].arg != nullptr) {
+          auto it = std::find(list.strbegin(), list.strend(), options_[FORMATTER].arg);
+          if (it != list.strend()) {
+            return it.id();
+          }
         }
-
         return formatters::DEFAULT;
       }
 
@@ -191,7 +239,8 @@ namespace bandit { namespace detail {
         DRY_RUN,
       };
 
-      static std::string append_list(std::string desc, std::vector<std::string> list) {
+      template<typename ENUM>
+      static std::string append_list(std::string desc, argstrs<ENUM> list) {
         return desc + ": " + argument::comma_separated_list(list);
       };
 
