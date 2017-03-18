@@ -44,6 +44,12 @@ go_bandit([](){
         all_ok(opt);
       });
 
+      it("parses the '--formatter=vs' option when used without =", [&](){
+        options opt({"--formatter", "vs"});
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
+        all_ok(opt);
+      });
+
       it("parses the '--formatter=default' option", [&](){
         options opt({"--formatter=default"});
         AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
@@ -117,6 +123,63 @@ go_bandit([](){
       it("uses default formatter for '--formatter'", [&](){
         AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
       });
+    });
+
+    describe("with unknown arguments", [&] {
+      it("recognizes unknown arguments", [&] {
+        options opt({"unknown-argument"});
+        AssertThat(opt.parsed_ok(), IsTrue());
+        AssertThat(opt.has_further_arguments(), IsTrue());
+        AssertThat(opt.has_unknown_options(), IsFalse());
+      });
+
+      it("recognizes unknown options", [&] {
+        options opt({"--unknown-option"});
+        AssertThat(opt.parsed_ok(), IsTrue());
+        AssertThat(opt.has_further_arguments(), IsFalse());
+        AssertThat(opt.has_unknown_options(), IsTrue());
+      });
+
+      it("recognizes unknown options and arguments", [&] {
+        options opt({"--unknown-option", "unknown-argument"});
+        AssertThat(opt.parsed_ok(), IsTrue());
+        AssertThat(opt.has_further_arguments(), IsTrue());
+        AssertThat(opt.has_unknown_options(), IsTrue());
+      });
+
+      it("ignores unknown options and arguments", [&] {
+        options opt({"--unknown-option",
+                     "--formatter=vs",
+                     "--reporter", "xunit",
+                     "--no-color",
+                     "unknown-argument",
+                     "--dry-run"});
+        AssertThat(opt.parsed_ok(), IsTrue());
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
+        AssertThat(opt.reporter(), Equals("xunit"));
+        AssertThat(opt.no_color(), IsTrue());
+        AssertThat(opt.dry_run(), IsFalse())
+        AssertThat(opt.has_further_arguments(), IsTrue());
+        AssertThat(opt.has_unknown_options(), IsTrue());
+      });
+    });
+
+    describe("with missing option arguments", [&] {
+      for (std::string name : {"skip", "only", "formatter", "reporter"}) {
+        it((std::string("is not ok with missing --") + name + " argument").c_str(), [&] {
+          options opt({"--" + name});
+          AssertThat(opt.parsed_ok(), IsFalse());
+        });
+      }
+    });
+
+    describe("with unknown option arguments", [&] {
+      for (std::string name : {"formatter", "reporter"}) {
+        it((std::string("is not ok with unknown ") + name).c_str(), [&] {
+          options opt({"--" + name + "=__unknown__"});
+          AssertThat(opt.parsed_ok(), IsFalse());
+        });
+      }
     });
   });
 });
