@@ -40,19 +40,19 @@ go_bandit([](){
 
       it("parses the '--formatter=vs' option", [&](){
         options opt({"--formatter=vs"});
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
         all_ok(opt);
       });
 
       it("parses the '--formatter=vs' option when used without =", [&](){
         options opt({"--formatter", "vs"});
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
         all_ok(opt);
       });
 
       it("parses the '--formatter=default' option", [&](){
         options opt({"--formatter=default"});
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::DEFAULT));
         all_ok(opt);
       });
 
@@ -121,7 +121,7 @@ go_bandit([](){
       });
 
       it("uses default formatter for '--formatter'", [&](){
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_DEFAULT));
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::DEFAULT));
       });
     });
 
@@ -155,7 +155,7 @@ go_bandit([](){
                      "unknown-argument",
                      "--dry-run"});
         AssertThat(opt.parsed_ok(), IsTrue());
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::FORMATTER_VS));
+        AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
         AssertThat(opt.reporter(), Equals("xunit"));
         AssertThat(opt.no_color(), IsTrue());
         AssertThat(opt.dry_run(), IsFalse())

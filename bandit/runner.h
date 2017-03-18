@@ -50,7 +50,7 @@ namespace bandit {
 
     inline failure_formatter_ptr create_formatter(const options& opt)
     {
-      if(opt.formatter() == options::formatters::FORMATTER_VS)
+      if(opt.formatter() == options::formatters::VS)
       {
         return failure_formatter_ptr(new visual_studio_failure_formatter());
       }

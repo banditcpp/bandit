@@ -140,22 +140,21 @@ namespace bandit { namespace detail {
         return options_[NO_COLOR] != nullptr;
       }
 
-      typedef enum
-      {
-        FORMATTER_DEFAULT,
-        FORMATTER_VS,
-        FORMATTER_UNKNOWN
-      } formatters;
+      enum class formatters {
+        DEFAULT,
+        VS,
+        UNKNOWN
+      };
 
       formatters formatter() const
       {
         std::string arg = options_[FORMATTER].arg ? options_[FORMATTER].arg : "";
         if(arg == "vs")
         {
-          return formatters::FORMATTER_VS;
+          return formatters::VS;
         }
 
-        return formatters::FORMATTER_DEFAULT;
+        return formatters::DEFAULT;
       }
 
       const char* skip() const
