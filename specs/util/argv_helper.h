@@ -1,7 +1,6 @@
 #ifndef BANDIT_SPECS_ARGV_HELPER_H
 #define BANDIT_SPECS_ARGV_HELPER_H
 
-#include <algorithm>
 #include <list>
 #include <string>
 
@@ -22,7 +21,8 @@ namespace bandit { namespace specs { namespace util {
       size_t i = 0;
       for (auto arg : args) {
         non_const_argv_[i] = new char[arg.size() + 1];
-        std::copy(arg.begin(), arg.end() + 1, non_const_argv_[i]);
+        arg.copy(non_const_argv_[i], arg.size());
+        non_const_argv_[i][arg.size()] = '\0';
         ++i;
       }
     }
