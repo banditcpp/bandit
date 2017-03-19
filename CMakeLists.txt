@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 project(bandit)
 
 option(BANDIT_BUILD_SPECS   "Build the Bandit specs"                ON)
 option(BANDIT_RUN_SPECS     "Run the Bandit specs"                  ON)
+set(CMAKE_CXX_STANDARD 11)
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cotire/CMake/cotire)
@@ -17,18 +18,6 @@ if (MSVC)
 else()
   # Assume GCC-style arguments
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdeprecated -Wdeprecated-declarations -Wshadow -Wall -W -Werror -Wno-error=unknown-pragmas -Wfloat-equal -Wundef -Wendif-labels")
-
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-    else()
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    endif()
-  endif()
-
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  endif()
 endif()
 
 #

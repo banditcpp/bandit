@@ -14,7 +14,7 @@ namespace bandit { namespace detail {
     }
 
     xunit_reporter(const failure_formatter& formatter)
-      : progress_reporter(formatter), stm_(std::cout)
+      : xunit_reporter(std::cout, formatter)
     {
     }
 

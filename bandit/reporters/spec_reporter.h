@@ -1,20 +1,21 @@
 #ifndef BANDIT_SPEC_REPORTER_H
 #define BANDIT_SPEC_REPORTER_H
 
-#include <bandit/reporters/progress_reporter.h>
+#include <bandit/reporters/colored_reporter.h>
 #include <bandit/reporters/test_run_summary.h>
 
 namespace bandit { namespace detail {
 
-  struct spec_reporter : public progress_reporter
+  struct spec_reporter : public colored_reporter
   {
     spec_reporter(std::ostream& stm, const failure_formatter& failure_formatter, 
-        const detail::colorizer& colorizer)
-      : progress_reporter(failure_formatter),  stm_(stm), colorizer_(colorizer), indentation_(0)
+        const colorizer& colorizer)
+      : colored_reporter(stm, failure_formatter, colorizer)
+      , indentation_(0)
     {}
 
-    spec_reporter(const failure_formatter& failure_formatter, const detail::colorizer& colorizer)
-      : progress_reporter(failure_formatter), stm_(std::cout), colorizer_(colorizer), indentation_(0)
+    spec_reporter(const failure_formatter& failure_formatter, const colorizer& colorizer)
+      : spec_reporter(std::cout, failure_formatter, colorizer)
     {}
 
 	spec_reporter& operator=(const spec_reporter&) { return *this; }
@@ -119,9 +120,7 @@ namespace bandit { namespace detail {
       return std::string(indentation_, '\t');
     }
 
-    private:
-    std::ostream& stm_;
-    const detail::colorizer& colorizer_;
+  private:
     int indentation_;
   };
 }}
