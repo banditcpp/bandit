@@ -4,6 +4,24 @@
 using namespace bandit::specs::util;
 namespace bd = bandit::detail;
 
+struct error_collector {
+  error_collector()
+    : origbuf(std::cerr.rdbuf(str.rdbuf()))
+  {}
+
+  ~error_collector() {
+    std::cerr.rdbuf(origbuf);
+  }
+
+  std::string get() {
+    return str.str();
+  }
+
+private:
+  std::stringstream str;
+  std::streambuf* origbuf;
+};
+
 static void all_ok(const bd::options &opt) {
   AssertThat(opt.parsed_ok(), IsTrue());
   AssertThat(opt.has_further_arguments(), IsFalse());
@@ -24,11 +42,13 @@ static void choice_tests(std::string &&optname, ENUM unknown,
   describe(optname.c_str(), [&] {
     for (auto pair : list) {
       it(std::string("parses the '--" + optname + "=" + pair.first + "' option").c_str(), [&] {
+        error_collector cerr;
         for (auto& opt : {options({"--" + optname + "=" + pair.first}),
                           options({"--" + optname, pair.first})}) {
           AssertThat(tester(opt), Equals(pair.second));
           all_ok(opt);
         }
+        AssertThat(cerr.get(), IsEmpty());
       });
     }
 
@@ -38,9 +58,11 @@ static void choice_tests(std::string &&optname, ENUM unknown,
     });
 
     it(std::string("is not ok with unknown " + optname).c_str(), [&] {
+      error_collector cerr;
       options opt({"--" + optname + "=__unknown__"});
       AssertThat(opt.parsed_ok(), IsFalse());
       AssertThat(tester(opt), Equals(unknown));
+      AssertThat(cerr.get(), !IsEmpty());
     });
   });
 }
@@ -192,8 +214,10 @@ go_bandit([](){
     describe("with missing option arguments", [&] {
       for (std::string name : {"skip", "only", "formatter", "reporter"}) {
         it((std::string("is not ok with missing --") + name + " argument").c_str(), [&] {
+          error_collector cerr;
           options opt({"--" + name});
           AssertThat(opt.parsed_ok(), IsFalse());
+          AssertThat(cerr.get(), !IsEmpty());
         });
       }
     });
