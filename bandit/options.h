@@ -286,6 +286,7 @@ namespace bandit {
         static std::string formatter_help = append_list("  --formatter=<formatter>, "
             "\tSelect error formatter", argument::formatter_list());
         static const option::Descriptor usage[] = {
+<<<<<<< HEAD
             {UNKNOWN, 0, "", "", argument::None,
                 "USAGE: <executable> [options]\n\n"
                 "Options:"},
@@ -302,6 +303,9 @@ namespace bandit {
                 "  --only=<substring>, \tRun only 'describe' and 'it' containing substring"},
             {BREAK_ON_FAILURE, 0, "", "break-on-failure", argument::None,
                 "  --break-on-failure, \tStop test run on first failing test"},
+            { BREAK_ON_FAILURE, 0, "", "break-on-failure", option::Arg::Optional,
+                "  --break-on-failure=<mode>, \t"
+                "if catch, stop test run on first failing test\nif on, do not catch exceptions"},
             {DRY_RUN, 0, "", "dry-run", argument::None,
                 "  --dry-run, \tSkip all tests. Use to list available tests"},
             {0, 0, 0, 0, 0, 0}};

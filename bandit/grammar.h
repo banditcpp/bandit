@@ -17,10 +17,14 @@ namespace bandit {
 
     context_stack.push_back(&ctxt);
 
-    try {
+    if (break_on_failure() == on) {
       func();
-    } catch (const bandit::detail::test_run_error& error) {
-      reporter.test_run_error(desc, error);
+    } else {
+      try {
+        func();
+      } catch (const bandit::detail::test_run_error& error) {
+        reporter.test_run_error(desc, error);
+      }
     }
 
     context_stack.pop_back();
@@ -124,6 +128,11 @@ namespace bandit {
           /* ignore */
         }
       }
+    };
+    if (break_on_failure() == on) {
+      try_with_adapter = [&](detail::voidfunc_t do_it) {
+        do_it();
+      };
     };
 
     bool success = false;
