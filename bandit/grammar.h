@@ -15,7 +15,7 @@ namespace bandit {
 
     context_stack.back()->execution_is_starting();
 
-    detail::bandit_context ctxt(desc.c_str(), hard_skip);
+    detail::bandit_context ctxt(desc, hard_skip);
 
     context_stack.push_back(&ctxt);
     try
