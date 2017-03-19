@@ -79,9 +79,9 @@ namespace bandit {
       private:
         void run_all(const std::list<voidfunc_t>& funcs)
         {
-          auto call_func = [](voidfunc_t f){ f(); };
-
-          for_each(funcs.begin(), funcs.end(), call_func);
+          for (auto f : funcs) {
+            f();
+          }
         }
 
       private:

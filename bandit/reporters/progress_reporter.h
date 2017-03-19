@@ -95,14 +95,13 @@ namespace bandit { namespace detail {
     {
       std::string name;
 
-      std::for_each(contexts_.begin(), contexts_.end(), [&](const std::string context){
-          if(name.size() > 0)
-          {
+      for (const auto& context : contexts_) {
+        if (name.size() > 0) {
           name += " ";
-          }
+        }
 
-          name += context;
-          });
+        name += context;
+      }
 
       return name;
     }

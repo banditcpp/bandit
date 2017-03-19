@@ -65,17 +65,15 @@ namespace bandit {
       return 0;
     }
 
-    auto call_func = [](const detail::voidfunc_t& func) {
-      func();
-    };
-
     listener.test_run_starting();
 
     bool hard_skip = false;
     detail::bandit_context global_context("", hard_skip);
     context_stack.push_back(&global_context);
 
-    for_each(specs.begin(), specs.end(), call_func);
+    for (auto func : specs) {
+      func();
+    };
 
     listener.test_run_complete();
 

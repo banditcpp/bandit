@@ -48,26 +48,26 @@ struct info_reporter : public colored_reporter
 			  << colorizer_.red()
 			  << "List of failures:"
 			  << std::endl;
-			std::for_each(failures_.begin(), failures_.end(), [&](const std::string &failure) {
+			for (const auto& failure : failures_) {
 				stm_
 				 << colorizer_.white()
 				 << " (*) "
 				 << colorizer_.red()
 				 << failure << std::endl;
-			});
+			}
 		}
 		if (test_run_errors_.size() > 0) {
 			stm_
 			  << colorizer_.red()
 			  << "List of run errors:"
 			  << std::endl;
-			std::for_each(test_run_errors_.begin(), test_run_errors_.end(), [&](const std::string &error) {
+			for (const auto& error : test_run_errors_) {
 				stm_
 				 << colorizer_.white()
 				 << " (*) "
 				 << colorizer_.red()
 				 << error << std::endl;
-			});
+			}
 		}
 	}
 

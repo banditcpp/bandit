@@ -41,22 +41,19 @@ namespace bandit { namespace detail {
 
       if(test_run_errors_.size() > 0)
       {
-        std::for_each(test_run_errors_.begin(), test_run_errors_.end(),
-            [&](const std::string& error){
-            stm << error << std::endl;
-            });
+        for (const auto& error : test_run_errors_) {
+          stm << error << std::endl;
+        }
       }
-
 
       if(specs_failed_ > 0)
       {
         stm << colorizer_.red();
         stm << "There were failures!";
         stm << colorizer_.reset() << std::endl;
-        std::for_each(failures_.begin(), failures_.end(), 
-            [&](const std::string& failure) {
-              stm << failure << std::endl;
-            });
+        for (const auto& failure : failures_) {
+          stm << failure << std::endl;
+        }
         stm << std::endl;
       }
 

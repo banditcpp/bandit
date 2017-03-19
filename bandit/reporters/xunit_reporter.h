@@ -77,28 +77,27 @@ namespace bandit { namespace detail {
     {
       std::stringstream stm;
 
-      std::for_each(str.begin(), str.end(), [&](char c){
-            switch(c)
-            {
-              case '&':
-                stm << "&amp;";
-                break;
-              case '<':
-                stm << "&lt;";
-                break;
-              case '>':
-                stm << "&gt;";
-                break;
-              case '\\':
-                stm << "&apos;";
-                break;
-              case '\"':
-                stm << "&quot;";
-                break;
-              default:
-                stm << c;
-            }
-          });
+      for (char c : str) {
+        switch (c) {
+        case '&':
+          stm << "&amp;";
+          break;
+        case '<':
+          stm << "&lt;";
+          break;
+        case '>':
+          stm << "&gt;";
+          break;
+        case '\\':
+          stm << "&apos;";
+          break;
+        case '\"':
+          stm << "&quot;";
+          break;
+        default:
+          stm << c;
+        }
+      }
 
       return stm.str();
     }
