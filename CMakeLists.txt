@@ -13,6 +13,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./bin)
 
 if (MSVC)
+  add_definitions(-D_SCL_SECURE_NO_WARNINGS)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /MP ")
 else()
   # Assume GCC-style arguments

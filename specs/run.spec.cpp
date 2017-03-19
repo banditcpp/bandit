@@ -1,4 +1,7 @@
+#include <specs/fakes/fake_reporter.h>
+#include <specs/util/argv_helper.h>
 #include <specs/specs.h>
+
 using namespace bandit::fakes;
 using namespace bandit::specs::util;
 namespace bd = bandit::detail;
@@ -23,8 +26,7 @@ go_bandit([](){
 
       context_stack = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
 
-      const char* args[] = {"executable"};
-      argv = std::unique_ptr<argv_helper>(new argv_helper(1, args));
+      argv = std::unique_ptr<argv_helper>(new argv_helper({}));
     });
 
     it("pushes the global context on the context stack", [&](){

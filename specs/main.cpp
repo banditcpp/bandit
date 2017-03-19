@@ -2,5 +2,5 @@
 
 int main(int argc, char* argv[])
 {
-  return bandit::run(argc, argv);
+  return bandit::run(argc, argv, false);
 }
