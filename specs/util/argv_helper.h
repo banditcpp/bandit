@@ -27,6 +27,8 @@ namespace bandit { namespace specs { namespace util {
       }
     }
 
+    argv_helper(const argv_helper &) = default;
+
     ~argv_helper()
     {
       for(int i=0; i < argc_; i++)
