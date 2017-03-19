@@ -23,7 +23,7 @@ namespace bandit { namespace detail {
 		background_color_ &= BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY;
 	}
 
-    const char* green() const
+    const std::string green() const
     {
       if(colors_enabled_)
 	  {
@@ -32,7 +32,7 @@ namespace bandit { namespace detail {
 	  return "";
     }
 
-    const char* yellow() const
+    const std::string yellow() const
     {
       if(colors_enabled_)
 	  {
@@ -41,7 +41,7 @@ namespace bandit { namespace detail {
 	  return "";
     }
 
-    const char* blue() const
+    const std::string blue() const
     {
       if(colors_enabled_)
 	  {
@@ -50,7 +50,7 @@ namespace bandit { namespace detail {
 	  return "";
     }
 
-    const char* red() const
+    const std::string red() const
     {
       if(colors_enabled_)
 	  {
@@ -59,7 +59,7 @@ namespace bandit { namespace detail {
 	  return "";
     }
 
-    const char* white() const
+    const std::string white() const
     {
       if(colors_enabled_)
 	  {
@@ -68,7 +68,7 @@ namespace bandit { namespace detail {
 	  return "";
     }
 
-    const char* reset() const
+    const std::string reset() const
     {
       if(colors_enabled_)
 	  {
@@ -104,32 +104,32 @@ namespace bandit { namespace detail {
       : colors_enabled_(colors_enabled)
     {}
 
-    const char* green() const
+    const std::string green() const
     {
       return colors_enabled_ ? "\033[1;32m" : "";
     }
 
-    const char* yellow() const
+    const std::string yellow() const
     {
       return colors_enabled_ ? "\033[1;33m" : "";
     }
 
-    const char* blue() const
+    const std::string blue() const
     {
       return colors_enabled_ ? "\033[1;34m" : "";
     }
 
-    const char* red() const
+    const std::string red() const
     {
       return colors_enabled_ ? "\033[1;31m" : "";
     }
 
-    const char* white() const
+    const std::string white() const
     {
       return colors_enabled_ ? "\033[1;37m" : "";
     }
 
-    const char* reset() const
+    const std::string reset() const
     {
       return colors_enabled_ ? "\033[0m" : "";
     }
