@@ -7,7 +7,7 @@ namespace bandit { namespace detail {
 
   struct never_run_policy : public run_policy
   {
-    bool should_run(const char* /* it_name */, const contextstack_t& /* contexts */) const
+    bool should_run(const std::string&, const contextstack_t&) const
     {
       return false;
     }

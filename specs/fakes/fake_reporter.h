@@ -22,42 +22,42 @@ namespace bandit { namespace fakes {
       log() << "test_run_complete" << std::endl;
     }
 
-    void context_starting(const char* desc)
+    void context_starting(const std::string& desc)
     {
       log() << "context_starting: " <<  desc << std::endl;
     }
 
-    void context_ended(const char* desc)
+    void context_ended(const std::string& desc)
     {
       log() << "context_ended: " <<  desc << std::endl;
     }
 
-    void test_run_error(const char* desc, const struct bandit::detail::test_run_error& err)
+    void test_run_error(const std::string& desc, const struct bandit::detail::test_run_error& err)
     {
       log() << "test_run_error: " <<  desc <<  " (" <<  strip_newline(err.what()) <<  ")" << std::endl;
     }
 
-    void it_starting(const char* desc)
+    void it_starting(const std::string& desc)
     {
       log() << "it_starting: " <<  desc << std::endl;
     }
 
-    void it_succeeded(const char* desc)
+    void it_succeeded(const std::string& desc)
     {
       log() << "it_succeeded: " <<  desc << std::endl;
     }
 
-    void it_failed(const char* desc, const bandit::detail::assertion_exception& ex)
+    void it_failed(const std::string& desc, const bandit::detail::assertion_exception& ex)
     {
       log() << "it_failed: " <<  desc <<  " ("  <<  strip_newline(ex.what()) <<  ")" << std::endl;
     }
 
-    void it_unknown_error(const char* desc)
+    void it_unknown_error(const std::string& desc)
     {
       log() << "it_unknown_error: " <<  desc << std::endl;
     }
 
-    void it_skip(const char* desc)
+    void it_skip(const std::string& desc)
     {
       log() << "it_skip: " <<  desc << std::endl;
     }

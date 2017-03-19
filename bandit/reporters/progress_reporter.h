@@ -32,30 +32,30 @@ namespace bandit { namespace detail {
     {
     }
 
-    virtual void context_starting(const char* desc) 
+    virtual void context_starting(const std::string& desc)
     {
       contexts_.push_back(std::string(desc));
     }
 
-    virtual void context_ended(const char*) 
+    virtual void context_ended(const std::string&)
     {
       contexts_.pop_back();
     }
 
-    virtual void test_run_error(const char*, const struct test_run_error&)
+    virtual void test_run_error(const std::string&, const struct test_run_error&)
     {}
 
-    void it_starting(const char*) 
+    void it_starting(const std::string&)
     {
       specs_run_++;
     }
 
-    void it_succeeded(const char*) 
+    void it_succeeded(const std::string&)
     {
       specs_succeeded_++;
     }
 
-    void it_failed(const char* desc, const assertion_exception& ex)
+    void it_failed(const std::string& desc, const assertion_exception& ex)
     {
       specs_failed_++;
 
@@ -67,7 +67,7 @@ namespace bandit { namespace detail {
       failures_.push_back(ss.str());
     }
 
-    void it_unknown_error(const char* desc)
+    void it_unknown_error(const std::string& desc)
     {
       specs_failed_++;
 
@@ -80,7 +80,7 @@ namespace bandit { namespace detail {
       failures_.push_back(ss.str());
     }
 
-    void it_skip(const char* /* desc */)
+    void it_skip(const std::string&)
     {
       specs_skipped_++;
     }
