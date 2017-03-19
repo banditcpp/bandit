@@ -8,7 +8,7 @@ option(BANDIT_BUILD_SPECS   "Build the Bandit specs"                ON)
 option(BANDIT_RUN_SPECS     "Run the Bandit specs"                  ON)
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(cotire/CMake/cotire)
+include(cotire/CMake/cotire OPTIONAL RESULT_VARIABLE HAS_COTIRE)
 
 include_directories("${PROJECT_SOURCE_DIR}")
 
@@ -32,10 +32,12 @@ endif()
 
 if (BANDIT_BUILD_SPECS)
     FILE(GLOB BanditSpecSourceFiles specs/*.cpp specs/**/*.cpp)
-    add_executable(bandit-specs ${BanditSpecSourceFiles} )
-    set_target_properties(bandit-specs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "specs/specs.h")
-    set_target_properties(bandit-specs PROPERTIES COTIRE_ADD_UNIT_BUILD FALSE)
-    cotire(bandit-specs)
+    add_executable(bandit-specs ${BanditSpecSourceFiles})
+    if (HAS_COTIRE)
+      set_target_properties(bandit-specs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "specs/specs.h")
+      set_target_properties(bandit-specs PROPERTIES COTIRE_ADD_UNIT_BUILD FALSE)
+      cotire(bandit-specs)
+    endif()
 endif()
 
 if (BANDIT_BUILD_SPECS AND BANDIT_RUN_SPECS)
