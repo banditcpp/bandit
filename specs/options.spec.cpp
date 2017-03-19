@@ -17,6 +17,34 @@ struct options : private argv_helper, public bd::options {
   {}
 };
 
+template<typename ENUM>
+static void choice_tests(std::string &&optname, ENUM unknown,
+    std::initializer_list<std::pair<std::string,ENUM>> &&list,
+    std::function<ENUM(const bd::options &opt)> tester) {
+  describe(optname.c_str(), [&] {
+    for (auto pair : list) {
+      it(std::string("parses the '--" + optname + "=" + pair.first + "' option").c_str(), [&] {
+        for (auto& opt : {options({"--" + optname + "=" + pair.first}),
+                          options({"--" + optname, pair.first})}) {
+          AssertThat(tester(opt), Equals(pair.second));
+          all_ok(opt);
+        }
+      });
+    }
+
+    it(std::string("does not know " + optname + " when not given").c_str(), [&] {
+      options opt({});
+      AssertThat(tester(opt), Equals(unknown));
+    });
+
+    it(std::string("is not ok with unknown " + optname).c_str(), [&] {
+      options opt({"--" + optname + "=__unknown__"});
+      AssertThat(opt.parsed_ok(), IsFalse());
+      AssertThat(tester(opt), Equals(unknown));
+    });
+  });
+}
+
 go_bandit([](){
   describe("options:", [&](){
     describe("with valid options", [&] {
@@ -35,24 +63,6 @@ go_bandit([](){
       it("parses the '--no-color' option", [&](){
         options opt({"--no-color"});
         AssertThat(opt.no_color(), IsTrue());
-        all_ok(opt);
-      });
-
-      it("parses the '--formatter=vs' option", [&](){
-        options opt({"--formatter=vs"});
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
-        all_ok(opt);
-      });
-
-      it("parses the '--formatter=vs' option when used without =", [&](){
-        options opt({"--formatter", "vs"});
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
-        all_ok(opt);
-      });
-
-      it("parses the '--formatter=default' option", [&](){
-        options opt({"--formatter=default"});
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::DEFAULT));
         all_ok(opt);
       });
 
@@ -119,10 +129,6 @@ go_bandit([](){
       it("cannot find '--dry-run'", [&](){
         AssertThat(opt.dry_run(), IsFalse())
       });
-
-      it_skip("uses default formatter for '--formatter'", [&](){
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::DEFAULT));
-      });
     });
 
     describe("with unknown arguments", [&] {
@@ -164,19 +170,29 @@ go_bandit([](){
       });
     });
 
+    describe("with choice options", [&] {
+      choice_tests<bd::options::formatters>("formatter", bd::options::formatters::UNKNOWN, {
+        {"vs", bd::options::formatters::VS},
+        {"default", bd::options::formatters::DEFAULT},
+      }, [&](const bd::options &opt) {
+        return opt.formatter();
+      });
+
+      choice_tests<bd::options::reporters>("reporter", bd::options::reporters::UNKNOWN, {
+        {"dots", bd::options::reporters::DOTS},
+        {"info", bd::options::reporters::INFO},
+        {"singleline", bd::options::reporters::SINGLELINE},
+        {"spec", bd::options::reporters::SPEC},
+        {"xunit", bd::options::reporters::XUNIT},
+      }, [&](const bd::options &opt) {
+        return opt.reporter();
+      });
+    });
+
     describe("with missing option arguments", [&] {
       for (std::string name : {"skip", "only", "formatter", "reporter"}) {
         it((std::string("is not ok with missing --") + name + " argument").c_str(), [&] {
           options opt({"--" + name});
-          AssertThat(opt.parsed_ok(), IsFalse());
-        });
-      }
-    });
-
-    describe("with unknown option arguments", [&] {
-      for (std::string name : {"formatter", "reporter"}) {
-        it((std::string("is not ok with unknown ") + name).c_str(), [&] {
-          options opt({"--" + name + "=__unknown__"});
           AssertThat(opt.parsed_ok(), IsFalse());
         });
       }
