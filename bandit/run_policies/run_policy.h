@@ -20,7 +20,7 @@ namespace bandit { namespace detail {
 
     virtual ~run_policy() {}
 
-    virtual bool should_run(const char* it_name, const contextstack_t& contexts) const = 0;
+    virtual bool should_run(const std::string& it_name, const contextstack_t& contexts) const = 0;
 
     virtual void encountered_failure()
     {

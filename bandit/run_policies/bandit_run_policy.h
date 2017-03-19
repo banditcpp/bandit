@@ -7,12 +7,12 @@ namespace bandit { namespace detail {
 
   struct bandit_run_policy : public run_policy
   {
-    bandit_run_policy(const char* skip_pattern, const char* only_pattern, bool break_on_failure, bool dry_run)
+    bandit_run_policy(const std::string& skip_pattern, const std::string& only_pattern, bool break_on_failure, bool dry_run)
       : run_policy(), skip_pattern_(skip_pattern), only_pattern_(only_pattern),
       break_on_failure_(break_on_failure), dry_run_(dry_run)
     {}
 
-    bool should_run(const char* it_name, const contextstack_t& contexts) const
+    bool should_run(const std::string& it_name, const contextstack_t& contexts) const
     {
       if(dry_run_)
       {
@@ -131,21 +131,9 @@ namespace bandit { namespace detail {
       return false;
     }
 
-    bool matches_only_pattern(const char* name) const
-    {
-      std::string n(name);
-      return matches_only_pattern(n);
-    }
-
     bool matches_only_pattern(const std::string& name) const
     {
       return matches_pattern(name, only_pattern_);
-    }
-
-    bool matches_skip_pattern(const char* name) const
-    {
-      std::string n(name);
-      return matches_skip_pattern(n);
     }
 
     bool matches_skip_pattern(const std::string& name) const

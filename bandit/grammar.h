@@ -99,7 +99,7 @@ namespace bandit {
       bandit::adapters::assertion_adapter& assertion_adapter, 
       detail::run_policy& run_policy)
   {
-    if(!run_policy.should_run(desc.c_str(), context_stack))
+    if(!run_policy.should_run(desc, context_stack))
     {
       it_skip(desc, func, listener);
       return;

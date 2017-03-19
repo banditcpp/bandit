@@ -13,7 +13,7 @@ go_bandit([](){
     bool dry_run;
 
     auto create_policy = [&]() -> bd::bandit_run_policy {
-        return bd::bandit_run_policy(skip_pattern.c_str(), only_pattern.c_str(), break_on_failure, dry_run);
+        return bd::bandit_run_policy(skip_pattern, only_pattern, break_on_failure, dry_run);
     };
 
     before_each([&](){
