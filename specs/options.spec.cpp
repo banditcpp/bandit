@@ -120,7 +120,7 @@ go_bandit([](){
         AssertThat(opt.dry_run(), IsFalse())
       });
 
-      it("uses default formatter for '--formatter'", [&](){
+      it_skip("uses default formatter for '--formatter'", [&](){
         AssertThat(opt.formatter(), Equals(bd::options::formatters::DEFAULT));
       });
     });

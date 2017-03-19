@@ -194,14 +194,7 @@ namespace bandit { namespace detail {
 
       reporters reporter() const
       {
-        const auto list(argument::reporter_list());
-        if (options_[REPORTER].arg != nullptr) {
-          auto it = std::find(list.strbegin(), list.strend(), options_[REPORTER].arg);
-          if (it != list.strend()) {
-            return it.id();
-          }
-        }
-        return reporters::UNKNOWN;
+        return get_enumerator_from_string(argument::reporter_list(), options_[REPORTER].arg);
       }
 
       bool no_color() const
@@ -211,14 +204,7 @@ namespace bandit { namespace detail {
 
       formatters formatter() const
       {
-        const auto list(argument::formatter_list());
-        if (options_[FORMATTER].arg != nullptr) {
-          auto it = std::find(list.strbegin(), list.strend(), options_[FORMATTER].arg);
-          if (it != list.strend()) {
-            return it.id();
-          }
-        }
-        return formatters::DEFAULT;
+        return get_enumerator_from_string(argument::formatter_list(), options_[FORMATTER].arg);
       }
 
       const char* skip() const
@@ -242,6 +228,18 @@ namespace bandit { namespace detail {
       }
 
     private:
+      template<typename ENUM>
+      ENUM get_enumerator_from_string(const argstrs<ENUM> &list, const char *str) const
+      {
+        if (str != nullptr) {
+          auto it = std::find(list.strbegin(), list.strend(), str);
+          if (it != list.strend()) {
+            return it.id();
+          }
+        }
+        return ENUM::UNKNOWN;
+      }
+
       enum option_index {
         UNKNOWN,
         VERSION,
