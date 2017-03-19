@@ -63,15 +63,24 @@ namespace bandit { namespace detail {
         UNKNOWN
       };
 
+      enum class reporters {
+        SINGLELINE,
+        XUNIT,
+        INFO,
+        SPEC,
+        DOTS,
+        UNKNOWN
+      };
+
       struct argument : public option::Arg {
-        static const argstrs<nullptr_t> reporter_list()
+        static const argstrs<reporters> reporter_list()
         {
           return {
-            { nullptr, "dots" },
-            { nullptr, "singleline" },
-            { nullptr, "xunit" },
-            { nullptr, "info" },
-            { nullptr, "spec" },
+            { reporters::DOTS, "dots" },
+            { reporters::SINGLELINE, "singleline" },
+            { reporters::XUNIT, "xunit" },
+            { reporters::INFO, "info" },
+            { reporters::SPEC, "spec" },
           };
         }
 
@@ -183,9 +192,16 @@ namespace bandit { namespace detail {
         return options_[VERSION] != nullptr;
       }
 
-      const char* reporter() const
+      reporters reporter() const
       {
-        return options_[REPORTER].arg;
+        const auto list(argument::reporter_list());
+        if (options_[REPORTER].arg != nullptr) {
+          auto it = std::find(list.strbegin(), list.strend(), options_[REPORTER].arg);
+          if (it != list.strend()) {
+            return it.id();
+          }
+        }
+        return reporters::UNKNOWN;
       }
 
       bool no_color() const

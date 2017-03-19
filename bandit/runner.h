@@ -20,29 +20,19 @@ namespace bandit {
     inline listener_ptr create_reporter(const options& opt,
         const failure_formatter* formatter, const colorizer& colorizer)
     {
-      std::string name(opt.reporter() ? opt.reporter() : "");
-
-      if(name == "singleline")
-      {
-        return std::unique_ptr<detail::listener>(new single_line_reporter(*formatter, colorizer));
+      switch (opt.reporter()) {
+      case options::reporters::SINGLELINE:
+        return listener_ptr(new single_line_reporter(*formatter, colorizer));
+      case options::reporters::XUNIT:
+        return listener_ptr(new xunit_reporter(*formatter));
+      case options::reporters::INFO:
+        return listener_ptr(new info_reporter(*formatter, colorizer));
+      case options::reporters::SPEC:
+        return listener_ptr(new spec_reporter(*formatter, colorizer));
+      case options::reporters::DOTS:
+      default:
+        return listener_ptr(new dots_reporter(*formatter, colorizer));
       }
-
-      if(name == "xunit")
-      {
-        return std::unique_ptr<detail::listener>(new xunit_reporter(*formatter));
-      }
-
-      if(name == "info")
-      {
-        return std::unique_ptr<detail::listener>(new info_reporter(*formatter, colorizer));
-      }
-
-      if(name == "spec")
-      {
-        return std::unique_ptr<detail::listener>(new spec_reporter(*formatter, colorizer));
-      }
-
-      return std::unique_ptr<detail::listener>(new dots_reporter(*formatter, colorizer));
     }
 
     typedef std::function<listener_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
@@ -50,12 +40,13 @@ namespace bandit {
 
     inline failure_formatter_ptr create_formatter(const options& opt)
     {
-      if(opt.formatter() == options::formatters::VS)
-      {
+      switch (opt.formatter()) {
+      case options::formatters::VS:
         return failure_formatter_ptr(new visual_studio_failure_formatter());
+      case options::formatters::DEFAULT:
+      default:
+        return failure_formatter_ptr(new default_failure_formatter());
       }
-
-      return failure_formatter_ptr(new default_failure_formatter());
     }
   }
 

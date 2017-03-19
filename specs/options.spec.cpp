@@ -156,7 +156,7 @@ go_bandit([](){
                      "--dry-run"});
         AssertThat(opt.parsed_ok(), IsTrue());
         AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
-        AssertThat(opt.reporter(), Equals("xunit"));
+        AssertThat(opt.reporter(), Equals(bd::options::reporters::XUNIT));
         AssertThat(opt.no_color(), IsTrue());
         AssertThat(opt.dry_run(), IsFalse())
         AssertThat(opt.has_further_arguments(), IsTrue());
