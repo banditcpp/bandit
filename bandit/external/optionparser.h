@@ -89,11 +89,12 @@
  *
  * @par Download:
  * Tarball with examples and test programs:
- * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.3.tar.gz/download">optionparser-1.3.tar.gz</a> @n
+ * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.4.tar.gz/download">optionparser-1.4.tar.gz</a> @n
  * Just the header (this is all you really need):
  * <a style="font-size:larger;font-weight:bold" href="http://optionparser.sourceforge.net/optionparser.h">optionparser.h</a>
  *
  * @par Changelog:
+ * <b>Version 1.4:</b> Fixed 2 printUsage() bugs that messed up output with small COLUMNS values @n
  * <b>Version 1.3:</b> Compatible with Microsoft Visual C++. @n
  * <b>Version 1.2:</b> Added @ref option::Option::namelen "Option::namelen" and removed the extraction
  *                     of short option characters into a special buffer. @n
@@ -231,12 +232,6 @@ struct MSC_Builtin_CLZ
   }
 };
 #define __builtin_clz(x) MSC_Builtin_CLZ::builtin_clz(x)
-
-#pragma warning( push )
-#pragma warning( disable: 4510 )
-#pragma warning( disable: 4512 )
-#pragma warning( disable: 4610 )
-#pragma warning( disable: 4127 )
 #endif
 
 class Option;
@@ -540,7 +535,7 @@ public:
    */
   int index() const
   {
-    return desc == 0 ? -1 : desc->index;
+    return desc == 0 ? -1 : (int)desc->index;
   }
 
   /**
@@ -1560,9 +1555,9 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
 
     do // loop over short options in group, for long options the body is executed only once
     {
-      int idx = 0;
+      int idx;
 
-      const char* optarg = 0;
+      const char* optarg;
 
       /******************** long option **********************/
       if (handle_short_options == false || try_single_minus_longopt)
@@ -2491,7 +2486,11 @@ struct PrintUsageImplementation
 
       int rightwidth = width - tabstop[lastcolumn];
       bool print_last_column_on_own_line = false;
-      if (rightwidth < last_column_min_width && rightwidth < col_width[lastcolumn])
+      if (rightwidth < last_column_min_width &&  // if we don't have the minimum requested width for the last column
+            ( col_width[lastcolumn] == 0 ||      // and all last columns are > overlong_column_threshold
+              rightwidth < col_width[lastcolumn] // or there is at least one last column that requires more than the space available
+            )
+          )
       {
         print_last_column_on_own_line = true;
         rightwidth = last_column_own_line_max_width;
@@ -2547,7 +2546,7 @@ struct PrintUsageImplementation
 
             LineWrapper& lineWrapper = (part.column() == 0) ? interjectionLineWrapper : lastColumnLineWrapper;
 
-            if (!print_last_column_on_own_line)
+            if (!print_last_column_on_own_line || part.column() != lastcolumn)
               lineWrapper.process(write, part.data(), part.length());
           }
         } // while
@@ -2817,9 +2816,5 @@ void printUsage(Function* prn, Stream* stream, const Descriptor usage[], int wid
 
 }
 // namespace option
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif /* OPTIONPARSER_H_ */
