@@ -39,9 +39,9 @@ template<typename ENUM>
 static void choice_tests(std::string &&optname, ENUM unknown,
     std::initializer_list<std::pair<std::string,ENUM>> &&list,
     std::function<ENUM(const bd::options &opt)> tester) {
-  describe(optname.c_str(), [&] {
+  describe(optname, [&] {
     for (auto pair : list) {
-      it(std::string("parses the '--" + optname + "=" + pair.first + "' option").c_str(), [&] {
+      it("parses the '--" + optname + "=" + pair.first + "' option", [&] {
         error_collector cerr;
         for (auto& opt : {options({"--" + optname + "=" + pair.first}),
                           options({"--" + optname, pair.first})}) {
@@ -52,12 +52,12 @@ static void choice_tests(std::string &&optname, ENUM unknown,
       });
     }
 
-    it(std::string("does not know " + optname + " when not given").c_str(), [&] {
+    it("does not know " + optname + " when not given", [&] {
       options opt({});
       AssertThat(tester(opt), Equals(unknown));
     });
 
-    it(std::string("is not ok with unknown " + optname).c_str(), [&] {
+    it("is not ok with unknown " + optname, [&] {
       error_collector cerr;
       options opt({"--" + optname + "=__unknown__"});
       AssertThat(opt.parsed_ok(), IsFalse());
@@ -213,7 +213,7 @@ go_bandit([](){
 
     describe("with missing option arguments", [&] {
       for (std::string name : {"skip", "only", "formatter", "reporter"}) {
-        it((std::string("is not ok with missing --") + name + " argument").c_str(), [&] {
+        it("is not ok with missing --" + name + " argument", [&] {
           error_collector cerr;
           options opt({"--" + name});
           AssertThat(opt.parsed_ok(), IsFalse());
