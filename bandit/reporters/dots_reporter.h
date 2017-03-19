@@ -31,7 +31,7 @@ namespace bandit { namespace detail {
       stm_.flush();
     }
 
-    void test_run_error(const char* desc, const struct test_run_error& err)
+    void test_run_error(const std::string& desc, const struct test_run_error& err)
     {
       progress_reporter::test_run_error(desc, err);
 
@@ -42,28 +42,28 @@ namespace bandit { namespace detail {
       test_run_errors_.push_back(ss.str());
     }
 
-    void it_succeeded(const char* desc) 
+    void it_succeeded(const std::string& desc)
     {
       progress_reporter::it_succeeded(desc);
       stm_ << colorizer_.green() << "." << colorizer_.reset();
       stm_.flush();
     }
 
-    void it_failed(const char* desc, const assertion_exception& ex)
+    void it_failed(const std::string& desc, const assertion_exception& ex)
     {
       progress_reporter::it_failed(desc, ex);
       stm_ << colorizer_.red() << "F" << colorizer_.reset();
       stm_.flush();
     }
 
-    void it_skip(const char* desc)
+    void it_skip(const std::string& desc)
     {
         progress_reporter::it_skip(desc);
         stm_ << colorizer_.yellow() << 'S' << colorizer_.reset();
         stm_.flush();
     }
 
-    void it_unknown_error(const char* desc)
+    void it_unknown_error(const std::string& desc)
     {
       progress_reporter::it_unknown_error(desc);
       stm_ << colorizer_.red() << "E" << colorizer_.reset();

@@ -18,34 +18,34 @@ namespace bandit { namespace detail {
     {
     }
 
-    void it_starting(const char* desc)
+    void it_starting(const std::string& desc)
     {
       progress_reporter::it_starting(desc);
       work_stm_ << "\t<testcase classname=\"" << escape(current_context_name()) << "\" ";
       work_stm_ << "name=\"" << escape(desc) << "\" time=\"0.0\">\n";
     }
 
-    void it_succeeded(const char* desc)
+    void it_succeeded(const std::string& desc)
     {
       progress_reporter::it_succeeded(desc);
       work_stm_ << "\t</testcase>\n";
     }
 
-    void it_failed(const char* desc, const assertion_exception& ex)
+    void it_failed(const std::string& desc, const assertion_exception& ex)
     {
       progress_reporter::it_failed(desc, ex);
       work_stm_ << "\t\t<failure message=\"" << escape(failure_formatter_.format(ex)) << "\" />\n";
       work_stm_ << "\t</testcase>\n";
     }
 
-    void it_unknown_error(const char* desc)
+    void it_unknown_error(const std::string& desc)
     {
       progress_reporter::it_unknown_error(desc);
       work_stm_ << "\t\t<failure message=\"Unknown exception\" />\n";
       work_stm_ << "\t</testcase>\n";
     }
 
-    void it_skip(const char* desc)
+    void it_skip(const std::string& desc)
     {
       progress_reporter::it_skip(desc);
       work_stm_ << "\t<testcase classname=\"" << escape(current_context_name()) << "\" ";

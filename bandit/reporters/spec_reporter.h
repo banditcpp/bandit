@@ -32,7 +32,7 @@ namespace bandit { namespace detail {
       stm_.flush();
     }
 
-    void test_run_error(const char* desc, const struct test_run_error& err)
+    void test_run_error(const std::string& desc, const struct test_run_error& err)
     {
       progress_reporter::test_run_error(desc, err);
 
@@ -43,7 +43,7 @@ namespace bandit { namespace detail {
       test_run_errors_.push_back(ss.str());
     }
 
-    virtual void context_starting(const char* desc)
+    virtual void context_starting(const std::string& desc)
     {
       progress_reporter::context_starting(desc);
 
@@ -54,20 +54,20 @@ namespace bandit { namespace detail {
 
     }
     
-    virtual void context_ended(const char* desc)
+    virtual void context_ended(const std::string& desc)
     {
       progress_reporter::context_ended(desc);
       decrease_indent();
     }
 
-    virtual void it_starting(const char* desc)
+    virtual void it_starting(const std::string& desc)
     {
       progress_reporter::it_starting(desc);
       stm_ << indent() << "- it " << desc << " ... ";
       stm_.flush();
     }
 
-    virtual void it_succeeded(const char* desc)
+    virtual void it_succeeded(const std::string& desc)
     {
       progress_reporter::it_succeeded(desc);
       stm_ << colorizer_.green();
@@ -77,7 +77,7 @@ namespace bandit { namespace detail {
       stm_.flush();
     }
 
-    virtual void it_failed(const char* desc, const assertion_exception& ex)
+    virtual void it_failed(const std::string& desc, const assertion_exception& ex)
     {
       progress_reporter::it_failed(desc, ex);
       stm_ << colorizer_.red();
@@ -87,7 +87,7 @@ namespace bandit { namespace detail {
       stm_.flush();
     }
 
-    virtual void it_unknown_error(const char* desc)
+    virtual void it_unknown_error(const std::string& desc)
     {
       progress_reporter::it_unknown_error(desc);
       stm_ << colorizer_.red();
@@ -97,7 +97,7 @@ namespace bandit { namespace detail {
       stm_.flush();
     }
 
-    virtual void it_skip(const char* desc)
+    virtual void it_skip(const std::string& desc)
     {
       progress_reporter::it_skip(desc);
       stm_ << indent() << "- it " << desc << " ... SKIPPED" << std::endl;

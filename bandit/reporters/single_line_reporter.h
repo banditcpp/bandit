@@ -31,7 +31,7 @@ namespace bandit { namespace detail {
       summary.write(stm_);
     }
 
-    void test_run_error(const char* desc, const struct test_run_error& err)
+    void test_run_error(const std::string& desc, const struct test_run_error& err)
     {
       progress_reporter::test_run_error(desc, err);
 
@@ -42,25 +42,25 @@ namespace bandit { namespace detail {
       test_run_errors_.push_back(ss.str());
     }
 
-    void it_starting(const char* desc) 
+    void it_starting(const std::string& desc)
     {
       print_status_line();
       progress_reporter::it_starting(desc);
     }
 
-    void it_succeeded(const char* desc) 
+    void it_succeeded(const std::string& desc)
     {
       progress_reporter::it_succeeded(desc);
       print_status_line();
     }
 
-    void it_failed(const char* desc, const assertion_exception& ex)
+    void it_failed(const std::string& desc, const assertion_exception& ex)
     {
       progress_reporter::it_failed(desc, ex);
       print_status_line();
     }
 
-    void it_unknown_error(const char* desc)
+    void it_unknown_error(const std::string& desc)
     {
       progress_reporter::it_unknown_error(desc);
       print_status_line();

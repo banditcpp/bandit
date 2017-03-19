@@ -11,7 +11,7 @@ namespace bandit {
       detail::listener& listener, detail::contextstack_t& context_stack,
       bool hard_skip = false)
   {
-    listener.context_starting(desc.c_str());
+    listener.context_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
@@ -24,12 +24,12 @@ namespace bandit {
     }
     catch(const bandit::detail::test_run_error& error)
     {
-      listener.test_run_error(desc.c_str(), error);
+      listener.test_run_error(desc, error);
     }
 
     context_stack.pop_back();
 
-    listener.context_ended(desc.c_str());
+    listener.context_ended(desc);
   }
 
   inline void describe(const std::string& desc, detail::voidfunc_t func)
@@ -81,7 +81,7 @@ namespace bandit {
 
   inline void it_skip(const std::string& desc, detail::voidfunc_t, detail::listener& listener)
   {
-    listener.it_skip(desc.c_str());
+    listener.it_skip(desc);
   }
 
   inline void it_skip(const std::string& desc, detail::voidfunc_t func)
@@ -105,7 +105,7 @@ namespace bandit {
       return;
     }
 
-    listener.it_starting(desc.c_str());
+    listener.it_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
@@ -113,14 +113,14 @@ namespace bandit {
       try {
         assertion_adapter.adapt_exceptions([&] { do_it(); });
       } catch (const bandit::detail::assertion_exception& ex) {
-        listener.it_failed(desc.c_str(), ex);
+        listener.it_failed(desc, ex);
         run_policy.encountered_failure();
       } catch (const std::exception& ex) {
         std::string err = std::string("exception: ") + ex.what();
-        listener.it_failed(desc.c_str(), bandit::detail::assertion_exception(err));
+        listener.it_failed(desc, bandit::detail::assertion_exception(err));
         run_policy.encountered_failure();
       } catch (...) {
-        listener.it_unknown_error(desc.c_str());
+        listener.it_unknown_error(desc);
         run_policy.encountered_failure();
       }
     };
@@ -141,7 +141,7 @@ namespace bandit {
       }
 
       if (success) {
-        listener.it_succeeded(desc.c_str());
+        listener.it_succeeded(desc);
       }
     });
   }

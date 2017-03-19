@@ -12,14 +12,14 @@ struct info_reporter : public colored_reporter
 {
 	struct context_info
 	{
-		context_info(const char *d) : desc(d), total(0), skipped(0), failed(0) {}
+		context_info(const std::string& d) : desc(d), total(0), skipped(0), failed(0) {}
 		void merge(const context_info &ci)
 		{
 			total += ci.total;
 			skipped += ci.skipped;
 			failed += ci.failed;
 		}
-		const char *desc;
+		const std::string desc; // copy
 		int total;
 		int skipped;
 		int failed;
@@ -115,7 +115,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	void test_run_error(const char *desc, const struct test_run_error &err)
+	void test_run_error(const std::string& desc, const struct test_run_error& err)
 	{
 		progress_reporter::test_run_error(desc, err);
 
@@ -124,7 +124,7 @@ struct info_reporter : public colored_reporter
 		test_run_errors_.push_back(ss.str());
 	}
 
-	virtual void context_starting(const char *desc)
+	virtual void context_starting(const std::string& desc)
 	{
 		progress_reporter::context_starting(desc);
 		context_stack_.emplace(desc);
@@ -164,7 +164,7 @@ struct info_reporter : public colored_reporter
 		not_yet_shown_ = 0;
 	}
 
-	virtual void context_ended(const char *desc)
+	virtual void context_ended(const std::string& desc)
 	{
 		progress_reporter::context_ended(desc);
 		if (context_stack_.size() == 1
@@ -209,14 +209,14 @@ struct info_reporter : public colored_reporter
 		stm_ << colorizer_.reset() << std::endl;
 	}
 
-	virtual void it_skip(const char *desc)
+	virtual void it_skip(const std::string& desc)
 	{
 		progress_reporter::it_skip(desc);
 		++context_stack_.top().total;
 		++context_stack_.top().skipped;
 	}
 
-	virtual void it_starting(const char *desc)
+	virtual void it_starting(const std::string& desc)
 	{
 		if (context_stack_.size() > 1
 		 && context_stack_.top().total == context_stack_.top().skipped) {
@@ -234,7 +234,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	virtual void it_succeeded(const char *desc)
+	virtual void it_succeeded(const std::string& desc)
 	{
 		progress_reporter::it_succeeded(desc);
 		++context_stack_.top().total;
@@ -249,7 +249,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	virtual void it_failed(const char *desc, const assertion_exception &ex)
+	virtual void it_failed(const std::string& desc, const assertion_exception& ex)
 	{
 		++specs_failed_;
 
@@ -270,7 +270,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	virtual void it_unknown_error(const char *desc)
+	virtual void it_unknown_error(const std::string& desc)
 	{
 		++specs_failed_;
 
