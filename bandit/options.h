@@ -9,7 +9,6 @@
 
 namespace bandit { namespace detail {
 
-    // TODO: print any unknown options
     struct options
     {
       template<typename ENUM>
