@@ -18,7 +18,7 @@ namespace bandit { namespace detail {
 
 	progress_reporter& operator=(const progress_reporter&) { return *this; }
 
-    virtual void test_run_starting() 
+    void test_run_starting() override
     {
       specs_run_ = 0;
       specs_succeeded_ = 0;
@@ -28,34 +28,34 @@ namespace bandit { namespace detail {
       contexts_.clear();
     }
 
-    virtual void test_run_complete()
+    void test_run_complete() override
     {
     }
 
-    virtual void context_starting(const std::string& desc)
+    void context_starting(const std::string& desc) override
     {
       contexts_.push_back(std::string(desc));
     }
 
-    virtual void context_ended(const std::string&)
+    void context_ended(const std::string&) override
     {
       contexts_.pop_back();
     }
 
-    virtual void test_run_error(const std::string&, const struct test_run_error&)
+    void test_run_error(const std::string&, const struct test_run_error&) override
     {}
 
-    void it_starting(const std::string&)
+    void it_starting(const std::string&) override
     {
       specs_run_++;
     }
 
-    void it_succeeded(const std::string&)
+    void it_succeeded(const std::string&) override
     {
       specs_succeeded_++;
     }
 
-    void it_failed(const std::string& desc, const assertion_exception& ex)
+    void it_failed(const std::string& desc, const assertion_exception& ex) override
     {
       specs_failed_++;
 
@@ -67,7 +67,7 @@ namespace bandit { namespace detail {
       failures_.push_back(ss.str());
     }
 
-    void it_unknown_error(const std::string& desc)
+    void it_unknown_error(const std::string& desc) override
     {
       specs_failed_++;
 
@@ -80,12 +80,12 @@ namespace bandit { namespace detail {
       failures_.push_back(ss.str());
     }
 
-    void it_skip(const std::string&)
+    void it_skip(const std::string&) override
     {
       specs_skipped_++;
     }
 
-    bool did_we_pass() const
+    bool did_we_pass() const override
     {
       return specs_run_ > 0 && specs_failed_ == 0 && test_run_errors_.size() == 0;
     }

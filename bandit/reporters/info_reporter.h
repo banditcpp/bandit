@@ -124,7 +124,7 @@ struct info_reporter : public colored_reporter
 		test_run_errors_.push_back(ss.str());
 	}
 
-	virtual void context_starting(const std::string& desc)
+	void context_starting(const std::string& desc) override
 	{
 		progress_reporter::context_starting(desc);
 		context_stack_.emplace(desc);
@@ -164,7 +164,7 @@ struct info_reporter : public colored_reporter
 		not_yet_shown_ = 0;
 	}
 
-	virtual void context_ended(const std::string& desc)
+	void context_ended(const std::string& desc) override
 	{
 		progress_reporter::context_ended(desc);
 		if (context_stack_.size() == 1
@@ -209,14 +209,14 @@ struct info_reporter : public colored_reporter
 		stm_ << colorizer_.reset() << std::endl;
 	}
 
-	virtual void it_skip(const std::string& desc)
+	void it_skip(const std::string& desc) override
 	{
 		progress_reporter::it_skip(desc);
 		++context_stack_.top().total;
 		++context_stack_.top().skipped;
 	}
 
-	virtual void it_starting(const std::string& desc)
+	void it_starting(const std::string& desc) override
 	{
 		if (context_stack_.size() > 1
 		 && context_stack_.top().total == context_stack_.top().skipped) {
@@ -234,7 +234,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	virtual void it_succeeded(const std::string& desc)
+	void it_succeeded(const std::string& desc) override
 	{
 		progress_reporter::it_succeeded(desc);
 		++context_stack_.top().total;
@@ -249,7 +249,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	virtual void it_failed(const std::string& desc, const assertion_exception& ex)
+	void it_failed(const std::string& desc, const assertion_exception& ex) override
 	{
 		++specs_failed_;
 
@@ -270,7 +270,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	virtual void it_unknown_error(const std::string& desc)
+	void it_unknown_error(const std::string& desc) override
 	{
 		++specs_failed_;
 
@@ -291,7 +291,7 @@ struct info_reporter : public colored_reporter
 		stm_.flush();
 	}
 
-	bool did_we_pass() const
+	bool did_we_pass() const override
 	{
 		return
 		  specs_failed_ == 0 &&

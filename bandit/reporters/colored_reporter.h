@@ -15,7 +15,7 @@ namespace bandit { namespace detail {
       : progress_reporter(failure_formatter), stm_(stm), colorizer_(colorizer)
     {}
 
-    virtual ~colored_reporter()
+    ~colored_reporter() override
     {
       stm_ << colorizer_.reset();
     }

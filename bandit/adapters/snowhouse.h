@@ -9,7 +9,7 @@ namespace bandit { namespace adapters {
 
   struct snowhouse_adapter : public assertion_adapter
   {
-    void adapt_exceptions(detail::voidfunc_t func)
+    void adapt_exceptions(detail::voidfunc_t func) override
     {
       try
       {

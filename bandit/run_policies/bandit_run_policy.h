@@ -12,7 +12,7 @@ namespace bandit { namespace detail {
       break_on_failure_(break_on_failure), dry_run_(dry_run)
     {}
 
-    bool should_run(const std::string& it_name, const contextstack_t& contexts) const
+    bool should_run(const std::string& it_name, const contextstack_t& contexts) const override
     {
       if(dry_run_)
       {

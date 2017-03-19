@@ -8,7 +8,7 @@ namespace bandit { namespace detail {
 
   struct visual_studio_failure_formatter : public failure_formatter
   {
-    std::string format(const assertion_exception& err) const
+    std::string format(const assertion_exception& err) const override
     {
       std::stringstream ss;
       if(err.file_name().size())

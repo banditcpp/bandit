@@ -18,34 +18,34 @@ namespace bandit { namespace detail {
     {
     }
 
-    void it_starting(const std::string& desc)
+    void it_starting(const std::string& desc) override
     {
       progress_reporter::it_starting(desc);
       work_stm_ << "\t<testcase classname=\"" << escape(current_context_name()) << "\" ";
       work_stm_ << "name=\"" << escape(desc) << "\" time=\"0.0\">\n";
     }
 
-    void it_succeeded(const std::string& desc)
+    void it_succeeded(const std::string& desc) override
     {
       progress_reporter::it_succeeded(desc);
       work_stm_ << "\t</testcase>\n";
     }
 
-    void it_failed(const std::string& desc, const assertion_exception& ex)
+    void it_failed(const std::string& desc, const assertion_exception& ex) override
     {
       progress_reporter::it_failed(desc, ex);
       work_stm_ << "\t\t<failure message=\"" << escape(failure_formatter_.format(ex)) << "\" />\n";
       work_stm_ << "\t</testcase>\n";
     }
 
-    void it_unknown_error(const std::string& desc)
+    void it_unknown_error(const std::string& desc) override
     {
       progress_reporter::it_unknown_error(desc);
       work_stm_ << "\t\t<failure message=\"Unknown exception\" />\n";
       work_stm_ << "\t</testcase>\n";
     }
 
-    void it_skip(const std::string& desc)
+    void it_skip(const std::string& desc) override
     {
       progress_reporter::it_skip(desc);
       work_stm_ << "\t<testcase classname=\"" << escape(current_context_name()) << "\" ";
@@ -54,7 +54,7 @@ namespace bandit { namespace detail {
       work_stm_ << "\t</testcase>\n";
     }
 
-    void test_run_complete()
+    void test_run_complete() override
     {
       stm_ << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
       stm_ << "<testsuite name=\"bandit\" tests=\"" << specs_run_ << "\" errors=\"0\" failures=\""

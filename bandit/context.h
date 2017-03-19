@@ -31,17 +31,17 @@ namespace bandit {
           : desc_(desc), hard_skip_(hard_skip_a), is_executing_(false)
         {}
 
-        const std::string& name() 
+        const std::string& name() override
         {
           return desc_;
         }
-        
-        void execution_is_starting()
+
+        void execution_is_starting() override
         {
           is_executing_ = true;
         }
 
-        void register_before_each(voidfunc_t func)
+        void register_before_each(voidfunc_t func) override
         {
           if(is_executing_)
           {
@@ -51,7 +51,7 @@ namespace bandit {
           before_eaches_.push_back(func);
         }
 
-        void register_after_each(voidfunc_t func)
+        void register_after_each(voidfunc_t func) override
         {
           if(is_executing_)
           {
@@ -61,17 +61,17 @@ namespace bandit {
           after_eaches_.push_back(func);
         }
 
-        void run_before_eaches()
+        void run_before_eaches() override
         {
           run_all(before_eaches_);
         }
 
-        void run_after_eaches()
+        void run_after_eaches() override
         {
           run_all(after_eaches_);
         }
 
-        bool hard_skip() 
+        bool hard_skip() override
         {
           return hard_skip_;
         }
