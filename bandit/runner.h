@@ -80,7 +80,7 @@ namespace bandit {
     return listener.did_we_pass() ? 0 : 1;
   }
 
-  inline int run(int argc, char* argv[], int allow_further = true)
+  inline int run(int argc, char* argv[], bool allow_further = true)
   {
     detail::options opt(argc, argv);
     if (!allow_further &&
