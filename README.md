@@ -12,7 +12,7 @@ For more information, go to [the bandit website](http://banditcpp.org).
 
 Bandit is released under the [MIT license](LICENSE.md)
 
-#An example
+# An example
 
 This is a complete test application written in bandit:
 
