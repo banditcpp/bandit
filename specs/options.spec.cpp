@@ -145,11 +145,11 @@ go_bandit([](){
       });
 
       it("cannot find '--break-on-failure'", [&](){
-        AssertThat(opt.break_on_failure(), IsFalse())
+        AssertThat(opt.break_on_failure(), IsFalse());
       });
 
       it("cannot find '--dry-run'", [&](){
-        AssertThat(opt.dry_run(), IsFalse())
+        AssertThat(opt.dry_run(), IsFalse());
       });
     });
 
@@ -186,7 +186,7 @@ go_bandit([](){
         AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
         AssertThat(opt.reporter(), Equals(bd::options::reporters::XUNIT));
         AssertThat(opt.no_color(), IsTrue());
-        AssertThat(opt.dry_run(), IsFalse())
+        AssertThat(opt.dry_run(), IsFalse());
         AssertThat(opt.has_further_arguments(), IsTrue());
         AssertThat(opt.has_unknown_options(), IsTrue());
       });

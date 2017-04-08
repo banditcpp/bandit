@@ -168,7 +168,7 @@ go_bandit([](){
       });
 
       it("reports the failed test", [&](){
-        AssertThat(output(), Contains("(*) context throws an unknown exception: Unknown exception"))
+        AssertThat(output(), Contains("(*) context throws an unknown exception: Unknown exception"));
       });
 
       it("does not end successfully", [&](){

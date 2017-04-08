@@ -112,7 +112,7 @@ go_bandit([](){
       });
 
       it("reports the failed test", [&](){
-        AssertThat(output(), Contains("my context my test:\nUnknown exception"))
+        AssertThat(output(), Contains("my context my test:\nUnknown exception"));
       });
     
     });
@@ -169,7 +169,7 @@ go_bandit([](){
       });
 
       it("reports test run errors in summary", [&](){
-        AssertThat(output(), EndsWith("Test run complete. 0 tests run. 0 succeeded. 1 test run errors.\n"))
+        AssertThat(output(), EndsWith("Test run complete. 0 tests run. 0 succeeded. 1 test run errors.\n"));
       });
 
       it("reports a failed test run", [&](){
