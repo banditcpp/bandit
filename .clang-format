@@ -1,0 +1,79 @@
+# This .clang-format file is tested with clang-format 4.0.0
+#
+# Please use the util/format.sh script before committing
+# your changes.
+---
+Language: Cpp
+Standard: Cpp11
+
+ColumnLimit: 0
+IndentWidth: 2
+UseTab: Never
+AccessModifierOffset: -2
+NamespaceIndentation: All
+IndentCaseLabels: false
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
+IndentWrappedFunctionNames: false
+
+AlwaysBreakTemplateDeclarations: true
+SpaceAfterTemplateKeyword: false
+
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterNamespace: false
+  AfterStruct: false
+  AfterClass: false
+  AfterFunction: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+
+AlignAfterOpenBracket: DontAlign
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+
+SpacesInParentheses: false
+SpaceInEmptyParentheses: false
+SpacesInSquareBrackets: false
+SpacesInAngles: false
+SpaceAfterCStyleCast: false
+SpacesInCStyleCastParentheses: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpacesBeforeTrailingComments: 1
+SpacesInContainerLiterals: false
+
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+
+SortIncludes: false
+IncludeCategories:
+  - Regex:           'snowhouse/'
+    Priority:        2
+  - Regex:           '^<'
+    Priority:        1
+  - Regex:           '.*'
+    Priority:        3
+# XXX: There is no need to sort includes alphabetically,
+# but standard library includes should come before snowhouse
+# includes should come before local includes.
+
+# AlignEscapedNewlinesLeft: false
+# XXX: There should be no alignment at all, but this is not available
+
+AlwaysBreakAfterReturnType: None
+
+ReflowComments: false
