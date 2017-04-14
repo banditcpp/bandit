@@ -11,9 +11,8 @@
 namespace bandit {
   namespace detail {
 
-    class context
+    struct context
     {
-      public:
         virtual ~context() {}
         virtual const std::string& name() = 0;
         virtual void execution_is_starting() = 0;
@@ -24,9 +23,8 @@ namespace bandit {
         virtual bool hard_skip() = 0;
     };
 
-    class bandit_context : public context
+    struct bandit_context : public context
     {
-      public:
         bandit_context(const std::string& desc, bool hard_skip_a)
           : desc_(desc), hard_skip_(hard_skip_a), is_executing_(false)
         {}
@@ -84,7 +82,6 @@ namespace bandit {
           }
         }
 
-      private:
         std::string desc_;
         bool hard_skip_;
         bool is_executing_;
