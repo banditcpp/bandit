@@ -7,10 +7,9 @@
 
 #include <bandit/external/optionparser.h>
 
-namespace bandit { namespace detail {
-
-    struct options
-    {
+namespace bandit {
+  namespace detail {
+    struct options {
       template<typename ENUM>
       struct argstr {
         ENUM id;
@@ -24,20 +23,33 @@ namespace bandit { namespace detail {
 
         struct str_iterator : public std::iterator<std::input_iterator_tag, std::string, int, const std::string*, std::string> {
           using base_iterator = typename std::vector<argstr<ENUM>>::const_iterator;
+
           str_iterator() = delete;
-          explicit str_iterator(base_iterator it) : it_(it) { }
-          str_iterator &operator++() {
+
+          explicit str_iterator(base_iterator it) : it_(it) {}
+
+          str_iterator& operator++() {
             ++it_;
             return *this;
           }
+
           str_iterator operator++(int) {
             str_iterator it(*this);
             ++(*this);
             return it;
           }
-          bool operator==(const str_iterator& other) const { return it_ == other.it_; }
-          bool operator!=(const str_iterator& other) const { return it_ != other.it_; }
-          reference operator*() const { return it_->str; }
+
+          bool operator==(const str_iterator& other) const {
+            return it_ == other.it_;
+          }
+
+          bool operator!=(const str_iterator& other) const {
+            return it_ != other.it_;
+          }
+
+          reference operator*() const {
+            return it_->str;
+          }
 
           ENUM id() {
             return it_->id;
@@ -72,22 +84,20 @@ namespace bandit { namespace detail {
       };
 
       struct argument : public option::Arg {
-        static const argstrs<reporters> reporter_list()
-        {
+        static const argstrs<reporters> reporter_list() {
           return {
-            { reporters::DOTS, "dots" },
-            { reporters::SINGLELINE, "singleline" },
-            { reporters::XUNIT, "xunit" },
-            { reporters::INFO, "info" },
-            { reporters::SPEC, "spec" },
+              {reporters::DOTS, "dots"},
+              {reporters::SINGLELINE, "singleline"},
+              {reporters::XUNIT, "xunit"},
+              {reporters::INFO, "info"},
+              {reporters::SPEC, "spec"},
           };
         }
 
-        static const argstrs<formatters> formatter_list()
-        {
+        static const argstrs<formatters> formatter_list() {
           return {
-            { formatters::DEFAULT, "default" },
-            { formatters::VS, "vs" },
+              {formatters::DEFAULT, "default"},
+              {formatters::VS, "vs"},
           };
         }
 
@@ -104,14 +114,12 @@ namespace bandit { namespace detail {
           return csl;
         }
 
-        static std::string name(const option::Option& option)
-        {
+        static std::string name(const option::Option& option) {
           std::string copy(option.name);
           return copy.substr(0, option.namelen);
         }
 
-        static option::ArgStatus Required(const option::Option& option, bool msg)
-        {
+        static option::ArgStatus Required(const option::Option& option, bool msg) {
           if (option.arg != nullptr) {
             return option::ARG_OK;
           }
@@ -122,36 +130,32 @@ namespace bandit { namespace detail {
         }
 
         template<typename ENUM>
-        static option::ArgStatus OneOf(const option::Option& option, bool msg, const argstrs<ENUM> &&list)
-        {
+        static option::ArgStatus OneOf(const option::Option& option, bool msg, const argstrs<ENUM>&& list) {
           auto status = Required(option, msg);
-          if (status == option::ARG_OK
-           && std::find(list.strbegin(), list.strend(), option.arg) == list.strend()) {
+          if (status == option::ARG_OK && std::find(list.strbegin(), list.strend(), option.arg) == list.strend()) {
             if (msg) {
               std::cerr
-                << "Option argument of '" << name(option) << "' must be one of: "
-                << comma_separated_list(list)
-                << std::endl;
+                  << "Option argument of '" << name(option) << "' must be one of: "
+                  << comma_separated_list(list)
+                  << std::endl;
             }
             status = option::ARG_ILLEGAL;
           }
           return status;
         }
 
-        static option::ArgStatus Reporter(const option::Option& option, bool msg)
-        {
+        static option::ArgStatus Reporter(const option::Option& option, bool msg) {
           return OneOf(option, msg, reporter_list());
         }
 
-        static option::ArgStatus Formatter(const option::Option& option, bool msg)
-        {
+        static option::ArgStatus Formatter(const option::Option& option, bool msg) {
           return OneOf(option, msg, formatter_list());
         }
       };
 
-      options(int argc, char* argv[])
-      {
-        argc -= (argc>0); argv += (argc>0); // Skip program name (argv[0]) if present
+      options(int argc, char* argv[]) {
+        argc -= (argc > 0);
+        argv += (argc > 0); // Skip program name (argv[0]) if present
         option::Stats stats(usage(), argc, argv);
         options_.resize(stats.options_max);
         std::vector<option::Option> buffer(stats.buffer_max);
@@ -161,75 +165,61 @@ namespace bandit { namespace detail {
         has_unknown_options_ = (options_[UNKNOWN] != nullptr);
       }
 
-      bool help() const
-      {
+      bool help() const {
         return options_[HELP] != nullptr;
       }
 
-      bool parsed_ok() const
-      {
+      bool parsed_ok() const {
         return parsed_ok_;
       }
 
-      bool has_further_arguments() const
-      {
+      bool has_further_arguments() const {
         return has_further_arguments_;
       }
 
-      bool has_unknown_options() const
-      {
+      bool has_unknown_options() const {
         return has_unknown_options_;
       }
 
-      void print_usage() const
-      {
+      void print_usage() const {
         option::printUsage(std::cout, usage());
       }
 
-      bool version() const
-      {
+      bool version() const {
         return options_[VERSION] != nullptr;
       }
 
-      reporters reporter() const
-      {
+      reporters reporter() const {
         return get_enumerator_from_string(argument::reporter_list(), options_[REPORTER].arg);
       }
 
-      bool no_color() const
-      {
+      bool no_color() const {
         return options_[NO_COLOR] != nullptr;
       }
 
-      formatters formatter() const
-      {
+      formatters formatter() const {
         return get_enumerator_from_string(argument::formatter_list(), options_[FORMATTER].arg);
       }
 
-      const char* skip() const
-      {
+      const char* skip() const {
         return options_[SKIP].arg ? options_[SKIP].arg : "";
       }
 
-      const char* only() const
-      {
+      const char* only() const {
         return options_[ONLY].arg ? options_[ONLY].arg : "";
       }
 
-      bool break_on_failure() const
-      {
+      bool break_on_failure() const {
         return options_[BREAK_ON_FAILURE] != nullptr;
       }
 
-      bool dry_run() const
-      {
+      bool dry_run() const {
         return options_[DRY_RUN] != nullptr;
       }
 
     private:
       template<typename ENUM>
-      ENUM get_enumerator_from_string(const argstrs<ENUM> &list, const char *str) const
-      {
+      ENUM get_enumerator_from_string(const argstrs<ENUM>& list, const char* str) const {
         if (str != nullptr) {
           auto it = std::find(list.strbegin(), list.strend(), str);
           if (it != list.strend()) {
@@ -257,33 +247,31 @@ namespace bandit { namespace detail {
         return desc + ": " + argument::comma_separated_list(list);
       }
 
-      static const option::Descriptor* usage()
-      {
+      static const option::Descriptor* usage() {
         static std::string reporter_help = append_list("  --reporter=<reporter>, \tSelect reporter", argument::reporter_list());
         static std::string formatter_help = append_list("  --formatter=<formatter>, \tSelect error formatter", argument::formatter_list());
         static const option::Descriptor usage[] = {
-          { UNKNOWN, 0, "", "", argument::None,
-            "USAGE: <executable> [options]\n\n"
-            "Options:" },
-          { VERSION, 0, "", "version", argument::None,
-            "  --version, \tPrint version of bandit" },
-          { HELP, 0, "", "help", argument::None,
-            "  --help, \tPrint usage and exit." },
-          { REPORTER, 0, "", "reporter", argument::Reporter, reporter_help.c_str() },
-          { NO_COLOR, 0, "", "no-color", argument::None,
-            "  --no-color, \tSuppress colors in output" },
-          { FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help.c_str() },
-          { SKIP, 0, "", "skip", argument::Required,
-            "  --skip=<substring>, \tskip all 'describe' and 'it' containing substring" },
-          { ONLY, 0, "", "only", argument::Required,
-            "  --only=<substring>, \tonly run 'describe' and 'it' containing substring" },
-          { BREAK_ON_FAILURE, 0, "", "break-on-failure", argument::None,
-            "  --break-on-failure, \tstop test run on first failing test" },
-          { DRY_RUN, 0, "", "dry-run", argument::None,
-            "  --dry-run, \tdon't run tests, just list progress."
-            "Use to list available tests" },
-          { 0, 0, 0, 0, 0, 0 }
-        };
+            {UNKNOWN, 0, "", "", argument::None,
+                "USAGE: <executable> [options]\n\n"
+                "Options:"},
+            {VERSION, 0, "", "version", argument::None,
+                "  --version, \tPrint version of bandit"},
+            {HELP, 0, "", "help", argument::None,
+                "  --help, \tPrint usage and exit."},
+            {REPORTER, 0, "", "reporter", argument::Reporter, reporter_help.c_str()},
+            {NO_COLOR, 0, "", "no-color", argument::None,
+                "  --no-color, \tSuppress colors in output"},
+            {FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help.c_str()},
+            {SKIP, 0, "", "skip", argument::Required,
+                "  --skip=<substring>, \tskip all 'describe' and 'it' containing substring"},
+            {ONLY, 0, "", "only", argument::Required,
+                "  --only=<substring>, \tonly run 'describe' and 'it' containing substring"},
+            {BREAK_ON_FAILURE, 0, "", "break-on-failure", argument::None,
+                "  --break-on-failure, \tstop test run on first failing test"},
+            {DRY_RUN, 0, "", "dry-run", argument::None,
+                "  --dry-run, \tdon't run tests, just list progress."
+                "Use to list available tests"},
+            {0, 0, 0, 0, 0, 0}};
 
         return usage;
       }
@@ -293,9 +281,7 @@ namespace bandit { namespace detail {
       bool parsed_ok_;
       bool has_further_arguments_;
       bool has_unknown_options_;
-
     };
-
-}}
-
+  }
+}
 #endif

@@ -9,17 +9,13 @@
 #include <bandit/version.h>
 
 namespace bandit {
-
   namespace detail {
-
-    inline run_policy_ptr create_run_policy(const options& opt)
-    {
+    inline run_policy_ptr create_run_policy(const options& opt) {
       return run_policy_ptr(new bandit_run_policy(opt.skip(), opt.only(), opt.break_on_failure(), opt.dry_run()));
     }
 
     inline listener_ptr create_reporter(const options& opt,
-        const failure_formatter* formatter, const colorizer& colorizer)
-    {
+        const failure_formatter* formatter, const colorizer& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
         return listener_ptr(new single_line_reporter(*formatter, colorizer));
@@ -35,11 +31,10 @@ namespace bandit {
       }
     }
 
-    typedef std::function<listener_ptr (const std::string&, const failure_formatter*)> reporter_factory_fn;
-    typedef std::function<detail::listener* (detail::listener*)> register_reporter_fn;
+    typedef std::function<listener_ptr(const std::string&, const failure_formatter*)> reporter_factory_fn;
+    typedef std::function<detail::listener*(detail::listener*)> register_reporter_fn;
 
-    inline failure_formatter_ptr create_formatter(const options& opt)
-    {
+    inline failure_formatter_ptr create_formatter(const options& opt) {
       switch (opt.formatter()) {
       case options::formatters::VS:
         return failure_formatter_ptr(new visual_studio_failure_formatter());
@@ -51,16 +46,13 @@ namespace bandit {
   }
 
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
-      detail::contextstack_t& context_stack, detail::listener& listener)
-  {
-    if(opt.help() || !opt.parsed_ok())
-    {
+      detail::contextstack_t& context_stack, detail::listener& listener) {
+    if (opt.help() || !opt.parsed_ok()) {
       opt.print_usage();
       return !opt.parsed_ok();
     }
 
-    if(opt.version())
-    {
+    if (opt.version()) {
       std::cout << "bandit version " << BANDIT_VERSION << std::endl;
       return 0;
     }
@@ -80,8 +72,7 @@ namespace bandit {
     return listener.did_we_pass() ? 0 : 1;
   }
 
-  inline int run(int argc, char* argv[], bool allow_further = true)
-  {
+  inline int run(int argc, char* argv[], bool allow_further = true) {
     detail::options opt(argc, argv);
     if (!allow_further &&
         (opt.has_further_arguments() || opt.has_unknown_options())) {
@@ -100,5 +91,4 @@ namespace bandit {
     return run(opt, detail::specs(), detail::context_stack(), *reporter);
   }
 }
-
 #endif
