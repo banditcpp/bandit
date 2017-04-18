@@ -255,7 +255,7 @@ namespace bandit { namespace detail {
       template<typename ENUM>
       static std::string append_list(std::string desc, argstrs<ENUM> list) {
         return desc + ": " + argument::comma_separated_list(list);
-      };
+      }
 
       static const option::Descriptor* usage()
       {
