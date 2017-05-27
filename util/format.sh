@@ -2,7 +2,7 @@
 # Reformat all tracked files (run this from bandit git root directory,
 # not from util!)
 
-DEFAULT_FORMAT_TOOL=clang-format-4.0
+DEFAULT_FORMAT_TOOL=clang-format-5.0
 test -n "$FORMATTER" || FORMATTER="$(command -v "$DEFAULT_FORMAT_TOOL")"
 
 if test -z "$FORMATTER"
