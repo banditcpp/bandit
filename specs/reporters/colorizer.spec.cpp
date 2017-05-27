@@ -1,8 +1,8 @@
-#ifndef _WIN32
 #include <specs/specs.h>
 
 go_bandit([]() {
   describe("colorizer: ", [&]() {
+#if !defined(_WIN32) || defined(BANDIT_CONFIG_COLOR_ANSI)
     describe("colors enabled", [&]() {
       bandit::detail::colorizer colorizer;
 
@@ -17,6 +17,7 @@ go_bandit([]() {
         AssertThat(colorizer.reset(), Equals("\033[0m"));
       });
     });
+#endif
 
     describe("colors disabled", [&]() {
       bandit::detail::colorizer colorizer(false);
@@ -35,4 +36,3 @@ go_bandit([]() {
     });
   });
 });
-#endif
