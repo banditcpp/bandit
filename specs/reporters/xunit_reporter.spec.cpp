@@ -112,7 +112,8 @@ go_bandit([]() {
       it("outputs the escaped characters", [&]() {
         AssertThat(output(), Contains(
             "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"1\">\n"
-            "\t<testcase classname=\"my context &amp; &lt; &gt; &apos; &quot;\" name=\"my test &amp; &lt; &gt; &apos; &quot;\" time=\"0.0\">\n"
+            "\t<testcase classname=\"my context &amp; &lt; &gt; &apos; &quot;\" "
+            "name=\"my test &amp; &lt; &gt; &apos; &quot;\" time=\"0.0\">\n"
             "\t\t<failure message=\"some_file:123: assertion failed &amp; &lt; &gt; &apos; &quot;\" />\n"
             "\t</testcase>\n"
             "</testsuite>\n"));

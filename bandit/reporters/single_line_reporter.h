@@ -65,7 +65,10 @@ namespace bandit {
         stm_ << "Executed " << specs_run_ << " tests.";
 
         if (specs_failed_) {
-          stm_ << " " << specs_succeeded_ << " succeeded. " << colorizer_.red() << specs_failed_ << " failed." << colorizer_.reset();
+          stm_
+              << " " << specs_succeeded_ << " succeeded. "
+              << colorizer_.red() << specs_failed_ << " failed."
+              << colorizer_.reset();
         }
         stm_.flush();
       }

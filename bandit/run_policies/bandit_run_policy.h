@@ -6,7 +6,8 @@
 namespace bandit {
   namespace detail {
     struct bandit_run_policy : public run_policy {
-      bandit_run_policy(const std::string& skip_pattern, const std::string& only_pattern, bool break_on_failure, bool dry_run)
+      bandit_run_policy(const std::string& skip_pattern, const std::string& only_pattern,
+          bool break_on_failure, bool dry_run)
           : run_policy(), skip_pattern_(skip_pattern), only_pattern_(only_pattern),
             break_on_failure_(break_on_failure), dry_run_(dry_run) {}
 

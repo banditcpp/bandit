@@ -68,7 +68,8 @@ go_bandit([]() {
 
         it("tells reporter it's failed", [&]() {
           call_it();
-          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 3 Actual: 2 )"));
+          AssertThat(reporter->call_log(),
+              Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 3 Actual: 2 )"));
         });
 
         it("doesn't report a succeeding test", [&]() {
@@ -131,7 +132,8 @@ go_bandit([]() {
 
         it("tells reporter it's failed", [&]() {
           call_it();
-          AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 3 Actual: 2 )"));
+          AssertThat(reporter->call_log(),
+              Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 3 Actual: 2 )"));
         });
 
         it("doesn't report a succeeding test", [&]() {
@@ -195,7 +197,8 @@ go_bandit([]() {
 
       it("tells reporter it's failed", [&]() {
         call_it();
-        AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 2 Actual: 3 )"));
+        AssertThat(reporter->call_log(),
+            Has().Exactly(1).EqualTo("it_failed: my it (Expected: equal to 2 Actual: 3 )"));
       });
 
       it("calls before_each in context", [&]() {

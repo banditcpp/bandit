@@ -50,7 +50,8 @@ namespace bandit {
 
       const std::string white() const {
         if (colors_enabled_) {
-          set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY | background_color_);
+          set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
+              FOREGROUND_INTENSITY | background_color_);
         }
         return "";
       }

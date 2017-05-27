@@ -21,7 +21,8 @@ namespace bandit {
       struct argstrs : std::vector<argstr<ENUM>> {
         using std::vector<argstr<ENUM>>::vector;
 
-        struct str_iterator : public std::iterator<std::input_iterator_tag, std::string, int, const std::string*, std::string> {
+        struct str_iterator
+            : public std::iterator<std::input_iterator_tag, std::string, int, const std::string*, std::string> {
           using base_iterator = typename std::vector<argstr<ENUM>>::const_iterator;
 
           str_iterator() = delete;
@@ -248,8 +249,10 @@ namespace bandit {
       }
 
       static const option::Descriptor* usage() {
-        static std::string reporter_help = append_list("  --reporter=<reporter>, \tSelect reporter", argument::reporter_list());
-        static std::string formatter_help = append_list("  --formatter=<formatter>, \tSelect error formatter", argument::formatter_list());
+        static std::string reporter_help = append_list("  --reporter=<reporter>, "
+            "\tSelect reporter", argument::reporter_list());
+        static std::string formatter_help = append_list("  --formatter=<formatter>, "
+            "\tSelect error formatter", argument::formatter_list());
         static const option::Descriptor usage[] = {
             {UNKNOWN, 0, "", "", argument::None,
                 "USAGE: <executable> [options]\n\n"

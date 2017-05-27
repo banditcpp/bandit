@@ -75,7 +75,8 @@ namespace bandit {
     it_skip(desc, func, detail::registered_listener());
   }
 
-  inline void xit(const std::string& desc, detail::voidfunc_t func, detail::listener& listener = detail::registered_listener()) {
+  inline void xit(const std::string& desc, detail::voidfunc_t func,
+      detail::listener& listener = detail::registered_listener()) {
     it_skip(desc, func, listener);
   }
 
