@@ -18,46 +18,43 @@ This is a complete test application written in bandit:
 
 ```cpp
 #include <bandit/bandit.h>
+
 using namespace bandit;
 
 // Tell bandit there are tests here.
-go_bandit([](){
+go_bandit([]() {
+  // We're describing how a fuzzbox works.
+  describe("fuzzbox:", []() {
+    guitar_ptr guitar;
+    fuzzbox_ptr fuzzbox;
 
-    // We're describing how a fuzzbox works.
-    describe("fuzzbox:", [](){
-      guitar_ptr guitar;
-      fuzzbox_ptr fuzzbox;
-
-      // Make sure each test has a fresh setup with
-      // a guitar with a fuzzbox connected to it.
-      before_each([&](){
-        guitar = guitar_ptr(new struct guitar());
-        fuzzbox = fuzzbox_ptr(new struct fuzzbox());
-        guitar->add_effect(*fuzzbox);
-      });
-
-      it("starts in clean mode", [&](){
-        AssertThat(guitar->sound(), Equals(sounds::clean));
-      });
-
-      // Describe what happens when we turn on the fuzzbox.
-      describe("in distorted mode", [&](){
-
-        // Turn on the fuzzbox.
-        before_each([&](){
-          fuzzbox->flip();
-        });
-
-        it("sounds distorted", [&](){
-          AssertThat(guitar->sound(), Equals(sounds::distorted));
-        });
-      });
+    // Make sure each test has a fresh setup with
+    // a guitar with a fuzzbox connected to it.
+    before_each([&]() {
+      guitar = guitar_ptr(new struct guitar());
+      fuzzbox = fuzzbox_ptr(new struct fuzzbox());
+      guitar->add_effect(fuzzbox.get());
     });
 
+    it("starts in clean mode", [&]() {
+      AssertThat(guitar->sound(), Equals(sounds::clean));
+    });
+
+    // Describe what happens when we turn on the fuzzbox.
+    describe("in distorted mode", [&]() {
+      // Turn on the fuzzbox.
+      before_each([&]() {
+        fuzzbox->flip();
+      });
+
+      it("sounds distorted", [&]() {
+        AssertThat(guitar->sound(), Equals(sounds::distorted));
+      });
+    });
+  });
 });
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
   // Run the tests.
   return bandit::run(argc, argv);
 }
