@@ -1,4 +1,4 @@
-# This .clang-format file is tested with clang-format 4.0.0
+# This .clang-format file is tested with 5.0.0-svn301421-1 (trunk)
 #
 # Please use the util/format.sh script before committing
 # your changes.
@@ -6,11 +6,13 @@
 Language: Cpp
 Standard: Cpp11
 
+Cpp11BracedListStyle: true
 ColumnLimit: 0
 IndentWidth: 2
 UseTab: Never
 AccessModifierOffset: -2
 NamespaceIndentation: All
+FixNamespaceComments: false
 IndentCaseLabels: false
 ContinuationIndentWidth: 4
 ConstructorInitializerIndentWidth: 4
@@ -35,15 +37,18 @@ BraceWrapping:
   BeforeElse: false
   IndentBraces: false
 
-AllowShortBlocksOnASingleLine: true
+AllowShortBlocksOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
+AllowShortFunctionsOnASingleLine: Empty
 
 AlignAfterOpenBracket: DontAlign
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
+#AlignEscapedNewlines: DontAlign
+AlignOperands: true
+AlignTrailingComments: false
 
 SpacesInParentheses: false
 SpaceInEmptyParentheses: false
@@ -61,7 +66,7 @@ MaxEmptyLinesToKeep: 1
 
 SortIncludes: false
 IncludeCategories:
-  - Regex:           'snowhouse/'
+  - Regex:           'bandit/'
     Priority:        2
   - Regex:           '^<'
     Priority:        1
@@ -71,9 +76,7 @@ IncludeCategories:
 # but standard library includes should come before snowhouse
 # includes should come before local includes.
 
-# AlignEscapedNewlinesLeft: false
-# XXX: There should be no alignment at all, but this is not available
-
 AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
 
 ReflowComments: false
