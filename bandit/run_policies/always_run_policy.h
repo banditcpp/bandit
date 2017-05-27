@@ -5,7 +5,6 @@
 
 namespace bandit {
   namespace detail {
-
     struct always_run_policy : public run_policy {
       bool should_run(const std::string&, const contextstack_t&) const override {
         return true;

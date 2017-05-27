@@ -5,7 +5,6 @@
 
 namespace bandit {
   namespace detail {
-
     struct spec_registrar {
       spec_registrar(bandit::detail::voidfunc_t func) {
         bandit::detail::specs().push_back(func);

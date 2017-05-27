@@ -14,7 +14,6 @@ go_bandit([]() {
     });
 
     describe("nested spec", [&]() {
-
       before_each([&]() {
         a += 3;
       });
