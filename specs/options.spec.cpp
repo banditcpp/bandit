@@ -84,27 +84,39 @@ go_bandit([]() {
         all_ok(opt);
       });
 
-      it("parses the '--skip=\"substring\"' option", [&]() {
+      it("parses the '--skip=\"substring\"' option once", [&]() {
         options opt({"--skip=substring"});
-        AssertThat(opt.skip(), Equals("substring"));
-        all_ok(opt);
-      });
-
-      it("parses skip as empty string if not present", [&]() {
-        options opt({});
-        AssertThat(opt.skip(), Equals(""));
+        AssertThat(opt.filter_chain(), HasLength(1));
+        AssertThat(opt.filter_chain().front().pattern, Equals("substring"));
+        AssertThat(opt.filter_chain().front().skip, IsTrue());
         all_ok(opt);
       });
 
       it("parses the '--only=\"substring\"' option", [&]() {
         options opt({"--only=substring"});
-        AssertThat(opt.only(), Equals("substring"));
+        AssertThat(opt.filter_chain(), HasLength(1));
+        AssertThat(opt.filter_chain().front().pattern, Equals("substring"));
+        AssertThat(opt.filter_chain().front().skip, IsFalse());
         all_ok(opt);
       });
 
-      it("parses only as empty string if not present", [&]() {
+      it("parses multiple --skip and --only options correctly", [&]() {
+        options opt({"--skip=s1", "--only=o2", "--skip=s3", "--only=o4"});
+        AssertThat(opt.filter_chain(), HasLength(4));
+        AssertThat(opt.filter_chain()[0].pattern, Equals("s1"));
+        AssertThat(opt.filter_chain()[0].skip, IsTrue());
+        AssertThat(opt.filter_chain()[1].pattern, Equals("o2"));
+        AssertThat(opt.filter_chain()[1].skip, IsFalse());
+        AssertThat(opt.filter_chain()[2].pattern, Equals("s3"));
+        AssertThat(opt.filter_chain()[2].skip, IsTrue());
+        AssertThat(opt.filter_chain()[3].pattern, Equals("o4"));
+        AssertThat(opt.filter_chain()[3].skip, IsFalse());
+        all_ok(opt);
+      });
+
+      it("has an empty filter chain if neither --skip nor --only are present", [&]() {
         options opt({});
-        AssertThat(opt.only(), Equals(""));
+        AssertThat(opt.filter_chain(), IsEmpty());
         all_ok(opt);
       });
 
