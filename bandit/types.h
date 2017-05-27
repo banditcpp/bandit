@@ -3,8 +3,9 @@
 
 #include <functional>
 
-namespace bandit { namespace detail {
-  typedef std::function<void ()> voidfunc_t;
-}}
-
+namespace bandit {
+  namespace detail {
+    typedef std::function<void()> voidfunc_t;
+  }
+}
 #endif

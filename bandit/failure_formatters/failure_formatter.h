@@ -4,13 +4,13 @@
 #include <memory>
 #include <bandit/assertion_exception.h>
 
-namespace bandit { namespace detail {
+namespace bandit {
+  namespace detail {
+    struct failure_formatter {
+      virtual std::string format(const assertion_exception&) const = 0;
+    };
 
-  struct failure_formatter
-  {
-    virtual std::string format(const assertion_exception&) const = 0;
-  };
-  typedef std::unique_ptr<failure_formatter> failure_formatter_ptr;
-}}
-
+    typedef std::unique_ptr<failure_formatter> failure_formatter_ptr;
+  }
+}
 #endif
