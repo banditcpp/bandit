@@ -1,6 +1,8 @@
 #ifndef BANDIT_REPORTERS_COLORIZER_H
 #define BANDIT_REPORTERS_COLORIZER_H
 
+#include <string>
+
 #if defined(_WIN32) && !defined(BANDIT_CONFIG_COLOR_ANSI)
 #  ifndef NOMINMAX
 #    define NOMINMAX
