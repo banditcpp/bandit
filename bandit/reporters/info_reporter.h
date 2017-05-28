@@ -269,11 +269,6 @@ namespace bandit {
         stm_.flush();
       }
 
-      bool did_we_pass() const override {
-        return specs_failed_ == 0 &&
-               test_run_errors_.size() == 0;
-      }
-
     private:
       std::string indent() {
         return std::string(2 * indentation_, ' ');
