@@ -25,6 +25,8 @@ namespace bandit {
         return listener_ptr(new info_reporter(*formatter, colorizer));
       case options::reporters::SPEC:
         return listener_ptr(new spec_reporter(*formatter, colorizer));
+      case options::reporters::CRASH:
+        return listener_ptr(new crash_reporter(*formatter));
       case options::reporters::DOTS:
       default:
         return listener_ptr(new dots_reporter(*formatter, colorizer));
