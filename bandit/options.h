@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include <bandit/external/optionparser.h>
+#include <bandit/filter_chain.h>
 
 namespace bandit {
   namespace detail {
@@ -166,6 +167,18 @@ namespace bandit {
         parsed_ok_ = !parse.error();
         has_further_arguments_ = (parse.nonOptionsCount() != 0);
         has_unknown_options_ = (options_[UNKNOWN] != nullptr);
+
+        for (int i = 0; i < parse.optionsCount(); ++i) {
+          option::Option& opt = buffer[i];
+          switch (opt.index()) {
+          case SKIP:
+            filter_chain_.push_back({opt.arg, true});
+            break;
+          case ONLY:
+            filter_chain_.push_back({opt.arg, false});
+            break;
+          }
+        }
       }
 
       bool help() const {
@@ -204,12 +217,8 @@ namespace bandit {
         return get_enumerator_from_string(argument::formatter_list(), options_[FORMATTER].arg);
       }
 
-      const char* skip() const {
-        return options_[SKIP].arg ? options_[SKIP].arg : "";
-      }
-
-      const char* only() const {
-        return options_[ONLY].arg ? options_[ONLY].arg : "";
+      const filter_chain_t& filter_chain() const {
+        return filter_chain_;
       }
 
       bool break_on_failure() const {
@@ -283,6 +292,7 @@ namespace bandit {
 
     private:
       std::vector<option::Option> options_;
+      filter_chain_t filter_chain_;
       bool parsed_ok_;
       bool has_further_arguments_;
       bool has_unknown_options_;

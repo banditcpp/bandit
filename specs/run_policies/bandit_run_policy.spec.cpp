@@ -6,14 +6,13 @@ go_bandit([]() {
   describe("bandit run policy", [&]() {
     std::unique_ptr<bd::contextstack_t> contextstack;
     std::unique_ptr<bd::context> global_context;
-    std::string only_pattern;
-    std::string skip_pattern;
+    std::unique_ptr<bd::filter_chain_t> filter_chain(new bd::filter_chain_t);
     bool hard_skip;
     bool break_on_failure;
     bool dry_run;
 
     auto create_policy = [&]() -> bd::bandit_run_policy {
-      return bd::bandit_run_policy(skip_pattern, only_pattern, break_on_failure, dry_run);
+      return bd::bandit_run_policy(*filter_chain, break_on_failure, dry_run);
     };
 
     before_each([&]() {
@@ -28,8 +27,7 @@ go_bandit([]() {
 
     describe("neither skip nor only specified", [&]() {
       before_each([&]() {
-        only_pattern = "";
-        skip_pattern = "";
+        filter_chain.reset(new bd::filter_chain_t);
       });
 
       it("always says run", [&]() {
@@ -74,8 +72,7 @@ go_bandit([]() {
 
     describe("'skip' specified, 'only' unspecified", [&]() {
       before_each([&]() {
-        only_pattern = "";
-        skip_pattern = "skip";
+        filter_chain.reset(new bd::filter_chain_t{{"skip", true}});
       });
 
       describe("current context matches 'skip'", [&]() {
@@ -114,8 +111,7 @@ go_bandit([]() {
 
     describe("'only' specified, 'skip' unspecified", [&]() {
       before_each([&]() {
-        only_pattern = "only";
-        skip_pattern = "";
+        filter_chain.reset(new bd::filter_chain_t{{"only", false}});
       });
 
       describe("current context matches 'only'", [&]() {
@@ -154,8 +150,26 @@ go_bandit([]() {
 
     describe("'skip' specified, 'only' specified", [&]() {
       before_each([&]() {
-        only_pattern = "only";
-        skip_pattern = "skip";
+        filter_chain.reset(new bd::filter_chain_t{{"skip", true}, {"only", false}});
+      });
+
+      describe("current context doesn't match anything", [&]() {
+        std::unique_ptr<bd::context> current_context;
+
+        before_each([&]() {
+          current_context = std::unique_ptr<bd::context>(new bd::bandit_context("context", hard_skip));
+          contextstack->push_back(current_context.get());
+        });
+
+        it("doesn't run if spec's name doesn't match 'only'", [&]() {
+          bd::bandit_run_policy policy = create_policy();
+          AssertThat(policy.should_run("it name", *contextstack), IsFalse());
+        });
+
+        it("runs if spec's name matches 'only'", [&]() {
+          bd::bandit_run_policy policy = create_policy();
+          AssertThat(policy.should_run("it matches 'only'", *contextstack), IsTrue());
+        });
       });
 
       describe("current context matches 'skip'", [&]() {
@@ -166,18 +180,18 @@ go_bandit([]() {
           contextstack->push_back(current_context.get());
         });
 
-        it("doesn't run if 'it' doesn't match 'only'", [&]() {
+        it("doesn't run if spec's name doesn't match 'only'", [&]() {
           bd::bandit_run_policy policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
 
-        it("runs if 'it' matches 'only'", [&]() {
+        it("doesn't run if spec's name matches 'only'", [&]() {
           bd::bandit_run_policy policy = create_policy();
-          AssertThat(policy.should_run("it matches 'only'", *contextstack), IsTrue());
+          AssertThat(policy.should_run("it matches 'only'", *contextstack), IsFalse());
         });
       });
 
-      describe("current context 'only'", [&]() {
+      describe("current context matches 'only'", [&]() {
         std::unique_ptr<bd::context> current_context;
 
         before_each([&]() {
@@ -196,7 +210,7 @@ go_bandit([]() {
         });
       });
 
-      describe("has both 'only' and 'skip' in context stack", [&]() {
+      describe("both 'only' and 'skip' in context stack", [&]() {
         std::unique_ptr<bd::context> current_context;
         std::unique_ptr<bd::context> parent_context;
 
@@ -207,9 +221,9 @@ go_bandit([]() {
           contextstack->push_back(current_context.get());
         });
 
-        it("runs if spec's name doesn't match anything", [&]() {
+        it("doesn't run if spec's name doesn't match anything", [&]() {
           bd::bandit_run_policy policy = create_policy();
-          AssertThat(policy.should_run("it name", *contextstack), IsTrue());
+          AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
 
         it("doesn't run if spec's name matches 'skip'", [&]() {
@@ -217,10 +231,51 @@ go_bandit([]() {
           AssertThat(policy.should_run("it name matching 'skip'", *contextstack), IsFalse());
         });
 
-        it("runs if spec's name matches 'only'", [&]() {
+        it("doesn't run if spec's name matches 'only'", [&]() {
           bd::bandit_run_policy policy = create_policy();
-          AssertThat(policy.should_run("it name matching 'only'", *contextstack), IsTrue());
+          AssertThat(policy.should_run("it name matching 'only'", *contextstack), IsFalse());
         });
+      });
+    });
+
+    describe("multiple 'skip' and 'only' specified", [&]() {
+      before_each([&]() {
+        filter_chain.reset(new bd::filter_chain_t{
+            {"skip1", true},
+            {"only1", false},
+            {"skip2", true},
+            {"only2", false},
+        });
+      });
+
+      it("runs if spec's name matches all 'only' but no 'skip'", [&]() {
+        bd::bandit_run_policy policy = create_policy();
+        AssertThat(policy.should_run("it name only1 only2", *contextstack), IsTrue());
+      });
+
+      it("doesn't run if spec's name matches one 'only' only", [&]() {
+        bd::bandit_run_policy policy = create_policy();
+        AssertThat(policy.should_run("it name only1", *contextstack), IsFalse());
+        AssertThat(policy.should_run("it name only2", *contextstack), IsFalse());
+      });
+
+      it("doesn't run if spec's name does not match anything", [&]() {
+        bd::bandit_run_policy policy = create_policy();
+        AssertThat(policy.should_run("it name", *contextstack), IsFalse());
+      });
+
+      it("doesn't run if spec's name matches any of the 'skip'", [&]() {
+        bd::bandit_run_policy policy = create_policy();
+        AssertThat(policy.should_run("it name skip1", *contextstack), IsFalse());
+        AssertThat(policy.should_run("it name skip2", *contextstack), IsFalse());
+        AssertThat(policy.should_run("it name skip1 skip2", *contextstack), IsFalse());
+      });
+
+      it("doesn't run if context contains any 'skip' but spec's name matches all 'only'", [&]() {
+        std::unique_ptr<bd::context> current_context = std::unique_ptr<bd::context>(new bd::bandit_context("context matches 'skip1'", hard_skip));
+        contextstack->push_back(current_context.get());
+        bd::bandit_run_policy policy = create_policy();
+        AssertThat(policy.should_run("it name only1 only2", *contextstack), IsFalse());
       });
     });
   });
