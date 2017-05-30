@@ -1,6 +1,3 @@
----
-layout: index
----
 Bandit is a framework for C++11 that wants to make working with unit tests a
 pleasant experience.
 

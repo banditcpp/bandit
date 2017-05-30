@@ -1,6 +1,3 @@
----
-layout: index
----
 # Reference
 
 ## Entry point
