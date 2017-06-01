@@ -9,7 +9,7 @@ namespace bandit {
   namespace detail {
     struct crash_reporter : public progress_reporter {
       crash_reporter(std::ostream& stm, const failure_formatter& failure_formatter)
-          : progress_reporter(failure_formatter), stm_(stm), contexts_() {}
+          : progress_reporter(failure_formatter), stm_(stm), cr_contexts_() {}
 
       crash_reporter(const failure_formatter& failure_formatter)
           : crash_reporter(std::cout, failure_formatter) {}
@@ -40,12 +40,12 @@ namespace bandit {
 
       void context_starting(const std::string& desc) override {
         progress_reporter::context_starting(desc);
-        contexts_.emplace_back(desc);
+        cr_contexts_.emplace_back(desc);
       }
 
       void context_ended(const std::string& desc) override {
         progress_reporter::context_ended(desc);
-        contexts_.pop_back();
+        cr_contexts_.pop_back();
       }
 
       void it_skip(const std::string& desc) override {
@@ -54,7 +54,7 @@ namespace bandit {
 
       void it_starting(const std::string& desc) override {
         progress_reporter::it_starting(desc);
-        for (auto context : contexts_) {
+        for (auto context : cr_contexts_) {
           stm_ << context << " | ";
         }
         stm_ << desc << std::endl;
@@ -87,7 +87,7 @@ namespace bandit {
 
     private:
       std::ostream& stm_;
-      std::vector<std::string> contexts_;
+      std::vector<std::string> cr_contexts_;
     };
   }
 }

@@ -97,7 +97,7 @@ namespace bandit {
             << std::endl;
       }
 
-      void test_run_complete() {
+      void test_run_complete() override {
         progress_reporter::test_run_complete();
         stm_ << std::endl;
         list_failures_and_errors();
@@ -105,7 +105,7 @@ namespace bandit {
         stm_.flush();
       }
 
-      void test_run_error(const std::string& desc, const struct test_run_error& err) {
+      void test_run_error(const std::string& desc, const struct test_run_error& err) override {
         progress_reporter::test_run_error(desc, err);
 
         std::stringstream ss;
