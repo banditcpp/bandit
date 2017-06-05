@@ -2,6 +2,7 @@
 #define BANDIT_ASSERTION_EXCEPTION_H
 
 #include <stdexcept>
+#include <string>
 
 namespace bandit {
   namespace detail {
