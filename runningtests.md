@@ -1,3 +1,6 @@
+---
+layout: home
+---
 # Running Tests
 
 With bandit you create a command line application that runs all registered
