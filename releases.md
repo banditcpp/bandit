@@ -1,3 +1,6 @@
+---
+layout: home
+---
 # Edge Version
 
 [https://github.com/banditcpp/bandit.git](https://github.com/banditcpp/bandit.git)

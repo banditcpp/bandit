@@ -1,3 +1,6 @@
+---
+layout: home
+---
 # Reference
 
 ## Entry point
