@@ -125,3 +125,16 @@ errors to be reported, as
 By default, bandit uses colors to highlight the status of the current test run.
 In certain IDEs or when running tests in continuous integration environment, this
 may look ugly. By specifying `--no-color` you can tell bandit to stop using colors.
+
+## Tweaking the behavior
+
+### Exit on first error
+
+The option `--break-on-failure` exits bandit when the first error or
+failed test occurs.
+
+### Dry run
+
+The `--dry-run` option skips every test.
+In combination with `--reporter=spec`, this can be used to get a list
+of the available tests.
