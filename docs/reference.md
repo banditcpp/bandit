@@ -16,6 +16,8 @@ int main(int argc, char* argv[]) {
 
 Bandit uses the [snowhouse](https://github.com/banditcpp/snowhouse#assertions)
 assertion library. Go there for references on how to write assertions.
+For regular use, you probably need `using namespace snowhouse;` in your
+`.cpp` files.
 
 ## go_bandit()
 
@@ -26,6 +28,8 @@ The boilerplate for each `.cpp` file containing tests should look like this:
 
 ```c++
 #include <bandit/bandit.h>
+
+using namespace snowhouse;
 using namespace bandit;
 
 go_bandit([]() {

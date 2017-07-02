@@ -17,6 +17,7 @@ This is a complete test application written in bandit:
 ```c++
 #include <bandit/bandit.h>
 
+using namespace snowhouse;
 using namespace bandit;
 
 // Tell bandit there are tests here.

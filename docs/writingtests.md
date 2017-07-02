@@ -43,6 +43,7 @@ We add a new `.cpp` file to our project with the following content:
 ```c++
 #include <bandit/bandit.h>
 
+using namespace snowhouse;
 using namespace bandit;
 
 go_bandit([]() {
