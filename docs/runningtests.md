@@ -21,11 +21,10 @@ Options:
                            info, spec
   --no-color,              Suppress colors in output
   --formatter=<formatter>, Select error formatter: default, vs
-  --skip=<substring>,      skip all 'describe' and 'it' containing substring
-  --only=<substring>,      only run 'describe' and 'it' containing substring
-  --break-on-failure,      stop test run on first failing test
-  --dry-run,               don't run tests, just list progress.Use to list
-                           available tests
+  --skip=<substring>,      Skip all 'describe' and 'it' containing substring
+  --only=<substring>,      Run only 'describe' and 'it' containing substring
+  --break-on-failure,      Stop test run on first failing test
+  --dry-run,               Skip all tests. Use to list available tests
 ```
 
 ## Running a subset of the tests

@@ -277,14 +277,13 @@ namespace bandit {
                 "  --no-color, \tSuppress colors in output"},
             {FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help.c_str()},
             {SKIP, 0, "", "skip", argument::Required,
-                "  --skip=<substring>, \tskip all 'describe' and 'it' containing substring"},
+                "  --skip=<substring>, \tSkip all 'describe' and 'it' containing substring"},
             {ONLY, 0, "", "only", argument::Required,
-                "  --only=<substring>, \tonly run 'describe' and 'it' containing substring"},
+                "  --only=<substring>, \tRun only 'describe' and 'it' containing substring"},
             {BREAK_ON_FAILURE, 0, "", "break-on-failure", argument::None,
-                "  --break-on-failure, \tstop test run on first failing test"},
+                "  --break-on-failure, \tStop test run on first failing test"},
             {DRY_RUN, 0, "", "dry-run", argument::None,
-                "  --dry-run, \tdon't run tests, just list progress."
-                "Use to list available tests"},
+                "  --dry-run, \tSkip all tests. Use to list available tests"},
             {0, 0, 0, 0, 0, 0}};
 
         return usage;
