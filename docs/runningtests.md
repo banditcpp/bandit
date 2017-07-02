@@ -28,6 +28,22 @@ Options:
                            available tests
 ```
 
+## Running a subset of the tests
+
+You can skip tests from within your source code by using the `describe_skip()`,
+`xdescribe()`, `it_skip()`, and `xit()` constructs.
+
+You can skip tests from the command line by using the `--skip=<substring>`
+option. By using this, you tell bandit to skip running all `describe()`
+and `it()` whose names contain `<substring>`.
+
+It is also possible to tell bandit to only run a subset of the tests by passing
+`--only=<substring>`. This will cause bandit to only run those `describe()` and
+`it()` whose names contain `<substring>`.
+
+You can use `--only` and `--skip` in combination and multiple times to
+filter the running tests according to your needs.
+
 ## Tweaking the output
 
 ### Reporters
@@ -109,19 +125,3 @@ errors to be reported, as
 By default, bandit uses colors to highlight the status of the current test run.
 In certain IDEs or when running tests in continuous integration environment, this
 may look ugly. By specifying `--no-color` you can tell bandit to stop using colors.
-
-## Running a subset of the tests
-
-You can skip tests from within your source code by using the `describe_skip()`,
-`xdescribe()`, `it_skip()`, and `xit()` constructs.
-
-You can skip tests from the command line by using the `--skip=<substring>`
-option. By using this, you tell bandit to skip running all `describe()`
-and `it()` whose names contain `<substring>`.
-
-It is also possible to tell bandit to only run a subset of the tests by passing
-`--only=<substring>`. This will cause bandit to only run those `describe()` and
-`it()` whose names contain `<substring>`.
-
-You can use `--only` and `--skip` in combination and multiple times to
-filter the running tests according to your needs.
