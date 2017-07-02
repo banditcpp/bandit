@@ -8,8 +8,6 @@ Human-friendly unit testing for C++11
 Bandit is a framework for C++11 that wants to make working with unit tests a
 pleasant experience.
 
-For more information, go to [the bandit website](http://banditcpp.org).
-
 Bandit is released under the [MIT license](LICENSE.txt)
 
 # An example
@@ -80,3 +78,9 @@ cmake project for generating bandit's self tests. Let us know how it goes.
 If your compiler does not support the C++11 features required by Bandit, we
 suggest that you take a look at [Igloo](http://igloo-testing.org), which is
 built on the same philosophy but works without C++11.
+
+# Online resources
+
+ * [The bandit website](//banditcpp.org)
+ * [Bandit on GitHub](//github.com/banditcpp/bandit)
+ * [Issues with bandit](//github.com/banditcpp/bandit/issues?state=open)
