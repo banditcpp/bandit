@@ -49,7 +49,6 @@ namespace bandit {
           for (const auto& failure : failures_) {
             stm << failure << std::endl;
           }
-          stm << std::endl;
         }
 
         stm << "Test run complete. " << specs_run_ << " tests run. " << specs_succeeded_ << " succeeded.";

@@ -66,7 +66,6 @@ our first test should fail:
 /<path to our project>/first.spec.cpp:8: Expected: equal to 6
 Actual: 5
 
-
 Test run complete. 1 tests run. 0 succeeded. 1 failed.
 ```
 

@@ -1,9 +1,9 @@
 #ifndef BANDIT_INFO_REPORTER_H
 #define BANDIT_INFO_REPORTER_H
 
+#include <iostream>
 #include <stack>
 #include <bandit/reporters/colored_reporter.h>
-#include <bandit/reporters/test_run_summary.h>
 
 namespace bandit {
   namespace detail {
