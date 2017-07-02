@@ -10,7 +10,7 @@ pleasant experience.
 
 Bandit is released under the [MIT license](LICENSE.txt)
 
-# An example
+## An example
 
 This is a complete test application written in bandit:
 
@@ -58,13 +58,13 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-# Installing
+## Installing
 
 Bandit is header-only, so there is no need for additional compilation before you
 can start using it. Download bandit and add its root directory to your project's
 include directories and you are ready to go.
 
-# Compilers
+## Compilers
 
 Bandit has been tested with the following compilers:
 
@@ -79,7 +79,7 @@ If your compiler does not support the C++11 features required by Bandit, we
 suggest that you take a look at [Igloo](http://igloo-testing.org), which is
 built on the same philosophy but works without C++11.
 
-# Online resources
+## Online resources
 
  * [The bandit website](//banditcpp.org)
  * [Bandit on GitHub](//github.com/banditcpp/bandit)
