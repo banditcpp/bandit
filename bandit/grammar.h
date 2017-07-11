@@ -28,14 +28,13 @@ namespace bandit {
     listener.context_ended(desc);
   }
 
-  inline void describe(const std::string& desc, detail::voidfunc_t func) {
-    describe(desc, func, detail::registered_listener(), detail::context_stack());
+  inline void describe(const std::string& desc, detail::voidfunc_t func, bool hard_skip = false) {
+    describe(desc, func, detail::registered_listener(), detail::context_stack(), hard_skip);
   }
 
   inline void describe_skip(const std::string& desc, detail::voidfunc_t func,
       detail::listener& listener, detail::contextstack_t& context_stack) {
-    bool skip = true;
-    describe(desc, func, listener, context_stack, skip);
+    describe(desc, func, listener, context_stack, true);
   }
 
   inline void describe_skip(const std::string& desc, detail::voidfunc_t func) {
@@ -83,8 +82,9 @@ namespace bandit {
   inline void it(const std::string& desc, detail::voidfunc_t func, detail::listener& listener,
       detail::contextstack_t& context_stack,
       bandit::adapters::assertion_adapter& assertion_adapter,
-      detail::run_policy& run_policy) {
-    if (!run_policy.should_run(desc, context_stack)) {
+      detail::run_policy& run_policy,
+      bool hard_skip = false) {
+    if (hard_skip || !run_policy.should_run(desc, context_stack)) {
       it_skip(desc, func, listener);
       return;
     }
@@ -130,9 +130,9 @@ namespace bandit {
     });
   }
 
-  inline void it(const std::string& desc, detail::voidfunc_t func) {
+  inline void it(const std::string& desc, detail::voidfunc_t func, bool hard_skip = false) {
     it(desc, func, detail::registered_listener(), detail::context_stack(),
-        detail::registered_adapter(), detail::registered_run_policy());
+        detail::registered_adapter(), detail::registered_run_policy(), hard_skip);
   }
 }
 #endif
