@@ -30,7 +30,8 @@ Options:
 ## Running a subset of the tests
 
 You can skip tests from within your source code by using the `describe_skip()`,
-`xdescribe()`, `it_skip()`, and `xit()` constructs.
+`xdescribe()`, `it_skip()`, and `xit()` constructs, or by setting the last
+(optional) argument of `it()` and `describe()` to `true`.
 
 You can skip tests from the command line by using the `--skip=<substring>`
 option. By using this, you tell bandit to skip running all `describe()`
