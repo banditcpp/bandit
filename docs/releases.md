@@ -13,6 +13,9 @@ In the following, we list breaking changes per major release.
   or all tests were skipped. Now the exit code is `0` in these cases because
   no tests are failing.
 
+* The signature of the short grammar of `it` and `describe` became a third
+  (but optional) parameter: if the `it`/`describe` should be skipped or not.
+
 * The behavior of combined `--only` and `--skip` has changed.
   You can now use these switches multiple times and they always act as a filter,
   that is, you can only reduce the list of tests by adding a `--only` or `--skip`
