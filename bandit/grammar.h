@@ -93,24 +93,32 @@ namespace bandit {
 
     context_stack.back()->execution_is_starting();
 
-    auto try_with_adapter = [&](detail::voidfunc_t do_it) {
-      try {
-        assertion_adapter.adapt_exceptions([&] { do_it(); });
-      } catch (const bandit::detail::assertion_exception& ex) {
-        listener.it_failed(desc, ex);
-        run_policy.encountered_failure();
-      } catch (const std::exception& ex) {
-        std::string err = std::string("exception: ") + ex.what();
-        listener.it_failed(desc, bandit::detail::assertion_exception(err));
-        run_policy.encountered_failure();
-      } catch (...) {
-        listener.it_unknown_error(desc);
-        run_policy.encountered_failure();
+    auto try_with_adapter = [&](bool allow_fail, detail::voidfunc_t do_it) {
+      if (allow_fail) {
+        try {
+          assertion_adapter.adapt_exceptions([&] { do_it(); });
+        } catch (const bandit::detail::assertion_exception& ex) {
+          listener.it_failed(desc, ex);
+          run_policy.encountered_failure();
+        } catch (const std::exception& ex) {
+          std::string err = std::string("exception: ") + ex.what();
+          listener.it_failed(desc, bandit::detail::assertion_exception(err));
+          run_policy.encountered_failure();
+        } catch (...) {
+          listener.it_unknown_error(desc);
+          run_policy.encountered_failure();
+        }
+      } else {
+        try {
+          do_it();
+        } catch (...) {
+          /* ignore */
+        }
       }
     };
 
     bool success = false;
-    try_with_adapter([&] {
+    try_with_adapter(true, [&] {
       for (auto context : context_stack) {
         context->run_before_eaches();
       }
@@ -119,7 +127,7 @@ namespace bandit {
       success = true;
     });
 
-    try_with_adapter([&] {
+    try_with_adapter(success, [&] {
       for (auto context : context_stack) {
         context->run_after_eaches();
       }
