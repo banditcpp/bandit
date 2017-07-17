@@ -118,9 +118,11 @@ namespace bandit {
     };
 
     bool success = false;
+    detail::context* last_successful_before_each_context = nullptr;
     try_with_adapter(true, [&] {
       for (auto context : context_stack) {
         context->run_before_eaches();
+        last_successful_before_each_context = context;
       }
 
       func();
@@ -128,9 +130,15 @@ namespace bandit {
     });
 
     try_with_adapter(success, [&] {
-      for (auto context : context_stack) {
-        context->run_after_eaches();
-      }
+      bool do_run_after_each = false;
+      std::for_each(context_stack.rbegin(), context_stack.rend(), [&](detail::context* context) {
+        if (context == last_successful_before_each_context) {
+          do_run_after_each = true;
+        }
+        if (do_run_after_each) {
+          context->run_after_eaches();
+        }
+      });
 
       if (success) {
         listener.it_succeeded(desc);

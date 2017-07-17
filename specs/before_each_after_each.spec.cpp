@@ -42,35 +42,78 @@ go_bandit([]() {
   });
 
   describe("before_each/after_each integration", [&]() {
-    bandit::specs::logging_fake logger;
+    describe("multiple before_each/after_each on the same level", [&] {
+      bandit::specs::logging_fake logger;
 
-    before_each([&]() {
-      logger.log() << "first before_each called" << std::endl;
+      before_each([&]() {
+        logger.log() << "first before_each called" << std::endl;
+      });
+
+      before_each([&]() {
+        logger.log() << "second before_each called" << std::endl;
+      });
+
+      after_each([&]() {
+        logger.log() << "first after_each called" << std::endl;
+      });
+
+      after_each([&]() {
+        logger.log() << "second after_each called" << std::endl;
+      });
+
+      it("should only have called the before_each functions for the first test", [&]() {
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second before_each called"));
+        AssertThat(logger.call_log(), Has().None().Containing("after_each"));
+      });
+
+      it("should have called 'before_each' function twice, and 'after_each' functions once for the second test", [&]() {
+        AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("first before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("second before_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first after_each called"));
+        AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second after_each called"));
+      });
     });
 
-    before_each([&]() {
-      logger.log() << "second before_each called" << std::endl;
-    });
+    describe("multiple before_each/after_each in different levels", [&] {
+      bandit::specs::logging_fake logger;
 
-    after_each([&]() {
-      logger.log() << "first after_each called" << std::endl;
-    });
+      before_each([&] {
+        logger.log() << "1b";
+      });
 
-    after_each([&]() {
-      logger.log() << "second after_each called" << std::endl;
-    });
+      after_each([&] {
+        logger.log() << "1a";
+      });
 
-    it("should only have called the before_each functions for the first test", [&]() {
-      AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first before_each called"));
-      AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second before_each called"));
-      AssertThat(logger.call_log(), Has().None().Containing("after_each"));
-    });
+      describe("first context level", [&] {
+        before_each([&] {
+          logger.log() << "2b";
+        });
 
-    it("should have called 'before_each' function twice, and 'after_each' functions once for the second test", [&]() {
-      AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("first before_each called"));
-      AssertThat(logger.call_log(), Has().Exactly(2).EqualTo("second before_each called"));
-      AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("first after_each called"));
-      AssertThat(logger.call_log(), Has().Exactly(1).EqualTo("second after_each called"));
+        after_each([&] {
+          logger.log() << "2a";
+        });
+
+        describe("second context level", [&] {
+          before_each([&] {
+            logger.log() << "3b";
+          });
+
+          after_each([&] {
+            logger.log() << "3a";
+          });
+
+          it("should only have called the before_each functions for the first test", [&]() {
+            AssertThat(logger.call_log(), Equals("1b2b3b"));
+            logger.log() << " ";
+          });
+
+          it("should have called 'before_each' function twice, and 'after_each' functions once for the second test", [&]() {
+            AssertThat(logger.call_log(), Equals("1b2b3b 3a2a1a1b2b3b"));
+          });
+        });
+      });
     });
   });
 });

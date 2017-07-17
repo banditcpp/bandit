@@ -27,6 +27,11 @@ In the following, we list breaking changes per major release.
   In prior versions, contexts matching `--skip` were ignored when they contained
   a matching `--only`.
 
+* If you use `after_each()` in nested `describe()`s, the order of processing them
+  is now reversed, i.e., the inner `after_each()` is run before the outer one.
+  Also, inner `after_each()`s are only called if their corresponding `before_each()`s
+  did not fail (or do not exist).
+
 * The option handling became stricter.
   Illegal option arguments like `--reporter=invalid` result in an error now.
 
