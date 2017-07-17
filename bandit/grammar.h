@@ -128,9 +128,9 @@ namespace bandit {
     });
 
     try_with_adapter(success, [&] {
-      for (auto context : context_stack) {
+      std::for_each(context_stack.rbegin(), context_stack.rend(), [](detail::context* context) {
         context->run_after_eaches();
-      }
+      });
 
       if (success) {
         listener.it_succeeded(desc);
