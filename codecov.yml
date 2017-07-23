@@ -1,0 +1,3 @@
+ignore:
+  - "bandit/external"
+  - "specs"
