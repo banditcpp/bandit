@@ -4,14 +4,23 @@ os: linux
 sudo: required
 dist: trusty
 
-compiler:
-  - gcc
-  - clang
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - lcov
+
+matrix:
+  include:
+    - compiler: gcc
+      env: BUILD_TYPE=codecov
+    - compiler: clang
+      env: BUILD_TYPE=normal
+
 before_script:
-  - BUILD_DIR=`pwd`/builds
-  - mkdir -p ${BUILD_DIR}
-  - cd ${BUILD_DIR}
-  - cmake ..
+  - util/travis_before_script.sh
 script:
-  - cd ${BUILD_DIR}
-  - make
+  - make -C build
+after_success:
+  - util/travis_after_success.sh
