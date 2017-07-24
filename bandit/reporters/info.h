@@ -7,7 +7,7 @@
 
 namespace bandit {
   namespace detail {
-    struct info_reporter : public colored_reporter {
+    struct info_reporter : public reporter::colored_base {
       struct context_info {
         context_info(const std::string& d) : desc(d), total(0), skipped(0), failed(0) {}
 
@@ -24,7 +24,7 @@ namespace bandit {
       };
 
       info_reporter(std::ostream& stm, const failure_formatter_t& formatter, const colorizer& colorizer)
-          : colored_reporter(stm, formatter, colorizer),
+          : colored_base(stm, formatter, colorizer),
             indentation_(0), not_yet_shown_(0), context_stack_() {}
 
       info_reporter(const failure_formatter_t& formatter, const colorizer& colorizer)
@@ -98,7 +98,7 @@ namespace bandit {
       }
 
       void test_run_complete() override {
-        progress_reporter::test_run_complete();
+        progress_base::test_run_complete();
         stm_ << std::endl;
         list_failures_and_errors();
         summary();
@@ -106,7 +106,7 @@ namespace bandit {
       }
 
       void test_run_error(const std::string& desc, const struct test_run_error& err) override {
-        progress_reporter::test_run_error(desc, err);
+        progress_base::test_run_error(desc, err);
 
         std::stringstream ss;
         ss << "Failed to run \"" << current_context_name() << "\": error \"" << err.what() << "\"" << std::endl;
@@ -114,7 +114,7 @@ namespace bandit {
       }
 
       void context_starting(const std::string& desc) override {
-        progress_reporter::context_starting(desc);
+        progress_base::context_starting(desc);
         context_stack_.emplace(desc);
         if (context_stack_.size() == 1) {
           output_context_start_message();
@@ -151,7 +151,7 @@ namespace bandit {
       }
 
       void context_ended(const std::string& desc) override {
-        progress_reporter::context_ended(desc);
+        progress_base::context_ended(desc);
         if (context_stack_.size() == 1 || context_stack_.top().total > context_stack_.top().skipped) {
           output_context_end_message();
         }
@@ -193,7 +193,7 @@ namespace bandit {
       }
 
       void it_skip(const std::string& desc) override {
-        progress_reporter::it_skip(desc);
+        progress_base::it_skip(desc);
         ++context_stack_.top().total;
         ++context_stack_.top().skipped;
       }
@@ -203,7 +203,7 @@ namespace bandit {
           output_not_yet_shown_context_start_messages();
         }
 
-        progress_reporter::it_starting(desc);
+        progress_base::it_starting(desc);
         stm_
             << indent()
             << colorizer_.yellow()
@@ -215,7 +215,7 @@ namespace bandit {
       }
 
       void it_succeeded(const std::string& desc) override {
-        progress_reporter::it_succeeded(desc);
+        progress_base::it_succeeded(desc);
         ++context_stack_.top().total;
         --indentation_;
         stm_

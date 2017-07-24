@@ -8,13 +8,13 @@
 #include <bandit/reporters/interface.h>
 
 namespace bandit {
-  namespace detail {
-    struct progress_reporter : public reporter::interface {
-      progress_reporter(const failure_formatter_t& formatter)
+  namespace reporter {
+    struct progress_base : public interface {
+      progress_base(const detail::failure_formatter_t& formatter)
           : specs_run_(0), specs_succeeded_(0), specs_failed_(0), specs_skipped_(0),
             failure_formatter_(formatter) {}
 
-      progress_reporter& operator=(const progress_reporter&) {
+      progress_base& operator=(const progress_base&) {
         return *this;
       }
 
@@ -37,7 +37,7 @@ namespace bandit {
         contexts_.pop_back();
       }
 
-      void test_run_error(const std::string&, const struct test_run_error&) override {}
+      void test_run_error(const std::string&, const detail::test_run_error&) override {}
 
       void it_starting(const std::string&) override {
         specs_run_++;
@@ -47,7 +47,7 @@ namespace bandit {
         specs_succeeded_++;
       }
 
-      void it_failed(const std::string& desc, const assertion_exception& ex) override {
+      void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         specs_failed_++;
 
         std::stringstream ss;
@@ -98,7 +98,7 @@ namespace bandit {
       int specs_succeeded_;
       int specs_failed_;
       int specs_skipped_;
-      const failure_formatter_t& failure_formatter_;
+      const detail::failure_formatter_t& failure_formatter_;
       std::list<std::string> contexts_;
       std::list<std::string> failures_;
       std::list<std::string> test_run_errors_;

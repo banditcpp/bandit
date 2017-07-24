@@ -7,9 +7,9 @@
 
 namespace bandit {
   namespace detail {
-    struct crash_reporter : public progress_reporter {
+    struct crash_reporter : public reporter::progress_base {
       crash_reporter(std::ostream& stm, const failure_formatter_t& formatter)
-          : progress_reporter(formatter), stm_(stm) {}
+          : progress_base(formatter), stm_(stm) {}
 
       crash_reporter(const failure_formatter_t& formatter)
           : crash_reporter(std::cout, formatter) {}
@@ -19,7 +19,7 @@ namespace bandit {
       }
 
       void test_run_complete() override {
-        progress_reporter::test_run_complete();
+        progress_base::test_run_complete();
         for (auto failure : failures_) {
           stm_ << std::endl
                << "# FAILED " << failure;
@@ -32,18 +32,18 @@ namespace bandit {
       }
 
       void test_run_error(const std::string& desc, const struct test_run_error& err) override {
-        progress_reporter::test_run_error(desc, err);
+        progress_base::test_run_error(desc, err);
         std::stringstream ss;
         ss << current_context_name() << ": " << desc << ": " << err.what() << std::endl;
         test_run_errors_.push_back(ss.str());
       }
 
       void it_skip(const std::string& desc) override {
-        progress_reporter::it_skip(desc);
+        progress_base::it_skip(desc);
       }
 
       void it_starting(const std::string& desc) override {
-        progress_reporter::it_starting(desc);
+        progress_base::it_starting(desc);
         for (auto context : contexts_) {
           stm_ << context << " | ";
         }
@@ -51,7 +51,7 @@ namespace bandit {
       }
 
       void it_succeeded(const std::string& desc) override {
-        progress_reporter::it_succeeded(desc);
+        progress_base::it_succeeded(desc);
       }
 
       void it_failed(const std::string& desc, const assertion_exception& ex) override {

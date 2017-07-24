@@ -6,14 +6,14 @@
 #include <bandit/reporters/progress_base.h>
 
 namespace bandit {
-  namespace detail {
-    struct colored_reporter : public progress_reporter {
-      colored_reporter(std::ostream& stm,
-          const failure_formatter_t& formatter,
-          const colorizer& colorizer)
-          : progress_reporter(formatter), stm_(stm), colorizer_(colorizer) {}
+  namespace reporter {
+    struct colored_base : public progress_base {
+      colored_base(std::ostream& stm,
+          const detail::failure_formatter_t& formatter,
+          const detail::colorizer& colorizer)
+          : progress_base(formatter), stm_(stm), colorizer_(colorizer) {}
 
-      ~colored_reporter() override {
+      ~colored_base() override {
         stm_ << colorizer_.reset();
       }
 

@@ -6,38 +6,38 @@
 
 namespace bandit {
   namespace detail {
-    struct xunit_reporter : public progress_reporter {
+    struct xunit_reporter : public reporter::progress_base {
       xunit_reporter(std::ostream& stm, const failure_formatter_t& formatter)
-          : progress_reporter(formatter), stm_(stm) {}
+          : progress_base(formatter), stm_(stm) {}
 
       xunit_reporter(const failure_formatter_t& formatter)
           : xunit_reporter(std::cout, formatter) {}
 
       void it_starting(const std::string& desc) override {
-        progress_reporter::it_starting(desc);
+        progress_base::it_starting(desc);
         work_stm_ << "\t<testcase classname=\"" << escape(current_context_name()) << "\" ";
         work_stm_ << "name=\"" << escape(desc) << "\" time=\"0.0\">\n";
       }
 
       void it_succeeded(const std::string& desc) override {
-        progress_reporter::it_succeeded(desc);
+        progress_base::it_succeeded(desc);
         work_stm_ << "\t</testcase>\n";
       }
 
       void it_failed(const std::string& desc, const assertion_exception& ex) override {
-        progress_reporter::it_failed(desc, ex);
+        progress_base::it_failed(desc, ex);
         work_stm_ << "\t\t<failure message=\"" << escape(failure_formatter_.format(ex)) << "\" />\n";
         work_stm_ << "\t</testcase>\n";
       }
 
       void it_unknown_error(const std::string& desc) override {
-        progress_reporter::it_unknown_error(desc);
+        progress_base::it_unknown_error(desc);
         work_stm_ << "\t\t<failure message=\"Unknown exception\" />\n";
         work_stm_ << "\t</testcase>\n";
       }
 
       void it_skip(const std::string& desc) override {
-        progress_reporter::it_skip(desc);
+        progress_base::it_skip(desc);
         work_stm_ << "\t<testcase classname=\"" << escape(current_context_name()) << "\" ";
         work_stm_ << "name=\"" << escape(desc) << "\" time=\"0.0\">\n";
         work_stm_ << "\t\t<skipped />\n";
