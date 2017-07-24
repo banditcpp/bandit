@@ -14,27 +14,27 @@ namespace bandit {
       return run_policy_ptr(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
     }
 
-    inline listener_ptr create_reporter(const options& opt,
+    inline reporter_ptr create_reporter(const options& opt,
         const failure_formatter_t* formatter, const colorizer& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
-        return listener_ptr(new single_line_reporter(*formatter, colorizer));
+        return reporter_ptr(new single_line_reporter(*formatter, colorizer));
       case options::reporters::XUNIT:
-        return listener_ptr(new xunit_reporter(*formatter));
+        return reporter_ptr(new xunit_reporter(*formatter));
       case options::reporters::INFO:
-        return listener_ptr(new info_reporter(*formatter, colorizer));
+        return reporter_ptr(new info_reporter(*formatter, colorizer));
       case options::reporters::SPEC:
-        return listener_ptr(new spec_reporter(*formatter, colorizer));
+        return reporter_ptr(new spec_reporter(*formatter, colorizer));
       case options::reporters::CRASH:
-        return listener_ptr(new crash_reporter(*formatter));
+        return reporter_ptr(new crash_reporter(*formatter));
       case options::reporters::DOTS:
       default:
-        return listener_ptr(new dots_reporter(*formatter, colorizer));
+        return reporter_ptr(new dots_reporter(*formatter, colorizer));
       }
     }
 
-    typedef std::function<listener_ptr(const std::string&, const failure_formatter_t*)> reporter_factory_fn;
-    typedef std::function<detail::listener*(detail::listener*)> register_reporter_fn;
+    typedef std::function<reporter_ptr(const std::string&, const failure_formatter_t*)> reporter_factory_fn;
+    typedef std::function<detail::reporter_t*(detail::reporter_t*)> register_reporter_fn;
 
     inline failure_formatter_ptr create_formatter(const options& opt) {
       switch (opt.formatter()) {
@@ -48,7 +48,7 @@ namespace bandit {
   }
 
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
-      detail::contextstack_t& context_stack, detail::listener& listener) {
+      detail::contextstack_t& context_stack, detail::reporter_t& reporter) {
     if (opt.help() || !opt.parsed_ok()) {
       opt.print_usage();
       return !opt.parsed_ok();
@@ -59,7 +59,7 @@ namespace bandit {
       return 0;
     }
 
-    listener.test_run_starting();
+    reporter.test_run_starting();
 
     bool hard_skip = false;
     detail::bandit_context global_context("", hard_skip);
@@ -69,9 +69,9 @@ namespace bandit {
       func();
     };
 
-    listener.test_run_complete();
+    reporter.test_run_complete();
 
-    return listener.did_we_pass() ? 0 : 1;
+    return reporter.did_we_pass() ? 0 : 1;
   }
 
   inline int run(int argc, char* argv[], bool allow_further = true) {
@@ -83,9 +83,9 @@ namespace bandit {
     }
     detail::failure_formatter_ptr formatter(create_formatter(opt));
     bandit::detail::colorizer colorizer(!opt.no_color());
-    detail::listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
+    detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
-    detail::register_listener(reporter.get());
+    detail::register_reporter(reporter.get());
 
     detail::run_policy_ptr run_policy = create_run_policy(opt);
     detail::register_run_policy(run_policy.get());

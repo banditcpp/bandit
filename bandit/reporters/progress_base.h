@@ -9,7 +9,7 @@
 
 namespace bandit {
   namespace detail {
-    struct progress_reporter : public listener {
+    struct progress_reporter : public reporter::interface {
       progress_reporter(const failure_formatter_t& formatter)
           : specs_run_(0), specs_succeeded_(0), specs_failed_(0), specs_skipped_(0),
             failure_formatter_(formatter) {}

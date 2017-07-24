@@ -6,7 +6,7 @@
 
 namespace bandit {
   namespace fakes {
-    struct fake_reporter : public bandit::detail::listener,
+    struct fake_reporter : public bandit::detail::reporter_t,
                            public bandit::specs::logging_fake {
       fake_reporter() : test_run_status_(true) {}
 

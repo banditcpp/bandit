@@ -7,9 +7,9 @@
 
 namespace bandit {
   inline void describe(const std::string& desc, detail::voidfunc_t func,
-      detail::listener& listener, detail::contextstack_t& context_stack,
+      detail::reporter_t& reporter, detail::contextstack_t& context_stack,
       bool hard_skip = false) {
-    listener.context_starting(desc);
+    reporter.context_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
@@ -20,32 +20,32 @@ namespace bandit {
     try {
       func();
     } catch (const bandit::detail::test_run_error& error) {
-      listener.test_run_error(desc, error);
+      reporter.test_run_error(desc, error);
     }
 
     context_stack.pop_back();
 
-    listener.context_ended(desc);
+    reporter.context_ended(desc);
   }
 
   inline void describe(const std::string& desc, detail::voidfunc_t func, bool hard_skip = false) {
-    describe(desc, func, detail::registered_listener(), detail::context_stack(), hard_skip);
+    describe(desc, func, detail::registered_reporter(), detail::context_stack(), hard_skip);
   }
 
   inline void describe_skip(const std::string& desc, detail::voidfunc_t func,
-      detail::listener& listener, detail::contextstack_t& context_stack) {
-    describe(desc, func, listener, context_stack, true);
+      detail::reporter_t& reporter, detail::contextstack_t& context_stack) {
+    describe(desc, func, reporter, context_stack, true);
   }
 
   inline void describe_skip(const std::string& desc, detail::voidfunc_t func) {
-    describe_skip(desc, func, detail::registered_listener(),
+    describe_skip(desc, func, detail::registered_reporter(),
         detail::context_stack());
   }
 
   inline void xdescribe(const std::string& desc, detail::voidfunc_t func,
-      detail::listener& listener = detail::registered_listener(),
+      detail::reporter_t& reporter = detail::registered_reporter(),
       detail::contextstack_t& context_stack = detail::context_stack()) {
-    describe_skip(desc, func, listener, context_stack);
+    describe_skip(desc, func, reporter, context_stack);
   }
 
   inline void before_each(detail::voidfunc_t func,
@@ -66,30 +66,30 @@ namespace bandit {
     after_each(func, detail::context_stack());
   }
 
-  inline void it_skip(const std::string& desc, detail::voidfunc_t, detail::listener& listener) {
-    listener.it_skip(desc);
+  inline void it_skip(const std::string& desc, detail::voidfunc_t, detail::reporter_t& reporter) {
+    reporter.it_skip(desc);
   }
 
   inline void it_skip(const std::string& desc, detail::voidfunc_t func) {
-    it_skip(desc, func, detail::registered_listener());
+    it_skip(desc, func, detail::registered_reporter());
   }
 
   inline void xit(const std::string& desc, detail::voidfunc_t func,
-      detail::listener& listener = detail::registered_listener()) {
-    it_skip(desc, func, listener);
+      detail::reporter_t& reporter = detail::registered_reporter()) {
+    it_skip(desc, func, reporter);
   }
 
-  inline void it(const std::string& desc, detail::voidfunc_t func, detail::listener& listener,
+  inline void it(const std::string& desc, detail::voidfunc_t func, detail::reporter_t& reporter,
       detail::contextstack_t& context_stack,
       detail::assertion_adapter_t& assertion_adapter,
       detail::run_policy_t& run_policy,
       bool hard_skip = false) {
     if (hard_skip || !run_policy.should_run(desc, context_stack)) {
-      it_skip(desc, func, listener);
+      it_skip(desc, func, reporter);
       return;
     }
 
-    listener.it_starting(desc);
+    reporter.it_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
@@ -98,14 +98,14 @@ namespace bandit {
         try {
           assertion_adapter.adapt_exceptions([&] { do_it(); });
         } catch (const bandit::detail::assertion_exception& ex) {
-          listener.it_failed(desc, ex);
+          reporter.it_failed(desc, ex);
           run_policy.encountered_failure();
         } catch (const std::exception& ex) {
           std::string err = std::string("exception: ") + ex.what();
-          listener.it_failed(desc, bandit::detail::assertion_exception(err));
+          reporter.it_failed(desc, bandit::detail::assertion_exception(err));
           run_policy.encountered_failure();
         } catch (...) {
-          listener.it_unknown_error(desc);
+          reporter.it_unknown_error(desc);
           run_policy.encountered_failure();
         }
       } else {
@@ -141,13 +141,13 @@ namespace bandit {
       });
 
       if (success) {
-        listener.it_succeeded(desc);
+        reporter.it_succeeded(desc);
       }
     });
   }
 
   inline void it(const std::string& desc, detail::voidfunc_t func, bool hard_skip = false) {
-    it(desc, func, detail::registered_listener(), detail::context_stack(),
+    it(desc, func, detail::registered_reporter(), detail::context_stack(),
         detail::registered_adapter(), detail::registered_run_policy(), hard_skip);
   }
 }
