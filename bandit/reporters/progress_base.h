@@ -1,11 +1,11 @@
-#ifndef BANDIT_PROGRESS_REPORTER_H
-#define BANDIT_PROGRESS_REPORTER_H
+#ifndef BANDIT_REPORTERS_PROGRESS_BASE_H
+#define BANDIT_REPORTERS_PROGRESS_BASE_H
 
 #include <algorithm>
 #include <list>
 #include <sstream>
 #include <bandit/failure_formatters/interface.h>
-#include <bandit/listener.h>
+#include <bandit/reporters/interface.h>
 
 namespace bandit {
   namespace detail {

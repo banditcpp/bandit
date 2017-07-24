@@ -1,7 +1,7 @@
-#ifndef BANDIT_REPORTERS_SINGLE_LINE_REPORTER_H
-#define BANDIT_REPORTERS_SINGLE_LINE_REPORTER_H
+#ifndef BANDIT_REPORTERS_SINGLELINE_H
+#define BANDIT_REPORTERS_SINGLELINE_H
 
-#include <bandit/reporters/colored_reporter.h>
+#include <bandit/reporters/colored_base.h>
 #include <bandit/reporters/test_run_summary.h>
 
 namespace bandit {

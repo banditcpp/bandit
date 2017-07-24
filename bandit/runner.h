@@ -3,7 +3,7 @@
 
 #include <bandit/options.h>
 #include <bandit/registration/registrar.h>
-#include <bandit/reporters/reporters.h>
+#include <bandit/reporters.h>
 #include <bandit/failure_formatters.h>
 #include <bandit/run_policies.h>
 #include <bandit/version.h>

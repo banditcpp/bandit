@@ -1,5 +1,5 @@
-#ifndef BANDIT_LISTENER_H
-#define BANDIT_LISTENER_H
+#ifndef BANDIT_REPORTERS_INTERFACE_H
+#define BANDIT_REPORTERS_INTERFACE_H
 
 #include <memory>
 #include <bandit/assertion_exception.h>

@@ -1,12 +1,12 @@
 #ifndef BANDIT_REPORTERS_H
 #define BANDIT_REPORTERS_H
 
-#include <bandit/reporters/dots_reporter.h>
-#include <bandit/reporters/single_line_reporter.h>
-#include <bandit/reporters/xunit_reporter.h>
-#include <bandit/reporters/info_reporter.h>
-#include <bandit/reporters/spec_reporter.h>
-#include <bandit/reporters/crash_reporter.h>
+#include <bandit/reporters/dots.h>
+#include <bandit/reporters/singleline.h>
+#include <bandit/reporters/xunit.h>
+#include <bandit/reporters/info.h>
+#include <bandit/reporters/spec.h>
+#include <bandit/reporters/crash.h>
 
 namespace bandit {
   namespace detail {

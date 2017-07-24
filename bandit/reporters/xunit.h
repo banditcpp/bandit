@@ -1,8 +1,8 @@
-#ifndef BANDIT_REPORTERS_XUNIT_REPORTER_H
-#define BANDIT_REPORTERS_XUNIT_REPORTER_H
+#ifndef BANDIT_REPORTERS_XUNIT_H
+#define BANDIT_REPORTERS_XUNIT_H
 
 #include <iostream>
-#include <bandit/reporters/progress_reporter.h>
+#include <bandit/reporters/progress_base.h>
 
 namespace bandit {
   namespace detail {

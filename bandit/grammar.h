@@ -2,7 +2,7 @@
 #define BANDIT_GRAMMAR_H
 
 #include <bandit/adapters.h>
-#include <bandit/reporters/reporters.h>
+#include <bandit/reporters.h>
 #include <bandit/run_policies.h>
 
 namespace bandit {

@@ -1,5 +1,5 @@
-#ifndef BANDIT_TEST_RUN_SUMMARY_H
-#define BANDIT_TEST_RUN_SUMMARY_H
+#ifndef BANDIT_REPORTERS_TEST_RUN_SUMMARY_H
+#define BANDIT_REPORTERS_TEST_RUN_SUMMARY_H
 
 #include <algorithm>
 #include <list>
