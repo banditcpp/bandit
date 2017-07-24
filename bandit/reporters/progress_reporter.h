@@ -4,15 +4,15 @@
 #include <algorithm>
 #include <list>
 #include <sstream>
-#include <bandit/failure_formatters/failure_formatter.h>
+#include <bandit/failure_formatters/interface.h>
 #include <bandit/listener.h>
 
 namespace bandit {
   namespace detail {
     struct progress_reporter : public listener {
-      progress_reporter(const detail::failure_formatter& failure_formatter)
+      progress_reporter(const failure_formatter_t& formatter)
           : specs_run_(0), specs_succeeded_(0), specs_failed_(0), specs_skipped_(0),
-            failure_formatter_(failure_formatter) {}
+            failure_formatter_(formatter) {}
 
       progress_reporter& operator=(const progress_reporter&) {
         return *this;
@@ -98,7 +98,7 @@ namespace bandit {
       int specs_succeeded_;
       int specs_failed_;
       int specs_skipped_;
-      const detail::failure_formatter& failure_formatter_;
+      const failure_formatter_t& failure_formatter_;
       std::list<std::string> contexts_;
       std::list<std::string> failures_;
       std::list<std::string> test_run_errors_;

@@ -7,12 +7,12 @@
 namespace bandit {
   namespace detail {
     struct dots_reporter : public colored_reporter {
-      dots_reporter(std::ostream& stm, const failure_formatter& failure_formatter,
+      dots_reporter(std::ostream& stm, const failure_formatter_t& formatter,
           const colorizer& colorizer)
-          : colored_reporter(stm, failure_formatter, colorizer) {}
+          : colored_reporter(stm, formatter, colorizer) {}
 
-      dots_reporter(const failure_formatter& failure_formatter, const colorizer& colorizer)
-          : dots_reporter(std::cout, failure_formatter, colorizer) {}
+      dots_reporter(const failure_formatter_t& formatter, const colorizer& colorizer)
+          : dots_reporter(std::cout, formatter, colorizer) {}
 
       dots_reporter& operator=(const dots_reporter&) {
         return *this;

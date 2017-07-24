@@ -7,12 +7,12 @@
 namespace bandit {
   namespace detail {
     struct spec_reporter : public colored_reporter {
-      spec_reporter(std::ostream& stm, const failure_formatter& failure_formatter,
+      spec_reporter(std::ostream& stm, const failure_formatter_t& formatter,
           const colorizer& colorizer)
-          : colored_reporter(stm, failure_formatter, colorizer), indentation_(0) {}
+          : colored_reporter(stm, formatter, colorizer), indentation_(0) {}
 
-      spec_reporter(const failure_formatter& failure_formatter, const colorizer& colorizer)
-          : spec_reporter(std::cout, failure_formatter, colorizer) {}
+      spec_reporter(const failure_formatter_t& formatter, const colorizer& colorizer)
+          : spec_reporter(std::cout, formatter, colorizer) {}
 
       spec_reporter& operator=(const spec_reporter&) {
         return *this;

@@ -7,10 +7,10 @@
 namespace bandit {
   namespace detail {
     struct xunit_reporter : public progress_reporter {
-      xunit_reporter(std::ostream& stm, const failure_formatter& formatter)
+      xunit_reporter(std::ostream& stm, const failure_formatter_t& formatter)
           : progress_reporter(formatter), stm_(stm) {}
 
-      xunit_reporter(const failure_formatter& formatter)
+      xunit_reporter(const failure_formatter_t& formatter)
           : xunit_reporter(std::cout, formatter) {}
 
       void it_starting(const std::string& desc) override {

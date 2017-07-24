@@ -8,11 +8,11 @@
 namespace bandit {
   namespace detail {
     struct crash_reporter : public progress_reporter {
-      crash_reporter(std::ostream& stm, const failure_formatter& failure_formatter)
-          : progress_reporter(failure_formatter), stm_(stm) {}
+      crash_reporter(std::ostream& stm, const failure_formatter_t& formatter)
+          : progress_reporter(formatter), stm_(stm) {}
 
-      crash_reporter(const failure_formatter& failure_formatter)
-          : crash_reporter(std::cout, failure_formatter) {}
+      crash_reporter(const failure_formatter_t& formatter)
+          : crash_reporter(std::cout, formatter) {}
 
       crash_reporter& operator=(const crash_reporter&) {
         return *this;

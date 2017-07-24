@@ -4,7 +4,7 @@
 #include <bandit/options.h>
 #include <bandit/registration/registrar.h>
 #include <bandit/reporters/reporters.h>
-#include <bandit/failure_formatters/failure_formatters.h>
+#include <bandit/failure_formatters.h>
 #include <bandit/run_policies/run_policies.h>
 #include <bandit/version.h>
 
@@ -15,7 +15,7 @@ namespace bandit {
     }
 
     inline listener_ptr create_reporter(const options& opt,
-        const failure_formatter* formatter, const colorizer& colorizer) {
+        const failure_formatter_t* formatter, const colorizer& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
         return listener_ptr(new single_line_reporter(*formatter, colorizer));
@@ -33,16 +33,16 @@ namespace bandit {
       }
     }
 
-    typedef std::function<listener_ptr(const std::string&, const failure_formatter*)> reporter_factory_fn;
+    typedef std::function<listener_ptr(const std::string&, const failure_formatter_t*)> reporter_factory_fn;
     typedef std::function<detail::listener*(detail::listener*)> register_reporter_fn;
 
     inline failure_formatter_ptr create_formatter(const options& opt) {
       switch (opt.formatter()) {
       case options::formatters::VS:
-        return failure_formatter_ptr(new visual_studio_failure_formatter());
+        return failure_formatter_ptr(new failure_formatter::visual_studio());
       case options::formatters::POSIX:
       default:
-        return failure_formatter_ptr(new posix_failure_formatter());
+        return failure_formatter_ptr(new failure_formatter::posix());
       }
     }
   }

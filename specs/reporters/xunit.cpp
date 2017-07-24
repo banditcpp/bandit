@@ -5,7 +5,7 @@ namespace bd = bandit::detail;
 go_bandit([]() {
   describe("xunit_reporter:", [&]() {
     std::stringstream stm;
-    bd::posix_failure_formatter formatter;
+    failure_formatter::posix formatter;
     std::unique_ptr<bd::xunit_reporter> reporter;
 
     auto output = [&]() { return stm.str(); };

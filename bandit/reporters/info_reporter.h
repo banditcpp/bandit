@@ -23,12 +23,12 @@ namespace bandit {
         int failed;
       };
 
-      info_reporter(std::ostream& stm, const failure_formatter& failure_formatter, const colorizer& colorizer)
-          : colored_reporter(stm, failure_formatter, colorizer),
+      info_reporter(std::ostream& stm, const failure_formatter_t& formatter, const colorizer& colorizer)
+          : colored_reporter(stm, formatter, colorizer),
             indentation_(0), not_yet_shown_(0), context_stack_() {}
 
-      info_reporter(const failure_formatter& failure_formatter, const colorizer& colorizer)
-          : info_reporter(std::cout, failure_formatter, colorizer) {}
+      info_reporter(const failure_formatter_t& formatter, const colorizer& colorizer)
+          : info_reporter(std::cout, formatter, colorizer) {}
 
       info_reporter& operator=(const info_reporter&) {
         return *this;
