@@ -87,3 +87,4 @@ built on the same philosophy but works without C++11.
  * [The bandit website](//banditcpp.org)
  * [Bandit on GitHub](//github.com/banditcpp/bandit)
  * [Issues with bandit](//github.com/banditcpp/bandit/issues?state=open)
+ * IRC: [#banditcpp on freenode](//webchat.freenode.net?channels=%23banditcpp)
