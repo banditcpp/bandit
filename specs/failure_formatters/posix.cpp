@@ -2,8 +2,8 @@
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("default failure formatter", [&]() {
-    bd::default_failure_formatter formatter;
+  describe("posix failure formatter", [&]() {
+    bd::posix_failure_formatter formatter;
 
     it("formats assertions with file and line number", [&]() {
       bd::assertion_exception exception("message", "file", 321);

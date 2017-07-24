@@ -6,7 +6,7 @@
 
 namespace bandit {
   namespace detail {
-    struct default_failure_formatter : public failure_formatter {
+    struct posix_failure_formatter : public failure_formatter {
       std::string format(const assertion_exception& err) const override {
         std::stringstream ss;
         if (err.file_name().size()) {

@@ -200,7 +200,7 @@ go_bandit([]() {
       choice_tests<bd::options::formatters>("formatter",
           bd::options::formatters::UNKNOWN, {
             {"vs", bd::options::formatters::VS},
-            {"default", bd::options::formatters::DEFAULT},
+            {"posix", bd::options::formatters::POSIX},
           }, [&](const bd::options& opt) {
             return opt.formatter();
           });

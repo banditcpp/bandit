@@ -6,7 +6,7 @@ go_bandit([]() {
   describe("crash_reporter:", [&]() {
     std::stringstream stm;
     std::unique_ptr<bd::crash_reporter> reporter;
-    bd::default_failure_formatter formatter;
+    bd::posix_failure_formatter formatter;
 
     before_each([&]() {
       stm.str(std::string());

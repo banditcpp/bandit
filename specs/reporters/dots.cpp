@@ -5,7 +5,7 @@ go_bandit([]() {
   describe("dots_reporter:", [&]() {
     std::stringstream stm;
     std::unique_ptr<bd::dots_reporter> reporter;
-    bd::default_failure_formatter formatter;
+    bd::posix_failure_formatter formatter;
     bd::colorizer colorizer(false);
 
     before_each([&]() {

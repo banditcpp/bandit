@@ -40,9 +40,9 @@ namespace bandit {
       switch (opt.formatter()) {
       case options::formatters::VS:
         return failure_formatter_ptr(new visual_studio_failure_formatter());
-      case options::formatters::DEFAULT:
+      case options::formatters::POSIX:
       default:
-        return failure_formatter_ptr(new default_failure_formatter());
+        return failure_formatter_ptr(new posix_failure_formatter());
       }
     }
   }

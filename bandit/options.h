@@ -71,7 +71,7 @@ namespace bandit {
       };
 
       enum class formatters {
-        DEFAULT,
+        POSIX,
         VS,
         UNKNOWN
       };
@@ -100,7 +100,7 @@ namespace bandit {
 
         static const argstrs<formatters> formatter_list() {
           return {
-              {formatters::DEFAULT, "default"},
+              {formatters::POSIX, "posix"},
               {formatters::VS, "vs"},
           };
         }

@@ -5,7 +5,7 @@ go_bandit([]() {
   describe("single line reporter", [&]() {
     std::stringstream stm;
     std::unique_ptr<bd::single_line_reporter> reporter;
-    bd::default_failure_formatter formatter;
+    bd::posix_failure_formatter formatter;
     bd::colorizer colorizer(false);
 
     before_each([&]() {

@@ -9,6 +9,8 @@ In the following, we list breaking changes per major release.
 
 ## Next major release (v3.0.0)
 
+* The `default` formatter is renamed to `posix`.
+
 * In prior versions, an error was raised in case no tests were available
   or all tests were skipped. Now the exit code is `0` in these cases because
   no tests are failing.

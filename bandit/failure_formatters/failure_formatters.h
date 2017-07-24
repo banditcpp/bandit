@@ -8,7 +8,7 @@
 namespace bandit {
   namespace detail {
     inline failure_formatter& registered_failure_formatter() {
-      static default_failure_formatter formatter;
+      static posix_failure_formatter formatter;
       return formatter;
     }
   }
