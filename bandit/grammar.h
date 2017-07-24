@@ -1,7 +1,7 @@
 #ifndef BANDIT_GRAMMAR_H
 #define BANDIT_GRAMMAR_H
 
-#include <bandit/adapters/adapters.h>
+#include <bandit/adapters.h>
 #include <bandit/reporters/reporters.h>
 #include <bandit/run_policies/run_policy.h>
 
@@ -81,7 +81,7 @@ namespace bandit {
 
   inline void it(const std::string& desc, detail::voidfunc_t func, detail::listener& listener,
       detail::contextstack_t& context_stack,
-      bandit::adapters::assertion_adapter& assertion_adapter,
+      detail::assertion_adapter_t& assertion_adapter,
       detail::run_policy& run_policy,
       bool hard_skip = false) {
     if (hard_skip || !run_policy.should_run(desc, context_stack)) {

@@ -11,7 +11,7 @@ go_bandit([]() {
     fake_reporter_ptr reporter;
     std::unique_ptr<bd::contextstack_t> contexts;
     std::unique_ptr<fake_context> context;
-    bandit::adapters::snowhouse_adapter assertion_adapter;
+    adapter::snowhouse assertion_adapter;
     bd::run_policy_ptr run_policy;
 
     before_each([&]() {
