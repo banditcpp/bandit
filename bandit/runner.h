@@ -18,18 +18,18 @@ namespace bandit {
         const failure_formatter_t* formatter, const colorizer& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
-        return reporter_ptr(new single_line_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::singleline(*formatter, colorizer));
       case options::reporters::XUNIT:
-        return reporter_ptr(new xunit_reporter(*formatter));
+        return reporter_ptr(new bandit::reporter::xunit(*formatter));
       case options::reporters::INFO:
-        return reporter_ptr(new info_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::info(*formatter, colorizer));
       case options::reporters::SPEC:
-        return reporter_ptr(new spec_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::spec(*formatter, colorizer));
       case options::reporters::CRASH:
-        return reporter_ptr(new crash_reporter(*formatter));
+        return reporter_ptr(new bandit::reporter::crash(*formatter));
       case options::reporters::DOTS:
       default:
-        return reporter_ptr(new dots_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::dots(*formatter, colorizer));
       }
     }
 

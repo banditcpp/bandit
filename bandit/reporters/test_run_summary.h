@@ -7,7 +7,7 @@
 #include <bandit/colorizers/colorizer.h>
 
 namespace bandit {
-  namespace detail {
+  namespace reporter {
     struct test_run_summary {
       test_run_summary(int specs_run, int specs_failed, int specs_succeeded, int specs_skipped,
           const std::list<std::string>& failures, const std::list<std::string>& test_run_errors,

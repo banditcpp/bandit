@@ -5,16 +5,16 @@
 #include <bandit/reporters/test_run_summary.h>
 
 namespace bandit {
-  namespace detail {
-    struct dots_reporter : public reporter::colored_base {
-      dots_reporter(std::ostream& stm, const failure_formatter_t& formatter,
-          const colorizer& colorizer)
+  namespace reporter {
+    struct dots : public colored_base {
+      dots(std::ostream& stm, const detail::failure_formatter_t& formatter,
+          const detail::colorizer& colorizer)
           : colored_base(stm, formatter, colorizer) {}
 
-      dots_reporter(const failure_formatter_t& formatter, const colorizer& colorizer)
-          : dots_reporter(std::cout, formatter, colorizer) {}
+      dots(const detail::failure_formatter_t& formatter, const detail::colorizer& colorizer)
+          : dots(std::cout, formatter, colorizer) {}
 
-      dots_reporter& operator=(const dots_reporter&) {
+      dots& operator=(const dots&) {
         return *this;
       }
 
@@ -29,7 +29,7 @@ namespace bandit {
         stm_.flush();
       }
 
-      void test_run_error(const std::string& desc, const struct test_run_error& err) override {
+      void test_run_error(const std::string& desc, const detail::test_run_error& err) override {
         progress_base::test_run_error(desc, err);
 
         std::stringstream ss;
@@ -45,7 +45,7 @@ namespace bandit {
         stm_.flush();
       }
 
-      void it_failed(const std::string& desc, const assertion_exception& ex) override {
+      void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         progress_base::it_failed(desc, ex);
         stm_ << colorizer_.red() << "F" << colorizer_.reset();
         stm_.flush();

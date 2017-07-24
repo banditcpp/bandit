@@ -5,13 +5,13 @@
 #include <bandit/reporters/progress_base.h>
 
 namespace bandit {
-  namespace detail {
-    struct xunit_reporter : public reporter::progress_base {
-      xunit_reporter(std::ostream& stm, const failure_formatter_t& formatter)
+  namespace reporter {
+    struct xunit : public progress_base {
+      xunit(std::ostream& stm, const detail::failure_formatter_t& formatter)
           : progress_base(formatter), stm_(stm) {}
 
-      xunit_reporter(const failure_formatter_t& formatter)
-          : xunit_reporter(std::cout, formatter) {}
+      xunit(const detail::failure_formatter_t& formatter)
+          : xunit(std::cout, formatter) {}
 
       void it_starting(const std::string& desc) override {
         progress_base::it_starting(desc);
@@ -24,7 +24,7 @@ namespace bandit {
         work_stm_ << "\t</testcase>\n";
       }
 
-      void it_failed(const std::string& desc, const assertion_exception& ex) override {
+      void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         progress_base::it_failed(desc, ex);
         work_stm_ << "\t\t<failure message=\"" << escape(failure_formatter_.format(ex)) << "\" />\n";
         work_stm_ << "\t</testcase>\n";

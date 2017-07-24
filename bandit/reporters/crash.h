@@ -6,15 +6,15 @@
 #include <bandit/reporters/progress_base.h>
 
 namespace bandit {
-  namespace detail {
-    struct crash_reporter : public reporter::progress_base {
-      crash_reporter(std::ostream& stm, const failure_formatter_t& formatter)
+  namespace reporter {
+    struct crash : public progress_base {
+      crash(std::ostream& stm, const detail::failure_formatter_t& formatter)
           : progress_base(formatter), stm_(stm) {}
 
-      crash_reporter(const failure_formatter_t& formatter)
-          : crash_reporter(std::cout, formatter) {}
+      crash(const detail::failure_formatter_t& formatter)
+          : crash(std::cout, formatter) {}
 
-      crash_reporter& operator=(const crash_reporter&) {
+      crash& operator=(const crash&) {
         return *this;
       }
 
@@ -31,7 +31,7 @@ namespace bandit {
         stm_.flush();
       }
 
-      void test_run_error(const std::string& desc, const struct test_run_error& err) override {
+      void test_run_error(const std::string& desc, const detail::test_run_error& err) override {
         progress_base::test_run_error(desc, err);
         std::stringstream ss;
         ss << current_context_name() << ": " << desc << ": " << err.what() << std::endl;
@@ -54,7 +54,7 @@ namespace bandit {
         progress_base::it_succeeded(desc);
       }
 
-      void it_failed(const std::string& desc, const assertion_exception& ex) override {
+      void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         ++specs_failed_;
 
         std::stringstream ss;

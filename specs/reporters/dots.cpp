@@ -2,16 +2,16 @@
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("dots_reporter:", [&]() {
+  describe("reporter::dots", [&]() {
     std::stringstream stm;
-    std::unique_ptr<bd::dots_reporter> reporter;
+    std::unique_ptr<reporter::dots> reporter;
     failure_formatter::posix formatter;
     bd::colorizer colorizer(false);
 
     before_each([&]() {
       stm.str(std::string());
-      reporter = std::unique_ptr<bd::dots_reporter>(
-          new bd::dots_reporter(stm, formatter, colorizer));
+      reporter = std::unique_ptr<reporter::dots>(
+          new reporter::dots(stm, formatter, colorizer));
     });
 
     auto output = [&]() { return stm.str(); };

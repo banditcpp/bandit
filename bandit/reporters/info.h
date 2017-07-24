@@ -6,8 +6,8 @@
 #include <bandit/reporters/colored_base.h>
 
 namespace bandit {
-  namespace detail {
-    struct info_reporter : public reporter::colored_base {
+  namespace reporter {
+    struct info : public colored_base {
       struct context_info {
         context_info(const std::string& d) : desc(d), total(0), skipped(0), failed(0) {}
 
@@ -23,14 +23,14 @@ namespace bandit {
         int failed;
       };
 
-      info_reporter(std::ostream& stm, const failure_formatter_t& formatter, const colorizer& colorizer)
+      info(std::ostream& stm, const detail::failure_formatter_t& formatter, const detail::colorizer& colorizer)
           : colored_base(stm, formatter, colorizer),
             indentation_(0), not_yet_shown_(0), context_stack_() {}
 
-      info_reporter(const failure_formatter_t& formatter, const colorizer& colorizer)
-          : info_reporter(std::cout, formatter, colorizer) {}
+      info(const detail::failure_formatter_t& formatter, const detail::colorizer& colorizer)
+          : info(std::cout, formatter, colorizer) {}
 
-      info_reporter& operator=(const info_reporter&) {
+      info& operator=(const info&) {
         return *this;
       }
 
@@ -105,7 +105,7 @@ namespace bandit {
         stm_.flush();
       }
 
-      void test_run_error(const std::string& desc, const struct test_run_error& err) override {
+      void test_run_error(const std::string& desc, const detail::test_run_error& err) override {
         progress_base::test_run_error(desc, err);
 
         std::stringstream ss;
@@ -228,7 +228,7 @@ namespace bandit {
         stm_.flush();
       }
 
-      void it_failed(const std::string& desc, const assertion_exception& ex) override {
+      void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         ++specs_failed_;
 
         std::stringstream ss;

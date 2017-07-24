@@ -3,14 +3,14 @@
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("crash_reporter:", [&]() {
+  describe("reporter::crash:", [&]() {
     std::stringstream stm;
-    std::unique_ptr<bd::crash_reporter> reporter;
+    std::unique_ptr<reporter::crash> reporter;
     failure_formatter::posix formatter;
 
     before_each([&]() {
       stm.str(std::string());
-      reporter = std::unique_ptr<bd::crash_reporter>(new bd::crash_reporter(stm, formatter));
+      reporter = std::unique_ptr<reporter::crash>(new reporter::crash(stm, formatter));
     });
 
     auto output = [&]() {
