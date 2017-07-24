@@ -2,7 +2,7 @@
 #define BANDIT_COLORED_REPORTER_H
 
 #include <ostream>
-#include <bandit/reporters/colorizer.h>
+#include <bandit/colorizers/colorizer.h>
 #include <bandit/reporters/progress_reporter.h>
 
 namespace bandit {
