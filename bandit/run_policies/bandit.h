@@ -1,19 +1,19 @@
-#ifndef BANDIT_BANDIT_RUN_POLICY_H
-#define BANDIT_BANDIT_RUN_POLICY_H
+#ifndef BANDIT_RUN_POLICIES_BANDIT_H
+#define BANDIT_RUN_POLICIES_BANDIT_H
 
 #include <bandit/filter_chain.h>
-#include <bandit/run_policies/run_policy.h>
+#include <bandit/run_policies/interface.h>
 
 namespace bandit {
-  namespace detail {
-    struct bandit_run_policy : public run_policy {
-      bandit_run_policy(filter_chain_t filter_chain,
+  namespace run_policy {
+    struct bandit : public interface {
+      bandit(detail::filter_chain_t filter_chain,
           bool break_on_failure, bool dry_run)
-          : run_policy(),
+          : interface(),
             filter_chain_(filter_chain),
             break_on_failure_(break_on_failure), dry_run_(dry_run) {}
 
-      bool should_run(const std::string& it_name, const contextstack_t& contexts) const override {
+      bool should_run(const std::string& it_name, const detail::contextstack_t& contexts) const override {
         if (dry_run_) {
           return false;
         }
@@ -42,8 +42,8 @@ namespace bandit {
       }
 
     private:
-      bool has_context_with_hard_skip(const contextstack_t& contexts) const {
-        contextstack_t::const_iterator it;
+      bool has_context_with_hard_skip(const detail::contextstack_t& contexts) const {
+        detail::contextstack_t::const_iterator it;
         for (it = contexts.begin(); it != contexts.end(); it++) {
           if ((*it)->hard_skip()) {
             return true;
@@ -53,7 +53,7 @@ namespace bandit {
         return false;
       }
 
-      bool context_matches_pattern(const contextstack_t& contexts, const std::string& pattern) const {
+      bool context_matches_pattern(const detail::contextstack_t& contexts, const std::string& pattern) const {
         for (auto context : contexts) {
           if (matches_pattern(context->name(), pattern)) {
             return true;
@@ -68,7 +68,7 @@ namespace bandit {
       }
 
     private:
-      const filter_chain_t filter_chain_;
+      const detail::filter_chain_t filter_chain_;
       bool break_on_failure_;
       bool dry_run_;
     };

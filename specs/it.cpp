@@ -20,7 +20,7 @@ go_bandit([]() {
       context = std::unique_ptr<fake_context>(new fake_context());
       contexts->push_back(context.get());
 
-      run_policy = bd::run_policy_ptr(new bd::always_run_policy());
+      run_policy = bd::run_policy_ptr(new run_policy::always());
     });
 
     auto call_it = [&]() {
@@ -299,7 +299,7 @@ go_bandit([]() {
       bool it_was_called;
 
       before_each([&]() {
-        run_policy = bd::run_policy_ptr(new bd::never_run_policy());
+        run_policy = bd::run_policy_ptr(new run_policy::never());
         it_func = [&]() { it_was_called = true; };
         it_was_called = false;
       });
@@ -325,7 +325,7 @@ go_bandit([]() {
 
       describe("with a policy that says to skip this it", [&]() {
         before_each([&]() {
-          run_policy = bd::run_policy_ptr(new bd::never_run_policy());
+          run_policy = bd::run_policy_ptr(new run_policy::never());
         });
 
         it("tells reporter it's skipped", [&]() {

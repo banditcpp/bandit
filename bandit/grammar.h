@@ -3,7 +3,7 @@
 
 #include <bandit/adapters.h>
 #include <bandit/reporters/reporters.h>
-#include <bandit/run_policies/run_policy.h>
+#include <bandit/run_policies.h>
 
 namespace bandit {
   inline void describe(const std::string& desc, detail::voidfunc_t func,
@@ -82,7 +82,7 @@ namespace bandit {
   inline void it(const std::string& desc, detail::voidfunc_t func, detail::listener& listener,
       detail::contextstack_t& context_stack,
       detail::assertion_adapter_t& assertion_adapter,
-      detail::run_policy& run_policy,
+      detail::run_policy_t& run_policy,
       bool hard_skip = false) {
     if (hard_skip || !run_policy.should_run(desc, context_stack)) {
       it_skip(desc, func, listener);

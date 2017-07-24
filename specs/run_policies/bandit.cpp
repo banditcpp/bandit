@@ -11,8 +11,8 @@ go_bandit([]() {
     bool break_on_failure;
     bool dry_run;
 
-    auto create_policy = [&]() -> bd::bandit_run_policy {
-      return bd::bandit_run_policy(*filter_chain, break_on_failure, dry_run);
+    auto create_policy = [&]() -> run_policy::bandit {
+      return run_policy::bandit(*filter_chain, break_on_failure, dry_run);
     };
 
     before_each([&]() {
@@ -31,7 +31,7 @@ go_bandit([]() {
       });
 
       it("always says run", [&]() {
-        bd::bandit_run_policy policy = create_policy();
+        run_policy::bandit policy = create_policy();
         AssertThat(policy.should_run("it name", *contextstack), IsTrue());
       });
 
@@ -41,12 +41,12 @@ go_bandit([]() {
         });
 
         it("says run if no failure has been encountered", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsTrue());
         });
 
         it("says don't run if a failure has been encountered", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           policy.encountered_failure();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
@@ -62,7 +62,7 @@ go_bandit([]() {
         });
 
         it("never runs", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
           AssertThat(policy.should_run("it name matches 'skip'", *contextstack), IsFalse());
           AssertThat(policy.should_run("it name matches 'only'", *contextstack), IsFalse());
@@ -84,7 +84,7 @@ go_bandit([]() {
         });
 
         it("never runs", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
       });
@@ -98,12 +98,12 @@ go_bandit([]() {
         });
 
         it("runs if spec's name doesn't match", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsTrue());
         });
 
         it("doesn't run if spec's name matches", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name matching 'skip'", *contextstack), IsFalse());
         });
       });
@@ -123,7 +123,7 @@ go_bandit([]() {
         });
 
         it("always runs", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsTrue());
         });
       });
@@ -137,12 +137,12 @@ go_bandit([]() {
         });
 
         it("doesn't run if spec's name doesn't match", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
 
         it("runs if spec's name matches", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name matching 'only'", *contextstack), IsTrue());
         });
       });
@@ -162,12 +162,12 @@ go_bandit([]() {
         });
 
         it("doesn't run if spec's name doesn't match 'only'", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
 
         it("runs if spec's name matches 'only'", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it matches 'only'", *contextstack), IsTrue());
         });
       });
@@ -181,12 +181,12 @@ go_bandit([]() {
         });
 
         it("doesn't run if spec's name doesn't match 'only'", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
 
         it("doesn't run if spec's name matches 'only'", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it matches 'only'", *contextstack), IsFalse());
         });
       });
@@ -200,12 +200,12 @@ go_bandit([]() {
         });
 
         it("runs if spec's name doesn't match anything", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsTrue());
         });
 
         it("doesn't run if spec's name matches 'skip'", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name matching 'skip'", *contextstack), IsFalse());
         });
       });
@@ -222,17 +222,17 @@ go_bandit([]() {
         });
 
         it("doesn't run if spec's name doesn't match anything", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name", *contextstack), IsFalse());
         });
 
         it("doesn't run if spec's name matches 'skip'", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name matching 'skip'", *contextstack), IsFalse());
         });
 
         it("doesn't run if spec's name matches 'only'", [&]() {
-          bd::bandit_run_policy policy = create_policy();
+          run_policy::bandit policy = create_policy();
           AssertThat(policy.should_run("it name matching 'only'", *contextstack), IsFalse());
         });
       });
@@ -249,23 +249,23 @@ go_bandit([]() {
       });
 
       it("runs if spec's name matches all 'only' but no 'skip'", [&]() {
-        bd::bandit_run_policy policy = create_policy();
+        run_policy::bandit policy = create_policy();
         AssertThat(policy.should_run("it name only1 only2", *contextstack), IsTrue());
       });
 
       it("doesn't run if spec's name matches one 'only' only", [&]() {
-        bd::bandit_run_policy policy = create_policy();
+        run_policy::bandit policy = create_policy();
         AssertThat(policy.should_run("it name only1", *contextstack), IsFalse());
         AssertThat(policy.should_run("it name only2", *contextstack), IsFalse());
       });
 
       it("doesn't run if spec's name does not match anything", [&]() {
-        bd::bandit_run_policy policy = create_policy();
+        run_policy::bandit policy = create_policy();
         AssertThat(policy.should_run("it name", *contextstack), IsFalse());
       });
 
       it("doesn't run if spec's name matches any of the 'skip'", [&]() {
-        bd::bandit_run_policy policy = create_policy();
+        run_policy::bandit policy = create_policy();
         AssertThat(policy.should_run("it name skip1", *contextstack), IsFalse());
         AssertThat(policy.should_run("it name skip2", *contextstack), IsFalse());
         AssertThat(policy.should_run("it name skip1 skip2", *contextstack), IsFalse());
@@ -274,7 +274,7 @@ go_bandit([]() {
       it("doesn't run if context contains any 'skip' but spec's name matches all 'only'", [&]() {
         std::unique_ptr<bd::context> current_context = std::unique_ptr<bd::context>(new bd::bandit_context("context matches 'skip1'", hard_skip));
         contextstack->push_back(current_context.get());
-        bd::bandit_run_policy policy = create_policy();
+        run_policy::bandit policy = create_policy();
         AssertThat(policy.should_run("it name only1 only2", *contextstack), IsFalse());
       });
     });

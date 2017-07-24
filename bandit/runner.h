@@ -5,13 +5,13 @@
 #include <bandit/registration/registrar.h>
 #include <bandit/reporters/reporters.h>
 #include <bandit/failure_formatters.h>
-#include <bandit/run_policies/run_policies.h>
+#include <bandit/run_policies.h>
 #include <bandit/version.h>
 
 namespace bandit {
   namespace detail {
     inline run_policy_ptr create_run_policy(const options& opt) {
-      return run_policy_ptr(new bandit_run_policy(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
+      return run_policy_ptr(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
     }
 
     inline listener_ptr create_reporter(const options& opt,
@@ -88,7 +88,7 @@ namespace bandit {
     detail::register_listener(reporter.get());
 
     detail::run_policy_ptr run_policy = create_run_policy(opt);
-    register_run_policy(run_policy.get());
+    detail::register_run_policy(run_policy.get());
 
     return run(opt, detail::specs(), detail::context_stack(), *reporter);
   }
