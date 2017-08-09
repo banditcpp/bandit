@@ -43,9 +43,9 @@
  * @brief This is the only file required to use The Lean Mean C++ Option Parser.
  *        Just \#include it and you're set.
  *
- * The Lean Mean C++ Option Parser handles the program's command line arguments 
+ * The Lean Mean C++ Option Parser handles the program's command line arguments
  * (argc, argv).
- * It supports the short and long option formats of getopt(), getopt_long() 
+ * It supports the short and long option formats of getopt(), getopt_long()
  * and getopt_long_only() but has a more convenient interface.
  * The following features set it apart from other option parsers:
  *
@@ -82,19 +82,21 @@
  *     @endcode
  *     </ul>
  * </ul> @n
- * Despite these features the code size remains tiny. 
+ * Despite these features the code size remains tiny.
  * It is smaller than <a href="http://uclibc.org">uClibc</a>'s GNU getopt() and just a
  * couple 100 bytes larger than uClibc's SUSv3 getopt(). @n
  * (This does not include the usage formatter, of course. But you don't have to use that.)
  *
  * @par Download:
  * Tarball with examples and test programs:
- * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.4.tar.gz/download">optionparser-1.4.tar.gz</a> @n
+ * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.5.tar.gz/download">optionparser-1.5.tar.gz</a> @n
  * Just the header (this is all you really need):
  * <a style="font-size:larger;font-weight:bold" href="http://optionparser.sourceforge.net/optionparser.h">optionparser.h</a>
  *
  * @par Changelog:
- * <b>Version 1.4:</b> Fixed 2 printUsage() bugs that messed up output with small COLUMNS values @n
+ * <b>Version 1.5:</b> Fixed 2 warnings about potentially uninitialized variables. @n
+ *                     Added const version of Option::next(). @n
+ * <b>Version 1.4:</b> Fixed 2 printUsage() bugs that messed up output with small COLUMNS values. @n
  * <b>Version 1.3:</b> Compatible with Microsoft Visual C++. @n
  * <b>Version 1.2:</b> Added @ref option::Option::namelen "Option::namelen" and removed the extraction
  *                     of short option characters into a special buffer. @n
@@ -113,6 +115,7 @@
  * @par Example program:
  * (Note: @c option::* identifiers are links that take you to their documentation.)
  * @code
+ * #error EXAMPLE SHORTENED FOR READABILITY. BETTER EXAMPLES ARE IN THE .TAR.GZ!
  * #include <iostream>
  * #include "optionparser.h"
  *
@@ -215,12 +218,15 @@
 #ifndef OPTIONPARSER_H_
 #define OPTIONPARSER_H_
 
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
+
 /** @brief The namespace of The Lean Mean C++ Option Parser. */
 namespace option
 {
 
 #ifdef _MSC_VER
-#include <intrin.h>
 #pragma intrinsic(_BitScanReverse)
 struct MSC_Builtin_CLZ
 {
@@ -663,6 +669,14 @@ public:
    * line.
    */
   Option* next()
+  {
+    return isLast() ? 0 : next_;
+  }
+
+  /**
+  * const version of Option::next().
+  */
+  const Option* next() const
   {
     return isLast() ? 0 : next_;
   }
@@ -1555,9 +1569,9 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
 
     do // loop over short options in group, for long options the body is executed only once
     {
-      int idx;
+      int idx = 0;
 
-      const char* optarg;
+      const char* optarg = 0;
 
       /******************** long option **********************/
       if (handle_short_options == false || try_single_minus_longopt)
@@ -1923,8 +1937,8 @@ struct PrintUsageImplementation
     int target_line_in_block; //!< Line index of the parts we should return to the user on this iteration.
     bool hit_target_line; //!< Flag whether we encountered a part with line index target_line_in_block in the current cell.
 
-    /** 
-     * @brief Determines the byte and character lengths of the part at @ref ptr and 
+    /**
+     * @brief Determines the byte and character lengths of the part at @ref ptr and
      * stores them in @ref len and @ref screenlen respectively.
      */
     void update_length()
