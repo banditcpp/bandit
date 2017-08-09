@@ -89,12 +89,14 @@
  *
  * @par Download:
  * Tarball with examples and test programs:
- * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.4.tar.gz/download">optionparser-1.4.tar.gz</a> @n
+ * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.5.tar.gz/download">optionparser-1.5.tar.gz</a> @n
  * Just the header (this is all you really need):
  * <a style="font-size:larger;font-weight:bold" href="http://optionparser.sourceforge.net/optionparser.h">optionparser.h</a>
  *
  * @par Changelog:
- * <b>Version 1.4:</b> Fixed 2 printUsage() bugs that messed up output with small COLUMNS values @n
+ * <b>Version 1.5:</b> Fixed 2 warnings about potentially uninitialized variables. @n
+ *                     Added const version of Option::next(). @n
+ * <b>Version 1.4:</b> Fixed 2 printUsage() bugs that messed up output with small COLUMNS values. @n
  * <b>Version 1.3:</b> Compatible with Microsoft Visual C++. @n
  * <b>Version 1.2:</b> Added @ref option::Option::namelen "Option::namelen" and removed the extraction
  *                     of short option characters into a special buffer. @n
@@ -113,6 +115,7 @@
  * @par Example program:
  * (Note: @c option::* identifiers are links that take you to their documentation.)
  * @code
+ * #error EXAMPLE SHORTENED FOR READABILITY. BETTER EXAMPLES ARE IN THE .TAR.GZ!
  * #include <iostream>
  * #include "optionparser.h"
  *
@@ -663,6 +666,14 @@ public:
    * line.
    */
   Option* next()
+  {
+    return isLast() ? 0 : next_;
+  }
+  
+  /**
+  * const version of Option::next().
+  */
+  const Option* next() const
   {
     return isLast() ? 0 : next_;
   }
@@ -1555,9 +1566,9 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
 
     do // loop over short options in group, for long options the body is executed only once
     {
-      int idx;
+      int idx = 0;
 
-      const char* optarg;
+      const char* optarg = 0;
 
       /******************** long option **********************/
       if (handle_short_options == false || try_single_minus_longopt)
