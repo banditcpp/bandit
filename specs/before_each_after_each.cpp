@@ -15,7 +15,7 @@ go_bandit([]() {
     });
 
     describe("before_each", [&]() {
-      bandit::detail::voidfunc_t before_each_fn;
+      std::function<void()> before_each_fn;
 
       before_each([&]() {
         before_each_fn = []() {};
@@ -28,7 +28,7 @@ go_bandit([]() {
     });
 
     describe("after_each", [&]() {
-      bandit::detail::voidfunc_t after_each_fn;
+      std::function<void()> after_each_fn;
 
       before_each([&]() {
         after_each_fn = []() {};

@@ -1,12 +1,12 @@
 #ifndef BANDIT_ADAPTERS_INTERFACE_H
 #define BANDIT_ADAPTERS_INTERFACE_H
 
-#include <bandit/types.h>
+#include <functional>
 
 namespace bandit {
   namespace adapter {
     struct interface {
-      virtual void adapt_exceptions(detail::voidfunc_t) = 0;
+      virtual void adapt_exceptions(std::function<void()>) = 0;
     };
   }
 

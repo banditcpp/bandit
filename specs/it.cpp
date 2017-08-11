@@ -7,7 +7,7 @@ namespace bd = bandit::detail;
 
 go_bandit([]() {
   describe("it:", [&]() {
-    bd::voidfunc_t it_func;
+    std::function<void()> it_func;
     fake_reporter_ptr reporter;
     std::unique_ptr<bandit::context::stack_t> contexts;
     std::unique_ptr<fake_context> context;

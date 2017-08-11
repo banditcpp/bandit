@@ -2,11 +2,11 @@
 #define BANDIT_SPEC_REGISTRY_H
 
 #include <list>
-#include <bandit/types.h>
+#include <functional>
 
 namespace bandit {
   namespace detail {
-    typedef std::list<voidfunc_t> spec_registry;
+    typedef std::list<std::function<void()>> spec_registry;
 
     inline detail::spec_registry& specs() {
       static detail::spec_registry registry;

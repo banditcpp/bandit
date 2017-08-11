@@ -3,12 +3,11 @@
 #include <specs/specs.h>
 
 using namespace bandit::fakes;
-namespace bd = bandit::detail;
 
 SPEC_BEGIN(describe)
 
 describe("describe:", []() {
-  bandit::detail::voidfunc_t describe_fn;
+  std::function<void()> describe_fn;
   fake_reporter_ptr reporter;
   std::unique_ptr<bandit::context::stack_t> context_stack;
   std::unique_ptr<fake_context> global_context;

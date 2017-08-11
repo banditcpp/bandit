@@ -3,9 +3,9 @@
 
 #include <algorithm>
 #include <deque>
+#include <functional>
 #include <list>
 #include <string>
-#include <bandit/types.h>
 #include <bandit/test_run_error.h>
 
 namespace bandit {

@@ -8,7 +8,7 @@
 namespace bandit {
   namespace adapter {
     struct snowhouse : public interface {
-      void adapt_exceptions(detail::voidfunc_t func) override {
+      void adapt_exceptions(std::function<void()> func) override {
         try {
           func();
         } catch (const ::snowhouse::AssertionException& ex) {
