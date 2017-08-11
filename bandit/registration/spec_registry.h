@@ -6,7 +6,7 @@
 
 namespace bandit {
   namespace detail {
-    typedef std::list<std::function<void()>> spec_registry;
+    using spec_registry = std::list<std::function<void()>>;
 
     inline detail::spec_registry& specs() {
       static detail::spec_registry registry;

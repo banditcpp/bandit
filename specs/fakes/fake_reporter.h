@@ -61,7 +61,8 @@ namespace bandit {
     private:
       bool test_run_status_;
     };
-    typedef std::unique_ptr<fake_reporter> fake_reporter_ptr;
+
+    using fake_reporter_ptr = std::unique_ptr<fake_reporter>;
   }
 }
 #endif

@@ -33,8 +33,8 @@ namespace bandit {
       }
     }
 
-    typedef std::function<reporter_ptr(const std::string&, const failure_formatter_t*)> reporter_factory_fn;
-    typedef std::function<detail::reporter_t*(detail::reporter_t*)> register_reporter_fn;
+    using reporter_factory_fn = std::function<reporter_ptr(const std::string&, const failure_formatter_t*)>;
+    using register_reporter_fn = std::function<detail::reporter_t*(detail::reporter_t*)>;
 
     inline failure_formatter_ptr create_formatter(const options& opt) {
       switch (opt.formatter()) {
