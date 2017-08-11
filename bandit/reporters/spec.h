@@ -2,7 +2,7 @@
 #define BANDIT_REPORTERS_SPEC_H
 
 #include <bandit/reporters/colored_base.h>
-#include <bandit/reporters/test_run_summary.h>
+#include <bandit/reporters/summary.h>
 
 namespace bandit {
   namespace reporter {
@@ -23,9 +23,8 @@ namespace bandit {
 
         stm_ << std::endl;
 
-        test_run_summary summary(specs_run_, specs_failed_, specs_succeeded_, specs_skipped_, failures_,
+        summary::write(stm_, specs_run_, specs_failed_, specs_succeeded_, specs_skipped_, failures_,
             test_run_errors_, colorizer_);
-        summary.write(stm_);
         stm_.flush();
       }
 
