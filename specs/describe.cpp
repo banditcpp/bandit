@@ -10,13 +10,13 @@ SPEC_BEGIN(describe)
 describe("describe:", []() {
   bandit::detail::voidfunc_t describe_fn;
   fake_reporter_ptr reporter;
-  std::unique_ptr<bd::contextstack_t> context_stack;
+  std::unique_ptr<bandit::context::stack_t> context_stack;
   std::unique_ptr<fake_context> global_context;
 
   before_each([&]() {
     reporter = fake_reporter_ptr(new fake_reporter());
 
-    context_stack = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
+    context_stack = std::unique_ptr<bandit::context::stack_t>(new bandit::context::stack_t());
 
     global_context = std::unique_ptr<fake_context>(new fake_context());
     context_stack->push_back(global_context.get());

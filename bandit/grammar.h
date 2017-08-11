@@ -7,13 +7,13 @@
 
 namespace bandit {
   inline void describe(const std::string& desc, detail::voidfunc_t func,
-      detail::reporter_t& reporter, detail::contextstack_t& context_stack,
+      detail::reporter_t& reporter, context::stack_t& context_stack,
       bool hard_skip = false) {
     reporter.context_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
-    detail::bandit_context ctxt(desc, hard_skip);
+    context::bandit ctxt(desc, hard_skip);
 
     context_stack.push_back(&ctxt);
 
@@ -29,41 +29,41 @@ namespace bandit {
   }
 
   inline void describe(const std::string& desc, detail::voidfunc_t func, bool hard_skip = false) {
-    describe(desc, func, detail::registered_reporter(), detail::context_stack(), hard_skip);
+    describe(desc, func, detail::registered_reporter(), context::stack(), hard_skip);
   }
 
   inline void describe_skip(const std::string& desc, detail::voidfunc_t func,
-      detail::reporter_t& reporter, detail::contextstack_t& context_stack) {
+      detail::reporter_t& reporter, context::stack_t& context_stack) {
     describe(desc, func, reporter, context_stack, true);
   }
 
   inline void describe_skip(const std::string& desc, detail::voidfunc_t func) {
     describe_skip(desc, func, detail::registered_reporter(),
-        detail::context_stack());
+        context::stack());
   }
 
   inline void xdescribe(const std::string& desc, detail::voidfunc_t func,
       detail::reporter_t& reporter = detail::registered_reporter(),
-      detail::contextstack_t& context_stack = detail::context_stack()) {
+      context::stack_t& context_stack = context::stack()) {
     describe_skip(desc, func, reporter, context_stack);
   }
 
   inline void before_each(detail::voidfunc_t func,
-      detail::contextstack_t& context_stack) {
+      context::stack_t& context_stack) {
     context_stack.back()->register_before_each(func);
   }
 
   inline void before_each(detail::voidfunc_t func) {
-    before_each(func, detail::context_stack());
+    before_each(func, context::stack());
   }
 
   inline void after_each(detail::voidfunc_t func,
-      detail::contextstack_t& context_stack) {
+      context::stack_t& context_stack) {
     context_stack.back()->register_after_each(func);
   }
 
   inline void after_each(detail::voidfunc_t func) {
-    after_each(func, detail::context_stack());
+    after_each(func, context::stack());
   }
 
   inline void it_skip(const std::string& desc, detail::voidfunc_t, detail::reporter_t& reporter) {
@@ -80,7 +80,7 @@ namespace bandit {
   }
 
   inline void it(const std::string& desc, detail::voidfunc_t func, detail::reporter_t& reporter,
-      detail::contextstack_t& context_stack,
+      context::stack_t& context_stack,
       detail::assertion_adapter_t& assertion_adapter,
       detail::run_policy_t& run_policy,
       bool hard_skip = false) {
@@ -118,7 +118,7 @@ namespace bandit {
     };
 
     bool success = false;
-    detail::context* last_successful_before_each_context = nullptr;
+    context::interface* last_successful_before_each_context = nullptr;
     try_with_adapter(true, [&] {
       for (auto context : context_stack) {
         context->run_before_eaches();
@@ -131,7 +131,7 @@ namespace bandit {
 
     try_with_adapter(success, [&] {
       bool do_run_after_each = false;
-      std::for_each(context_stack.rbegin(), context_stack.rend(), [&](detail::context* context) {
+      std::for_each(context_stack.rbegin(), context_stack.rend(), [&](context::interface* context) {
         if (context == last_successful_before_each_context) {
           do_run_after_each = true;
         }
@@ -147,7 +147,7 @@ namespace bandit {
   }
 
   inline void it(const std::string& desc, detail::voidfunc_t func, bool hard_skip = false) {
-    it(desc, func, detail::registered_reporter(), detail::context_stack(),
+    it(desc, func, detail::registered_reporter(), context::stack(),
         detail::registered_adapter(), detail::registered_run_policy(), hard_skip);
   }
 }

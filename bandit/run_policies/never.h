@@ -6,7 +6,7 @@
 namespace bandit {
   namespace run_policy {
     struct never : public interface {
-      bool should_run(const std::string&, const detail::contextstack_t&) const override {
+      bool should_run(const std::string&, const context::stack_t&) const override {
         return false;
       }
     };

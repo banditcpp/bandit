@@ -19,7 +19,7 @@ namespace bandit {
 
       virtual ~interface() {}
 
-      virtual bool should_run(const std::string& it_name, const detail::contextstack_t& contexts) const = 0;
+      virtual bool should_run(const std::string& it_name, const context::stack_t& contexts) const = 0;
 
       virtual void encountered_failure() {
         encountered_failure_ = true;

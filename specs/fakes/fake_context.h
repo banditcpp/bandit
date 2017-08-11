@@ -6,7 +6,7 @@
 
 namespace bandit {
   namespace fakes {
-    struct fake_context : public bandit::detail::context, public bandit::specs::logging_fake {
+    struct fake_context : public bandit::context::interface, public bandit::specs::logging_fake {
       fake_context()
           : hard_skip_(false), name_("fake_context"),
             custom_after_each_([]() {}), custom_before_each_([]() {}) {}

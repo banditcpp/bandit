@@ -9,14 +9,14 @@ go_bandit([]() {
   describe("it:", [&]() {
     bd::voidfunc_t it_func;
     fake_reporter_ptr reporter;
-    std::unique_ptr<bd::contextstack_t> contexts;
+    std::unique_ptr<bandit::context::stack_t> contexts;
     std::unique_ptr<fake_context> context;
     adapter::snowhouse assertion_adapter;
     bd::run_policy_ptr run_policy;
 
     before_each([&]() {
       reporter = fake_reporter_ptr(new fake_reporter());
-      contexts = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
+      contexts = std::unique_ptr<bandit::context::stack_t>(new bandit::context::stack_t());
       context = std::unique_ptr<fake_context>(new fake_context());
       contexts->push_back(context.get());
 
