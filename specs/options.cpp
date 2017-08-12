@@ -1,7 +1,7 @@
 #include <specs/util/argv_helper.h>
 #include <specs/specs.h>
 
-using namespace bandit::specs::util;
+using namespace specs::util;
 namespace bd = bandit::detail;
 
 struct error_collector {

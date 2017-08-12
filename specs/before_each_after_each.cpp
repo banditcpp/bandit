@@ -1,16 +1,14 @@
 #include <specs/fakes/fake_context.h>
 #include <specs/specs.h>
 
-namespace bf = bandit::fakes;
-
 go_bandit([]() {
   describe("before_each/after_each", [&]() {
-    std::unique_ptr<bandit::context::stack_t> context_stack;
-    std::unique_ptr<bf::fake_context> context;
+    std::unique_ptr<context::stack_t> context_stack;
+    std::unique_ptr<fakes::fake_context> context;
 
     before_each([&]() {
-      context = std::unique_ptr<bf::fake_context>(new bf::fake_context());
-      context_stack = std::unique_ptr<bandit::context::stack_t>(new bandit::context::stack_t());
+      context = std::unique_ptr<fakes::fake_context>(new fakes::fake_context());
+      context_stack = std::unique_ptr<context::stack_t>(new context::stack_t());
       context_stack->push_back(context.get());
     });
 
@@ -43,7 +41,7 @@ go_bandit([]() {
 
   describe("before_each/after_each integration", [&]() {
     describe("multiple before_each/after_each on the same level", [&] {
-      bandit::specs::logging_fake logger;
+      specs::logging_fake logger;
 
       before_each([&]() {
         logger.log() << "first before_each called" << std::endl;
@@ -76,7 +74,7 @@ go_bandit([]() {
     });
 
     describe("multiple before_each/after_each in different levels", [&] {
-      bandit::specs::logging_fake logger;
+      specs::logging_fake logger;
 
       before_each([&] {
         logger.log() << "1b";

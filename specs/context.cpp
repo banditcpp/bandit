@@ -1,8 +1,8 @@
 #include <specs/specs.h>
 
 go_bandit([]() {
-  describe("bandit_context:", [&]() {
-    std::unique_ptr<bandit::context::bandit> context;
+  describe("context::bandit", [&]() {
+    std::unique_ptr<context::bandit> context;
 
     before_each([&]() {
       bool hard_skip = false;

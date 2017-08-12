@@ -9,7 +9,7 @@ go_bandit([]() {
   describe("it:", [&]() {
     std::function<void()> it_func;
     fake_reporter_ptr reporter;
-    std::unique_ptr<bandit::context::stack_t> contexts;
+    std::unique_ptr<context::stack_t> contexts;
     std::unique_ptr<fake_context> context;
     adapter::snowhouse assertion_adapter;
     bd::run_policy_ptr run_policy;
