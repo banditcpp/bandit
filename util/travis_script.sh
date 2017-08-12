@@ -3,7 +3,8 @@
 
 case "$BUILD_TYPE" in
 check)
-	./util/check_header_guards.sh
+	./util/check_header_guards.sh &&
+	./util/check_selfsufficiency.sh
 	;;
 normal|codecov)
 	make -C build
