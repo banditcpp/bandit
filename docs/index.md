@@ -25,7 +25,7 @@ using namespace bandit;
 // Tell bandit there are tests here.
 go_bandit([]() {
   // We're describing how a fuzzbox works.
-  describe("fuzzbox:", []() {
+  describe("fuzzbox", []() {
     guitar_ptr guitar;
     fuzzbox_ptr fuzzbox;
 

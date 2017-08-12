@@ -6,7 +6,7 @@ using namespace bandit::fakes;
 
 SPEC_BEGIN(describe)
 
-describe("describe:", []() {
+describe("describe", []() {
   std::function<void()> describe_fn;
   fake_reporter_ptr reporter;
   std::unique_ptr<bandit::context::stack_t> context_stack;

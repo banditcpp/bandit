@@ -1,7 +1,7 @@
 #include <specs/specs.h>
 
 go_bandit([]() {
-  describe("colorizer: ", [&]() {
+  describe("colorizer", [&]() {
 #if !defined(_WIN32) || defined(BANDIT_CONFIG_COLOR_ANSI)
     describe("colors enabled", [&]() {
       bandit::detail::colorizer colorizer;

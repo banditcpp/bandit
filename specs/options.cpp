@@ -64,7 +64,7 @@ static void choice_tests(std::string&& optname, ENUM unknown,
 }
 
 go_bandit([]() {
-  describe("options:", [&]() {
+  describe("options", [&]() {
     describe("with valid options", [&] {
       it("parses the '--help' option", [&]() {
         options opt({"--help"});

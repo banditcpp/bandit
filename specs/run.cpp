@@ -8,7 +8,7 @@ using namespace specs::util;
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("run:", [&]() {
+  describe("run", [&]() {
     std::unique_ptr<bd::spec_registry> specs;
     std::unique_ptr<argv_helper> argv;
     fake_reporter_ptr reporter;

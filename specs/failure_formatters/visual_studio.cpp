@@ -2,7 +2,7 @@
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("Visual Studio failure formatter:", [&]() {
+  describe("Visual Studio failure formatter", [&]() {
     failure_formatter::visual_studio formatter;
 
     it("formats assertions with file and line number", [&]() {

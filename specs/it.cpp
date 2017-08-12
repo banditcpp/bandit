@@ -6,7 +6,7 @@ using namespace bandit::fakes;
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("it:", [&]() {
+  describe("it", [&]() {
     std::function<void()> it_func;
     fake_reporter_ptr reporter;
     std::unique_ptr<context::stack_t> contexts;
