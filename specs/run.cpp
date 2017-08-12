@@ -2,8 +2,8 @@
 #include <specs/util/argv_helper.h>
 #include <specs/specs.h>
 
-using namespace bandit::fakes;
-using namespace bandit::specs::util;
+using namespace fakes;
+using namespace specs::util;
 
 namespace bd = bandit::detail;
 
@@ -12,11 +12,11 @@ go_bandit([]() {
     std::unique_ptr<bd::spec_registry> specs;
     std::unique_ptr<argv_helper> argv;
     fake_reporter_ptr reporter;
-    std::unique_ptr<bd::contextstack_t> context_stack;
+    std::unique_ptr<context::stack_t> context_stack;
 
     auto call_run = [&]() -> int {
       bd::options opt(argv->argc(), argv->argv());
-      return bandit::run(opt, *specs, *context_stack, *reporter);
+      return run(opt, *specs, *context_stack, *reporter);
     };
 
     before_each([&]() {
@@ -24,7 +24,7 @@ go_bandit([]() {
 
       reporter = fake_reporter_ptr(new fake_reporter());
 
-      context_stack = std::unique_ptr<bd::contextstack_t>(new bd::contextstack_t());
+      context_stack = std::unique_ptr<context::stack_t>(new context::stack_t());
 
       argv = std::unique_ptr<argv_helper>(new argv_helper({}));
     });

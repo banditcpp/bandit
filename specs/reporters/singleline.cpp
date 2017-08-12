@@ -2,16 +2,16 @@
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("single line reporter", [&]() {
+  describe("reporter::singleline", [&]() {
     std::stringstream stm;
-    std::unique_ptr<bd::single_line_reporter> reporter;
-    bd::default_failure_formatter formatter;
+    std::unique_ptr<reporter::singleline> reporter;
+    failure_formatter::posix formatter;
     bd::colorizer colorizer(false);
 
     before_each([&]() {
       stm.str(std::string());
-      reporter = std::unique_ptr<bd::single_line_reporter>(
-          new bd::single_line_reporter(stm, formatter, colorizer));
+      reporter = std::unique_ptr<reporter::singleline>(
+          new reporter::singleline(stm, formatter, colorizer));
     });
 
     auto output = [&]() { return stm.str(); };

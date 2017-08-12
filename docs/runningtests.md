@@ -20,7 +20,7 @@ Options:
   --reporter=<reporter>,   Select reporter: crash, dots, singleline, xunit,
                            info, spec
   --no-color,              Suppress colors in output
-  --formatter=<formatter>, Select error formatter: default, vs
+  --formatter=<formatter>, Select error formatter: posix, vs
   --skip=<substring>,      Skip all 'describe' and 'it' containing substring
   --only=<substring>,      Run only 'describe' and 'it' containing substring
   --break-on-failure,      Stop test run on first failing test
@@ -100,16 +100,16 @@ With the `--formatter=<formatter>` option you can specify how bandit reports
 failed assertions. Different IDEs expect errors to be reported in different
 ways to be able to quickly navigate to the location of a failed assertion.
 
-#### `--formatter=default`
+#### `--formatter=posix`
 
-The default formatter reports errors as
+The POSIX formatter reports errors as
 
 ```
 <filename>:<line>: <error message>
 ```
 
 This matches how gcc and clang reports errors.
-As the name indicates, this formatter is the default.
+This formatter is the default.
 
 #### `--formatter=vs`
 

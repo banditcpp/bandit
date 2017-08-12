@@ -21,7 +21,7 @@ namespace fuzzbox {
     sounds sound_;
   };
 
-  typedef std::unique_ptr<fuzzbox> fuzzbox_ptr;
+  using fuzzbox_ptr = std::unique_ptr<fuzzbox>;
 
   struct guitar {
     void add_effect(fuzzbox* effect) {
@@ -36,7 +36,7 @@ namespace fuzzbox {
     fuzzbox* effect_;
   };
 
-  typedef std::unique_ptr<guitar> guitar_ptr;
+  using guitar_ptr = std::unique_ptr<guitar>;
 }
 
 using namespace fuzzbox;

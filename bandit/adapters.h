@@ -5,9 +5,9 @@
 
 namespace bandit {
   namespace detail {
-    inline bandit::adapters::assertion_adapter& registered_adapter() {
-      static bandit::adapters::snowhouse_adapter adapter;
-      return adapter;
+    inline assertion_adapter_t& registered_adapter() {
+      static adapter::snowhouse default_adapter;
+      return default_adapter;
     }
   }
 }

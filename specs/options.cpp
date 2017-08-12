@@ -1,7 +1,7 @@
 #include <specs/util/argv_helper.h>
 #include <specs/specs.h>
 
-using namespace bandit::specs::util;
+using namespace specs::util;
 namespace bd = bandit::detail;
 
 struct error_collector {
@@ -200,7 +200,7 @@ go_bandit([]() {
       choice_tests<bd::options::formatters>("formatter",
           bd::options::formatters::UNKNOWN, {
             {"vs", bd::options::formatters::VS},
-            {"default", bd::options::formatters::DEFAULT},
+            {"posix", bd::options::formatters::POSIX},
           }, [&](const bd::options& opt) {
             return opt.formatter();
           });

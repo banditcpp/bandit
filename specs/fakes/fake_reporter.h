@@ -6,7 +6,7 @@
 
 namespace bandit {
   namespace fakes {
-    struct fake_reporter : public bandit::detail::listener,
+    struct fake_reporter : public bandit::detail::reporter_t,
                            public bandit::specs::logging_fake {
       fake_reporter() : test_run_status_(true) {}
 
@@ -61,7 +61,8 @@ namespace bandit {
     private:
       bool test_run_status_;
     };
-    typedef std::unique_ptr<fake_reporter> fake_reporter_ptr;
+
+    using fake_reporter_ptr = std::unique_ptr<fake_reporter>;
   }
 }
 #endif

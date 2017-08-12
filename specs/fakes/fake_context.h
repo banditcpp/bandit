@@ -6,7 +6,7 @@
 
 namespace bandit {
   namespace fakes {
-    struct fake_context : public bandit::detail::context, public bandit::specs::logging_fake {
+    struct fake_context : public bandit::context::interface, public bandit::specs::logging_fake {
       fake_context()
           : hard_skip_(false), name_("fake_context"),
             custom_after_each_([]() {}), custom_before_each_([]() {}) {}
@@ -20,11 +20,11 @@ namespace bandit {
         log() << "execution_is_starting" << std::endl;
       }
 
-      void register_before_each(detail::voidfunc_t) {
+      void register_before_each(std::function<void()>) {
         log() << "register_before_each" << std::endl;
       }
 
-      void register_after_each(detail::voidfunc_t) {
+      void register_after_each(std::function<void()>) {
         log() << "register_after_each" << std::endl;
       }
 
@@ -43,19 +43,19 @@ namespace bandit {
         return hard_skip_;
       }
 
-      void with_after_each(detail::voidfunc_t call) {
+      void with_after_each(std::function<void()> call) {
         custom_after_each_ = call;
       }
 
-      void with_before_each(detail::voidfunc_t call) {
+      void with_before_each(std::function<void()> call) {
         custom_before_each_ = call;
       }
 
     private:
       bool hard_skip_;
       std::string name_;
-      detail::voidfunc_t custom_after_each_;
-      detail::voidfunc_t custom_before_each_;
+      std::function<void()> custom_after_each_;
+      std::function<void()> custom_before_each_;
     };
   }
 }

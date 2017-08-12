@@ -3,52 +3,52 @@
 
 #include <bandit/options.h>
 #include <bandit/registration/registrar.h>
-#include <bandit/reporters/reporters.h>
-#include <bandit/failure_formatters/failure_formatters.h>
-#include <bandit/run_policies/run_policies.h>
+#include <bandit/reporters.h>
+#include <bandit/failure_formatters.h>
+#include <bandit/run_policies.h>
 #include <bandit/version.h>
 
 namespace bandit {
   namespace detail {
     inline run_policy_ptr create_run_policy(const options& opt) {
-      return run_policy_ptr(new bandit_run_policy(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
+      return run_policy_ptr(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
     }
 
-    inline listener_ptr create_reporter(const options& opt,
-        const failure_formatter* formatter, const colorizer& colorizer) {
+    inline reporter_ptr create_reporter(const options& opt,
+        const failure_formatter_t* formatter, const colorizer& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
-        return listener_ptr(new single_line_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::singleline(*formatter, colorizer));
       case options::reporters::XUNIT:
-        return listener_ptr(new xunit_reporter(*formatter));
+        return reporter_ptr(new bandit::reporter::xunit(*formatter));
       case options::reporters::INFO:
-        return listener_ptr(new info_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::info(*formatter, colorizer));
       case options::reporters::SPEC:
-        return listener_ptr(new spec_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::spec(*formatter, colorizer));
       case options::reporters::CRASH:
-        return listener_ptr(new crash_reporter(*formatter));
+        return reporter_ptr(new bandit::reporter::crash(*formatter));
       case options::reporters::DOTS:
       default:
-        return listener_ptr(new dots_reporter(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::dots(*formatter, colorizer));
       }
     }
 
-    typedef std::function<listener_ptr(const std::string&, const failure_formatter*)> reporter_factory_fn;
-    typedef std::function<detail::listener*(detail::listener*)> register_reporter_fn;
+    using reporter_factory_fn = std::function<reporter_ptr(const std::string&, const failure_formatter_t*)>;
+    using register_reporter_fn = std::function<detail::reporter_t*(detail::reporter_t*)>;
 
     inline failure_formatter_ptr create_formatter(const options& opt) {
       switch (opt.formatter()) {
       case options::formatters::VS:
-        return failure_formatter_ptr(new visual_studio_failure_formatter());
-      case options::formatters::DEFAULT:
+        return failure_formatter_ptr(new failure_formatter::visual_studio());
+      case options::formatters::POSIX:
       default:
-        return failure_formatter_ptr(new default_failure_formatter());
+        return failure_formatter_ptr(new failure_formatter::posix());
       }
     }
   }
 
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
-      detail::contextstack_t& context_stack, detail::listener& listener) {
+      context::stack_t& context_stack, detail::reporter_t& reporter) {
     if (opt.help() || !opt.parsed_ok()) {
       opt.print_usage();
       return !opt.parsed_ok();
@@ -59,19 +59,19 @@ namespace bandit {
       return 0;
     }
 
-    listener.test_run_starting();
+    reporter.test_run_starting();
 
     bool hard_skip = false;
-    detail::bandit_context global_context("", hard_skip);
+    context::bandit global_context("", hard_skip);
     context_stack.push_back(&global_context);
 
     for (auto func : specs) {
       func();
     };
 
-    listener.test_run_complete();
+    reporter.test_run_complete();
 
-    return listener.did_we_pass() ? 0 : 1;
+    return reporter.did_we_pass() ? 0 : 1;
   }
 
   inline int run(int argc, char* argv[], bool allow_further = true) {
@@ -83,14 +83,14 @@ namespace bandit {
     }
     detail::failure_formatter_ptr formatter(create_formatter(opt));
     bandit::detail::colorizer colorizer(!opt.no_color());
-    detail::listener_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
+    detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
-    detail::register_listener(reporter.get());
+    detail::register_reporter(reporter.get());
 
     detail::run_policy_ptr run_policy = create_run_policy(opt);
-    register_run_policy(run_policy.get());
+    detail::register_run_policy(run_policy.get());
 
-    return run(opt, detail::specs(), detail::context_stack(), *reporter);
+    return run(opt, detail::specs(), context::stack(), *reporter);
   }
 }
 #endif
