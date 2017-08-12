@@ -1,5 +1,5 @@
-#ifndef BANDIT_REGISTRAR_H
-#define BANDIT_REGISTRAR_H
+#ifndef BANDIT_REGISTRATION_REGISTRAR_H
+#define BANDIT_REGISTRATION_REGISTRAR_H
 
 #include <bandit/registration/spec_registry.h>
 
