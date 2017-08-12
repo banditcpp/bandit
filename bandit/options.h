@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include <bandit/external/optionparser.h>
-#include <bandit/filter_chain.h>
+#include <bandit/run_policies/filter_chain.h>
 
 namespace bandit {
   namespace detail {
@@ -217,7 +217,7 @@ namespace bandit {
         return get_enumerator_from_string(argument::formatter_list(), options_[FORMATTER].arg);
       }
 
-      const filter_chain_t& filter_chain() const {
+      const run_policy::filter_chain_t& filter_chain() const {
         return filter_chain_;
       }
 
@@ -291,7 +291,7 @@ namespace bandit {
 
     private:
       std::vector<option::Option> options_;
-      filter_chain_t filter_chain_;
+      run_policy::filter_chain_t filter_chain_;
       bool parsed_ok_;
       bool has_further_arguments_;
       bool has_unknown_options_;

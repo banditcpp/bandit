@@ -1,12 +1,12 @@
 #include <specs/specs.h>
 
 go_bandit([]() {
-  namespace bd = bandit::detail;
+  using bandit::run_policy::filter_chain_t;
 
   describe("bandit run policy", [&]() {
     std::unique_ptr<bandit::context::stack_t> contextstack;
     std::unique_ptr<bandit::context::interface> global_context;
-    std::unique_ptr<bd::filter_chain_t> filter_chain(new bd::filter_chain_t);
+    std::unique_ptr<filter_chain_t> filter_chain(new filter_chain_t);
     bool hard_skip;
     bool break_on_failure;
     bool dry_run;
@@ -27,7 +27,7 @@ go_bandit([]() {
 
     describe("neither skip nor only specified", [&]() {
       before_each([&]() {
-        filter_chain.reset(new bd::filter_chain_t);
+        filter_chain.reset(new filter_chain_t);
       });
 
       it("always says run", [&]() {
@@ -72,7 +72,7 @@ go_bandit([]() {
 
     describe("'skip' specified, 'only' unspecified", [&]() {
       before_each([&]() {
-        filter_chain.reset(new bd::filter_chain_t{{"skip", true}});
+        filter_chain.reset(new filter_chain_t{{"skip", true}});
       });
 
       describe("current context matches 'skip'", [&]() {
@@ -111,7 +111,7 @@ go_bandit([]() {
 
     describe("'only' specified, 'skip' unspecified", [&]() {
       before_each([&]() {
-        filter_chain.reset(new bd::filter_chain_t{{"only", false}});
+        filter_chain.reset(new filter_chain_t{{"only", false}});
       });
 
       describe("current context matches 'only'", [&]() {
@@ -150,7 +150,7 @@ go_bandit([]() {
 
     describe("'skip' specified, 'only' specified", [&]() {
       before_each([&]() {
-        filter_chain.reset(new bd::filter_chain_t{{"skip", true}, {"only", false}});
+        filter_chain.reset(new filter_chain_t{{"skip", true}, {"only", false}});
       });
 
       describe("current context doesn't match anything", [&]() {
@@ -240,7 +240,7 @@ go_bandit([]() {
 
     describe("multiple 'skip' and 'only' specified", [&]() {
       before_each([&]() {
-        filter_chain.reset(new bd::filter_chain_t{
+        filter_chain.reset(new filter_chain_t{
             {"skip1", true},
             {"only1", false},
             {"skip2", true},

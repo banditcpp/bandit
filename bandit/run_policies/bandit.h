@@ -1,13 +1,13 @@
 #ifndef BANDIT_RUN_POLICIES_BANDIT_H
 #define BANDIT_RUN_POLICIES_BANDIT_H
 
-#include <bandit/filter_chain.h>
+#include <bandit/run_policies/filter_chain.h>
 #include <bandit/run_policies/interface.h>
 
 namespace bandit {
   namespace run_policy {
     struct bandit : public interface {
-      bandit(detail::filter_chain_t filter_chain,
+      bandit(filter_chain_t filter_chain,
           bool break_on_failure, bool dry_run)
           : interface(),
             filter_chain_(filter_chain),
@@ -68,7 +68,7 @@ namespace bandit {
       }
 
     private:
-      const detail::filter_chain_t filter_chain_;
+      const filter_chain_t filter_chain_;
       bool break_on_failure_;
       bool dry_run_;
     };
