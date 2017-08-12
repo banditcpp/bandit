@@ -1,8 +1,8 @@
 #!/bin/sh
-# Script that is run by .travis.yml's after_success
+# Script that is run by .travis.yml's after_success step
 
-if [ "$BUILD_TYPE" = codecov ]
-then
+case "$BUILD_TYPE" in
+codecov)
 	echo "Collecting coverage information"
 	lcov --directory . --capture --output-file coverage.info &&
 	lcov --remove coverage.info '/usr/*' --output-file coverage.info &&
@@ -10,7 +10,11 @@ then
 
 	echo "Sending information to codecov.io"
 	curl -s https://codecov.io/bash | bash
-else
-	echo "Nothing to do"
-fi
-exit
+	;;
+check|normal)
+	;;
+*)
+	echo "BUILD_TYPE \"$BUILD_TYPE\" not set or unknown." >&2
+	exit 1
+	;;
+esac

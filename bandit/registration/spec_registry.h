@@ -1,5 +1,5 @@
-#ifndef BANDIT_SPEC_REGISTRY_H
-#define BANDIT_SPEC_REGISTRY_H
+#ifndef BANDIT_REGISTRATION_SPEC_REGISTRY_H
+#define BANDIT_REGISTRATION_SPEC_REGISTRY_H
 
 #include <list>
 #include <functional>
