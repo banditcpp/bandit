@@ -13,6 +13,7 @@ addons:
 
 matrix:
   include:
+    - env: BUILD_TYPE=check
     - compiler: gcc
       env: BUILD_TYPE=codecov
     - compiler: clang
@@ -21,7 +22,7 @@ matrix:
 before_script:
   - util/travis_before_script.sh
 script:
-  - make -C build
+  - util/travis_script.sh
 after_success:
   - util/travis_after_success.sh
 
