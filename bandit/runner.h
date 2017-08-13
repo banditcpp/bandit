@@ -15,21 +15,21 @@ namespace bandit {
     }
 
     inline reporter_ptr create_reporter(const options& opt,
-        const failure_formatter_t* formatter, const colorizer_t& colorizer) {
+        const failure_formatter_t& formatter, const colorizer_t& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
-        return reporter_ptr(new bandit::reporter::singleline(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::singleline(formatter, colorizer));
       case options::reporters::XUNIT:
-        return reporter_ptr(new bandit::reporter::xunit(*formatter));
+        return reporter_ptr(new bandit::reporter::xunit(formatter));
       case options::reporters::INFO:
-        return reporter_ptr(new bandit::reporter::info(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::info(formatter, colorizer));
       case options::reporters::SPEC:
-        return reporter_ptr(new bandit::reporter::spec(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::spec(formatter, colorizer));
       case options::reporters::CRASH:
-        return reporter_ptr(new bandit::reporter::crash(*formatter));
+        return reporter_ptr(new bandit::reporter::crash(formatter));
       case options::reporters::DOTS:
       default:
-        return reporter_ptr(new bandit::reporter::dots(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::dots(formatter, colorizer));
       }
     }
 
@@ -91,9 +91,10 @@ namespace bandit {
 
     detail::failure_formatter_ptr formatter(create_formatter(opt));
     detail::colorizer_ptr colorizer(create_colorizer(opt));
-    detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), *colorizer));
+    detail::reporter_ptr reporter(create_reporter(opt, *formatter, *colorizer));
+    detail::run_policy_ptr run_policy(create_run_policy(opt));
+
     detail::register_reporter(reporter.get());
-    detail::run_policy_ptr run_policy = create_run_policy(opt);
     detail::register_run_policy(run_policy.get());
 
     return run(opt, detail::specs(), context::stack(), *reporter);
