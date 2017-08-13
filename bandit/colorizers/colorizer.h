@@ -4,27 +4,27 @@
 #include <bandit/colorizers/backend.h>
 
 namespace bandit {
-  namespace detail {
-    struct colorizer : private bandit::colorizer::backend {
-      colorizer(bool colors_enabled = true) : backend(colors_enabled) {}
+  namespace colorizer {
+    struct light : private backend {
+      light(bool colors_enabled = true) : backend(colors_enabled) {}
 
-      const std::string green() const {
+      const std::string good() const {
         return backend::green();
       }
 
-      const std::string yellow() const {
+      const std::string neutral() const {
         return backend::yellow();
       }
 
-      const std::string blue() const {
+      const std::string info() const {
         return backend::blue();
       }
 
-      const std::string red() const {
+      const std::string bad() const {
         return backend::red();
       }
 
-      const std::string white() const {
+      const std::string emphasize() const {
         return backend::white();
       }
 
@@ -32,6 +32,10 @@ namespace bandit {
         return backend::reset();
       }
     };
+  }
+
+  namespace detail {
+    using colorizer_t = ::bandit::colorizer::light;
   }
 }
 #endif

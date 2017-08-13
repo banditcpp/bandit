@@ -15,7 +15,7 @@ namespace bandit {
     }
 
     inline reporter_ptr create_reporter(const options& opt,
-        const failure_formatter_t* formatter, const colorizer& colorizer) {
+        const failure_formatter_t* formatter, const colorizer_t& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
         return reporter_ptr(new bandit::reporter::singleline(*formatter, colorizer));
@@ -82,7 +82,7 @@ namespace bandit {
       return 1;
     }
     detail::failure_formatter_ptr formatter(create_formatter(opt));
-    bandit::detail::colorizer colorizer(!opt.no_color());
+    detail::colorizer_t colorizer(!opt.no_color());
     detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
     detail::register_reporter(reporter.get());

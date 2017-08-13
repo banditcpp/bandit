@@ -14,9 +14,9 @@ namespace bandit {
       static void write(std::ostream& stm,
           int specs_run, int specs_failed, int specs_succeeded, int specs_skipped,
           const std::list<std::string>& failures, const std::list<std::string>& errors,
-          const detail::colorizer& colorizer) {
+          const detail::colorizer_t& colorizer) {
         if (specs_run == 0 && errors.size() == 0) {
-          stm << colorizer.red()
+          stm << colorizer.bad()
               << "Could not find any tests."
               << colorizer.reset()
               << std::endl;
@@ -24,7 +24,7 @@ namespace bandit {
         }
 
         if (specs_failed == 0 && errors.size() == 0) {
-          stm << colorizer.green()
+          stm << colorizer.good()
               << "Success!"
               << colorizer.reset()
               << std::endl;
@@ -37,7 +37,7 @@ namespace bandit {
         }
 
         if (specs_failed > 0) {
-          stm << colorizer.red()
+          stm << colorizer.bad()
               << "There were failures!"
               << colorizer.reset() << std::endl;
           for (const auto& failure : failures) {

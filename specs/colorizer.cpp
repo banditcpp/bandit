@@ -1,18 +1,19 @@
 #include <specs/specs.h>
 
 go_bandit([]() {
-  describe("colorizer", [&]() {
+  describe("colorizer::light", [&]() {
 #if !defined(_WIN32) || defined(BANDIT_CONFIG_COLOR_ANSI)
     describe("colors enabled", [&]() {
-      bandit::detail::colorizer colorizer;
+      colorizer::light colorizer;
 
-      it("can set color to green", [&]() {
-        AssertThat(colorizer.green(), Equals("\033[1;32m"));
+      it("sets 'good' color to green", [&]() {
+        AssertThat(colorizer.good(), Equals("\033[1;32m"));
       });
 
-      it("set color to red", [&]() {
-        AssertThat(colorizer.red(), Equals("\033[1;31m"));
+      it("sets 'bad' color to red", [&]() {
+        AssertThat(colorizer.bad(), Equals("\033[1;31m"));
       });
+
       it("resets color", [&]() {
         AssertThat(colorizer.reset(), Equals("\033[0m"));
       });
@@ -20,14 +21,14 @@ go_bandit([]() {
 #endif
 
     describe("colors disabled", [&]() {
-      bandit::detail::colorizer colorizer(false);
+      colorizer::light colorizer(false);
 
-      it("ignores setting color to green", [&]() {
-        AssertThat(colorizer.green(), Equals(""));
+      it("ignores setting 'good' color", [&]() {
+        AssertThat(colorizer.good(), Equals(""));
       });
 
-      it("ignores setting color to red", [&]() {
-        AssertThat(colorizer.red(), Equals(""));
+      it("ignores setting 'bad' color", [&]() {
+        AssertThat(colorizer.bad(), Equals(""));
       });
 
       it("ignores resetting colors", [&]() {

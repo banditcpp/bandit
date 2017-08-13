@@ -8,11 +8,11 @@ namespace bandit {
   namespace reporter {
     struct singleline : public colored_base {
       singleline(std::ostream& stm, const detail::failure_formatter_t& formatter,
-          const detail::colorizer& colorizer)
+          const detail::colorizer_t& colorizer)
           : colored_base(stm, formatter, colorizer) {}
 
       singleline(const detail::failure_formatter_t& formatter,
-          const detail::colorizer& colorizer)
+          const detail::colorizer_t& colorizer)
           : singleline(std::cout, formatter, colorizer) {}
 
       singleline& operator=(const singleline&) {
@@ -66,7 +66,7 @@ namespace bandit {
         if (specs_failed_) {
           stm_
               << " " << specs_succeeded_ << " succeeded. "
-              << colorizer_.red() << specs_failed_ << " failed."
+              << colorizer_.bad() << specs_failed_ << " failed."
               << colorizer_.reset();
         }
         stm_.flush();
