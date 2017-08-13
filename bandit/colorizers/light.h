@@ -1,5 +1,5 @@
-#ifndef BANDIT_COLORIZERS_COLORIZER_H
-#define BANDIT_COLORIZERS_COLORIZER_H
+#ifndef BANDIT_COLORIZERS_LIGHT_H
+#define BANDIT_COLORIZERS_LIGHT_H
 
 #include <bandit/colorizers/backend.h>
 #include <bandit/colorizers/interface.h>
