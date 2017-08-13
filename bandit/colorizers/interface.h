@@ -1,6 +1,7 @@
 #ifndef BANDIT_COLORIZERS_INTERFACE_H
 #define BANDIT_COLORIZERS_INTERFACE_H
 
+#include <memory>
 #include <string>
 
 namespace bandit {
@@ -17,6 +18,7 @@ namespace bandit {
 
   namespace detail {
     using colorizer_t = ::bandit::colorizer::interface;
+    using colorizer_ptr = std::unique_ptr<colorizer_t>;
   }
 }
 #endif

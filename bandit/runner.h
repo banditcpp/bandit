@@ -45,6 +45,13 @@ namespace bandit {
         return failure_formatter_ptr(new failure_formatter::posix());
       }
     }
+
+    inline colorizer_ptr create_colorizer(const options& opt) {
+      if (opt.no_color()) {
+        return colorizer_ptr(new colorizer::off());
+      }
+      return colorizer_ptr(new colorizer::light());
+    }
   }
 
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
@@ -81,12 +88,11 @@ namespace bandit {
       opt.print_usage();
       return 1;
     }
+
     detail::failure_formatter_ptr formatter(create_formatter(opt));
-    colorizer::light colorizer(!opt.no_color());
-    detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
-
+    detail::colorizer_ptr colorizer(create_colorizer(opt));
+    detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), *colorizer));
     detail::register_reporter(reporter.get());
-
     detail::run_policy_ptr run_policy = create_run_policy(opt);
     detail::register_run_policy(run_policy.get());
 

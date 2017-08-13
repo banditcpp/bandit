@@ -15,53 +15,39 @@ namespace bandit {
   namespace colorizer {
     struct backend {
 #if defined(_WIN32) && !defined(BANDIT_CONFIG_COLOR_ANSI)
-      backend(bool colors_enabled = true)
-          : colors_enabled_(colors_enabled),
-            stdout_handle_(GetStdHandle(STD_OUTPUT_HANDLE)) {
+      backend() : stdout_handle_(GetStdHandle(STD_OUTPUT_HANDLE)) {
         background_color_ = original_color_ = get_console_color();
         background_color_ &= BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY;
       }
 
       const std::string green() const {
-        if (colors_enabled_) {
-          set_console_color(FOREGROUND_GREEN | FOREGROUND_INTENSITY | background_color_);
-        }
+        set_console_color(FOREGROUND_GREEN | FOREGROUND_INTENSITY | background_color_);
         return "";
       }
 
       const std::string yellow() const {
-        if (colors_enabled_) {
-          set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY | background_color_);
-        }
+        set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY | background_color_);
         return "";
       }
 
       const std::string blue() const {
-        if (colors_enabled_) {
-          set_console_color(FOREGROUND_BLUE | FOREGROUND_INTENSITY | background_color_);
-        }
+        set_console_color(FOREGROUND_BLUE | FOREGROUND_INTENSITY | background_color_);
         return "";
       }
 
       const std::string red() const {
-        if (colors_enabled_) {
-          set_console_color(FOREGROUND_RED | FOREGROUND_INTENSITY | background_color_);
-        }
+        set_console_color(FOREGROUND_RED | FOREGROUND_INTENSITY | background_color_);
         return "";
       }
 
       const std::string white() const {
-        if (colors_enabled_) {
-          set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
-              FOREGROUND_INTENSITY | background_color_);
-        }
+        set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
+            FOREGROUND_INTENSITY | background_color_);
         return "";
       }
 
       const std::string reset() const {
-        if (colors_enabled_) {
-          set_console_color(original_color_);
-        }
+        set_console_color(original_color_);
         return "";
       }
 
@@ -77,39 +63,33 @@ namespace bandit {
       }
 
     private:
-      bool colors_enabled_;
       HANDLE stdout_handle_;
       WORD original_color_;
       WORD background_color_;
 #else
-      backend(bool colors_enabled = true) : colors_enabled_(colors_enabled) {}
-
       const std::string green() const {
-        return colors_enabled_ ? "\033[1;32m" : "";
+        return "\033[1;32m";
       }
 
       const std::string yellow() const {
-        return colors_enabled_ ? "\033[1;33m" : "";
+        return "\033[1;33m";
       }
 
       const std::string blue() const {
-        return colors_enabled_ ? "\033[1;34m" : "";
+        return "\033[1;34m";
       }
 
       const std::string red() const {
-        return colors_enabled_ ? "\033[1;31m" : "";
+        return "\033[1;31m";
       }
 
       const std::string white() const {
-        return colors_enabled_ ? "\033[1;37m" : "";
+        return "\033[1;37m";
       }
 
       const std::string reset() const {
-        return colors_enabled_ ? "\033[0m" : "";
+        return "\033[0m";
       }
-
-    private:
-      bool colors_enabled_;
 #endif
     };
   }

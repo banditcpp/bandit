@@ -1,34 +1,33 @@
-#ifndef BANDIT_COLORIZERS_LIGHT_H
-#define BANDIT_COLORIZERS_LIGHT_H
+#ifndef BANDIT_COLORIZERS_OFF_H
+#define BANDIT_COLORIZERS_OFF_H
 
-#include <bandit/colorizers/backend.h>
 #include <bandit/colorizers/interface.h>
 
 namespace bandit {
   namespace colorizer {
-    struct light : interface, private backend {
+    struct off : interface {
       const std::string good() const override {
-        return backend::green();
+        return "";
       }
 
       const std::string neutral() const override {
-        return backend::yellow();
+        return "";
       }
 
       const std::string info() const override {
-        return backend::blue();
+        return "";
       }
 
       const std::string bad() const override {
-        return backend::red();
+        return "";
       }
 
       const std::string emphasize() const override {
-        return backend::white();
+        return "";
       }
 
       const std::string reset() const override {
-        return backend::reset();
+        return "";
       }
     };
   }

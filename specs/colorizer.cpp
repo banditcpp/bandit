@@ -1,9 +1,9 @@
 #include <specs/specs.h>
 
 go_bandit([]() {
-  describe("colorizer::light", [&]() {
+  describe("colorizers", [&]() {
 #if !defined(_WIN32) || defined(BANDIT_CONFIG_COLOR_ANSI)
-    describe("colors enabled", [&]() {
+    describe("colorizer::light", [&]() {
       colorizer::light colorizer;
 
       it("sets 'good' color to green", [&]() {
@@ -20,8 +20,8 @@ go_bandit([]() {
     });
 #endif
 
-    describe("colors disabled", [&]() {
-      colorizer::light colorizer(false);
+    describe("colorizer::off", [&]() {
+      colorizer::off colorizer;
 
       it("ignores setting 'good' color", [&]() {
         AssertThat(colorizer.good(), Equals(""));
