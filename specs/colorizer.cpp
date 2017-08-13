@@ -6,12 +6,24 @@ go_bandit([]() {
     describe("colorizer::light", [&]() {
       colorizer::light colorizer;
 
+      it("sets 'bad' color to red", [&]() {
+        AssertThat(colorizer.bad(), Equals("\033[1;31m"));
+      });
+
       it("sets 'good' color to green", [&]() {
         AssertThat(colorizer.good(), Equals("\033[1;32m"));
       });
 
-      it("sets 'bad' color to red", [&]() {
-        AssertThat(colorizer.bad(), Equals("\033[1;31m"));
+      it("sets 'neutral' color to yellow", [&]() {
+        AssertThat(colorizer.neutral(), Equals("\033[1;33m"));
+      });
+
+      it("sets 'info' color to blue", [&]() {
+        AssertThat(colorizer.info(), Equals("\033[1;34m"));
+      });
+
+      it("emphasizes using color white", [&]() {
+        AssertThat(colorizer.emphasize(), Equals("\033[1;37m"));
       });
 
       it("resets color", [&]() {
@@ -29,6 +41,18 @@ go_bandit([]() {
 
       it("ignores setting 'bad' color", [&]() {
         AssertThat(colorizer.bad(), Equals(""));
+      });
+
+      it("ignores setting 'neutral' color", [&]() {
+        AssertThat(colorizer.good(), Equals(""));
+      });
+
+      it("ignores setting 'info' color", [&]() {
+        AssertThat(colorizer.good(), Equals(""));
+      });
+
+      it("ignores emphasizing", [&]() {
+        AssertThat(colorizer.good(), Equals(""));
       });
 
       it("ignores resetting colors", [&]() {
