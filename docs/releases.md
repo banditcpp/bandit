@@ -11,6 +11,9 @@ In the following, we list breaking changes per major release.
 
 * The `default` formatter is renamed to `posix`.
 
+* The `--no-color` option is replaced by `--colorizer=off`. It now can be
+  understood as choosing the `off` color theme instead of turning colors off.
+
 * In prior versions, an error was raised in case no tests were available
   or all tests were skipped. Now the exit code is `0` in these cases because
   no tests are failing.

@@ -47,10 +47,13 @@ namespace bandit {
     }
 
     inline colorizer_ptr create_colorizer(const options& opt) {
-      if (opt.no_color()) {
+      switch (opt.colorizer()) {
+      case options::colorizers::OFF:
         return colorizer_ptr(new colorizer::off());
+      case options::colorizers::LIGHT:
+      default:
+        return colorizer_ptr(new colorizer::light());
       }
-      return colorizer_ptr(new colorizer::light());
     }
   }
 

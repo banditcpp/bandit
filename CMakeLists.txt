@@ -45,7 +45,7 @@ endif()
 if (BANDIT_BUILD_SPECS AND BANDIT_RUN_SPECS)
     add_custom_command(TARGET bandit-specs
                        POST_BUILD
-                       COMMAND bandit-specs --no-color --reporter=dots
+                       COMMAND bandit-specs --colorizer=off --reporter=dots
                        WORKING_DIRECTORY ./bin)
 elseif (BANDIT_RUN_SPECS)
     message(WARNING "Unable to run Bandit specs - set:\n  option(BANDIT_BUILD_SPECS, \"Build the Bandit specs\" ON)\nand clear your CMake cache")

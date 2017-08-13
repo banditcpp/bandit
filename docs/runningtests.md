@@ -19,7 +19,7 @@ Options:
   --help,                  Print usage and exit.
   --reporter=<reporter>,   Select reporter: crash, dots, singleline, xunit,
                            info, spec
-  --no-color,              Suppress colors in output
+  --colorizer=<colorizer>, Select color theme: off, light
   --formatter=<formatter>, Select error formatter: posix, vs
   --skip=<substring>,      Skip all 'describe' and 'it' containing substring
   --only=<substring>,      Run only 'describe' and 'it' containing substring
@@ -124,7 +124,7 @@ errors to be reported, as
 
 By default, bandit uses colors to highlight the status of the current test run.
 In certain IDEs or when running tests in continuous integration environment, this
-may look ugly. By specifying `--no-color` you can tell bandit to stop using colors.
+may look ugly. By specifying `--colorizer=off` you can tell bandit to stop using colors.
 
 ## Tweaking the behavior
 
