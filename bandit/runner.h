@@ -82,7 +82,7 @@ namespace bandit {
       return 1;
     }
     detail::failure_formatter_ptr formatter(create_formatter(opt));
-    detail::colorizer_t colorizer(!opt.no_color());
+    colorizer::light colorizer(!opt.no_color());
     detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
 
     detail::register_reporter(reporter.get());
