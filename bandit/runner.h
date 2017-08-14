@@ -50,6 +50,8 @@ namespace bandit {
       switch (opt.colorizer()) {
       case options::colorizers::OFF:
         return colorizer_ptr(new colorizer::off());
+      case options::colorizers::DARK:
+        return colorizer_ptr(new colorizer::dark());
       case options::colorizers::LIGHT:
       default:
         return colorizer_ptr(new colorizer::light());

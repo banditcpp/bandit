@@ -30,6 +30,35 @@ go_bandit([]() {
         AssertThat(colorizer.reset(), Equals("\033[0m"));
       });
     });
+
+    describe("colorizer::dark", [&]() {
+      colorizer::backend color;
+      colorizer::dark colorizer;
+
+      it("sets 'bad' color to dark red", [&]() {
+        AssertThat(colorizer.bad(), Equals(color.dark_red()));
+      });
+
+      it("sets 'good' color to dark green", [&]() {
+        AssertThat(colorizer.good(), Equals(color.dark_green()));
+      });
+
+      it("sets 'neutral' color to brown", [&]() {
+        AssertThat(colorizer.neutral(), Equals(color.brown()));
+      });
+
+      it("sets 'info' color to dark blue", [&]() {
+        AssertThat(colorizer.info(), Equals(color.dark_blue()));
+      });
+
+      it("emphasizes using color dark gray", [&]() {
+        AssertThat(colorizer.emphasize(), Equals(color.dark_gray()));
+      });
+
+      it("resets color", [&]() {
+        AssertThat(colorizer.reset(), Equals(color.reset()));
+      });
+    });
 #endif
 
     describe("colorizer::off", [&]() {

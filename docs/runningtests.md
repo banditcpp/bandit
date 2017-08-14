@@ -19,7 +19,7 @@ Options:
   --help,                  Print usage and exit.
   --reporter=<reporter>,   Select reporter: crash, dots, singleline, xunit,
                            info, spec
-  --colorizer=<colorizer>, Select color theme: off, light
+  --colorizer=<colorizer>, Select color theme: off, light, dark
   --formatter=<formatter>, Select error formatter: posix, vs
   --skip=<substring>,      Skip all 'describe' and 'it' containing substring
   --only=<substring>,      Run only 'describe' and 'it' containing substring
@@ -122,9 +122,23 @@ errors to be reported, as
 
 ### Colors
 
-By default, bandit uses colors to highlight the status of the current test run.
-In certain IDEs or when running tests in continuous integration environment, this
-may look ugly. By specifying `--colorizer=off` you can tell bandit to stop using colors.
+Bandit uses colors to highlight the status of the current test run.
+
+#### `--colorizer=off`
+
+Turns colors off.
+In certain IDEs or when running tests in continuous integration environment,
+colors might be ugly or are not supported and you just see the underlying escape
+sequences.
+
+#### `--colorizer=light`
+
+Uses a color theme with light colors for dark backgrounds.
+This is the default.
+
+#### `--colorizer=dark`
+
+Uses a color theme with dark colors for light backgrounds.
 
 ## Tweaking the behavior
 

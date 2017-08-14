@@ -20,8 +20,18 @@ namespace bandit {
         background_color_ &= BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY;
       }
 
+      const std::string dark_green() const {
+        set_console_color(FOREGROUND_GREEN | background_color_);
+        return "";
+      }
+
       const std::string green() const {
         set_console_color(FOREGROUND_GREEN | FOREGROUND_INTENSITY | background_color_);
+        return "";
+      }
+
+      const std::string brown() const {
+        set_console_color(FOREGROUND_RED | FOREGROUND_GREEN | background_color_);
         return "";
       }
 
@@ -30,13 +40,28 @@ namespace bandit {
         return "";
       }
 
+      const std::string dark_blue() const {
+        set_console_color(FOREGROUND_BLUE | FOREGROUND_INTENSITY | background_color_);
+        return "";
+      }
+
       const std::string blue() const {
         set_console_color(FOREGROUND_BLUE | FOREGROUND_INTENSITY | background_color_);
         return "";
       }
 
+      const std::string dark_red() const {
+        set_console_color(FOREGROUND_RED | background_color_);
+        return "";
+      }
+
       const std::string red() const {
         set_console_color(FOREGROUND_RED | FOREGROUND_INTENSITY | background_color_);
+        return "";
+      }
+
+      const std::string dark_gray() const {
+        set_console_color(FOREGROUND_INTENSITY | background_color_);
         return "";
       }
 
@@ -67,20 +92,40 @@ namespace bandit {
       WORD original_color_;
       WORD background_color_;
 #else
+      const std::string dark_green() const {
+        return "\033[0;32m";
+      }
+
       const std::string green() const {
         return "\033[1;32m";
+      }
+
+      const std::string brown() const {
+        return "\033[0;33m";
       }
 
       const std::string yellow() const {
         return "\033[1;33m";
       }
 
+      const std::string dark_blue() const {
+        return "\033[0;34m";
+      }
+
       const std::string blue() const {
         return "\033[1;34m";
       }
 
+      const std::string dark_red() const {
+        return "\033[0;31m";
+      }
+
       const std::string red() const {
         return "\033[1;31m";
+      }
+
+      const std::string dark_gray() const {
+        return "\033[1;30m";
       }
 
       const std::string white() const {

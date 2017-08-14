@@ -73,6 +73,7 @@ namespace bandit {
       enum class colorizers {
         OFF,
         LIGHT,
+        DARK,
         UNKNOWN
       };
 
@@ -115,6 +116,7 @@ namespace bandit {
           return {
               {colorizers::OFF, "off"},
               {colorizers::LIGHT, "light"},
+              {colorizers::DARK, "dark"},
           };
         }
 
