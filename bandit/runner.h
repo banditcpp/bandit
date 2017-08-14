@@ -15,21 +15,21 @@ namespace bandit {
     }
 
     inline reporter_ptr create_reporter(const options& opt,
-        const failure_formatter_t* formatter, const colorizer& colorizer) {
+        const failure_formatter_t& formatter, const colorizer_t& colorizer) {
       switch (opt.reporter()) {
       case options::reporters::SINGLELINE:
-        return reporter_ptr(new bandit::reporter::singleline(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::singleline(formatter, colorizer));
       case options::reporters::XUNIT:
-        return reporter_ptr(new bandit::reporter::xunit(*formatter));
+        return reporter_ptr(new bandit::reporter::xunit(formatter));
       case options::reporters::INFO:
-        return reporter_ptr(new bandit::reporter::info(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::info(formatter, colorizer));
       case options::reporters::SPEC:
-        return reporter_ptr(new bandit::reporter::spec(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::spec(formatter, colorizer));
       case options::reporters::CRASH:
-        return reporter_ptr(new bandit::reporter::crash(*formatter));
+        return reporter_ptr(new bandit::reporter::crash(formatter));
       case options::reporters::DOTS:
       default:
-        return reporter_ptr(new bandit::reporter::dots(*formatter, colorizer));
+        return reporter_ptr(new bandit::reporter::dots(formatter, colorizer));
       }
     }
 
@@ -43,6 +43,18 @@ namespace bandit {
       case options::formatters::POSIX:
       default:
         return failure_formatter_ptr(new failure_formatter::posix());
+      }
+    }
+
+    inline colorizer_ptr create_colorizer(const options& opt) {
+      switch (opt.colorizer()) {
+      case options::colorizers::OFF:
+        return colorizer_ptr(new colorizer::off());
+      case options::colorizers::DARK:
+        return colorizer_ptr(new colorizer::dark());
+      case options::colorizers::LIGHT:
+      default:
+        return colorizer_ptr(new colorizer::light());
       }
     }
   }
@@ -81,13 +93,13 @@ namespace bandit {
       opt.print_usage();
       return 1;
     }
+
     detail::failure_formatter_ptr formatter(create_formatter(opt));
-    bandit::detail::colorizer colorizer(!opt.no_color());
-    detail::reporter_ptr reporter(create_reporter(opt, formatter.get(), colorizer));
+    detail::colorizer_ptr colorizer(create_colorizer(opt));
+    detail::reporter_ptr reporter(create_reporter(opt, *formatter, *colorizer));
+    detail::run_policy_ptr run_policy(create_run_policy(opt));
 
     detail::register_reporter(reporter.get());
-
-    detail::run_policy_ptr run_policy = create_run_policy(opt);
     detail::register_run_policy(run_policy.get());
 
     return run(opt, detail::specs(), context::stack(), *reporter);

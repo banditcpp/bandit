@@ -6,7 +6,7 @@ go_bandit([]() {
     std::stringstream stm;
     std::unique_ptr<reporter::info> reporter;
     failure_formatter::posix formatter;
-    bd::colorizer colorizer(false);
+    colorizer::off colorizer;
 
     before_each([&]() {
       stm.str(std::string());

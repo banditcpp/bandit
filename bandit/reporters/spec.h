@@ -8,10 +8,10 @@ namespace bandit {
   namespace reporter {
     struct spec : public colored_base {
       spec(std::ostream& stm, const detail::failure_formatter_t& formatter,
-          const detail::colorizer& colorizer)
+          const detail::colorizer_t& colorizer)
           : colored_base(stm, formatter, colorizer), indentation_(0) {}
 
-      spec(const detail::failure_formatter_t& formatter, const detail::colorizer& colorizer)
+      spec(const detail::failure_formatter_t& formatter, const detail::colorizer_t& colorizer)
           : spec(std::cout, formatter, colorizer) {}
 
       spec& operator=(const spec&) {
@@ -60,7 +60,7 @@ namespace bandit {
 
       void it_succeeded(const std::string& desc) override {
         progress_base::it_succeeded(desc);
-        stm_ << colorizer_.green();
+        stm_ << colorizer_.good();
         stm_ << "OK";
         stm_ << colorizer_.reset();
         stm_ << std::endl;
@@ -69,7 +69,7 @@ namespace bandit {
 
       void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         progress_base::it_failed(desc, ex);
-        stm_ << colorizer_.red();
+        stm_ << colorizer_.bad();
         stm_ << "FAILED";
         stm_ << colorizer_.reset();
         stm_ << std::endl;
@@ -78,7 +78,7 @@ namespace bandit {
 
       void it_unknown_error(const std::string& desc) override {
         progress_base::it_unknown_error(desc);
-        stm_ << colorizer_.red();
+        stm_ << colorizer_.bad();
         stm_ << "ERROR";
         stm_ << colorizer_.reset();
         stm_ << std::endl;

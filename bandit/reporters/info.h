@@ -23,11 +23,11 @@ namespace bandit {
         int failed;
       };
 
-      info(std::ostream& stm, const detail::failure_formatter_t& formatter, const detail::colorizer& colorizer)
+      info(std::ostream& stm, const detail::failure_formatter_t& formatter, const detail::colorizer_t& colorizer)
           : colored_base(stm, formatter, colorizer),
             indentation_(0), not_yet_shown_(0), context_stack_() {}
 
-      info(const detail::failure_formatter_t& formatter, const detail::colorizer& colorizer)
+      info(const detail::failure_formatter_t& formatter, const detail::colorizer_t& colorizer)
           : info(std::cout, formatter, colorizer) {}
 
       info& operator=(const info&) {
@@ -37,27 +37,27 @@ namespace bandit {
       void list_failures_and_errors() {
         if (specs_failed_ > 0) {
           stm_
-              << colorizer_.red()
+              << colorizer_.bad()
               << "List of failures:"
               << std::endl;
           for (const auto& failure : failures_) {
             stm_
-                << colorizer_.white()
+                << colorizer_.emphasize()
                 << " (*) "
-                << colorizer_.red()
+                << colorizer_.bad()
                 << failure << std::endl;
           }
         }
         if (test_run_errors_.size() > 0) {
           stm_
-              << colorizer_.red()
+              << colorizer_.bad()
               << "List of run errors:"
               << std::endl;
           for (const auto& error : test_run_errors_) {
             stm_
-                << colorizer_.white()
+                << colorizer_.emphasize()
                 << " (*) "
-                << colorizer_.red()
+                << colorizer_.bad()
                 << error << std::endl;
           }
         }
@@ -65,30 +65,30 @@ namespace bandit {
 
       void summary() {
         stm_
-            << colorizer_.white()
+            << colorizer_.emphasize()
             << "Tests run: " << specs_run_
             << std::endl;
         if (specs_skipped_ > 0) {
           stm_
-              << colorizer_.yellow()
+              << colorizer_.neutral()
               << "Skipped: " << specs_skipped_
               << std::endl;
         }
         if (specs_succeeded_ > 0) {
           stm_
-              << colorizer_.green()
+              << colorizer_.good()
               << "Passed: " << specs_succeeded_
               << std::endl;
         }
         if (specs_failed_ > 0) {
           stm_
-              << colorizer_.red()
+              << colorizer_.bad()
               << "Failed: " << specs_failed_
               << std::endl;
         }
         if (test_run_errors_.size() > 0) {
           stm_
-              << colorizer_.red()
+              << colorizer_.bad()
               << "Errors: " << test_run_errors_.size()
               << std::endl;
         }
@@ -126,9 +126,9 @@ namespace bandit {
       void output_context_start_message() {
         stm_
             << indent()
-            << colorizer_.blue()
+            << colorizer_.info()
             << "begin "
-            << colorizer_.white()
+            << colorizer_.emphasize()
             << context_stack_.top().desc
             << colorizer_.reset()
             << std::endl;
@@ -170,23 +170,23 @@ namespace bandit {
         --indentation_;
         stm_
             << indent()
-            << colorizer_.blue()
+            << colorizer_.info()
             << "end "
             << colorizer_.reset()
             << context.desc;
         if (context.total > 0) {
           stm_
-              << colorizer_.white()
+              << colorizer_.emphasize()
               << " " << context.total << " total";
         }
         if (context.skipped > 0) {
           stm_
-              << colorizer_.yellow()
+              << colorizer_.neutral()
               << " " << context.skipped << " skipped";
         }
         if (context.failed > 0) {
           stm_
-              << colorizer_.red()
+              << colorizer_.bad()
               << " " << context.failed << " failed";
         }
         stm_ << colorizer_.reset() << std::endl;
@@ -206,7 +206,7 @@ namespace bandit {
         progress_base::it_starting(desc);
         stm_
             << indent()
-            << colorizer_.yellow()
+            << colorizer_.neutral()
             << "[ TEST ]"
             << colorizer_.reset()
             << " it " << desc;
@@ -220,7 +220,7 @@ namespace bandit {
         --indentation_;
         stm_
             << "\r" << indent()
-            << colorizer_.green()
+            << colorizer_.good()
             << "[ PASS ]"
             << colorizer_.reset()
             << " it " << desc
@@ -241,7 +241,7 @@ namespace bandit {
         --indentation_;
         stm_
             << "\r" << indent()
-            << colorizer_.red()
+            << colorizer_.bad()
             << "[ FAIL ]"
             << colorizer_.reset()
             << " it " << desc
@@ -261,7 +261,7 @@ namespace bandit {
         --indentation_;
         stm_
             << "\r" << indent()
-            << colorizer_.red()
+            << colorizer_.bad()
             << "-ERROR->"
             << colorizer_.reset()
             << " it " << desc

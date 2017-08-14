@@ -78,12 +78,6 @@ go_bandit([]() {
         all_ok(opt);
       });
 
-      it("parses the '--no-color' option", [&]() {
-        options opt({"--no-color"});
-        AssertThat(opt.no_color(), IsTrue());
-        all_ok(opt);
-      });
-
       it("parses the '--skip=\"substring\"' option once", [&]() {
         options opt({"--skip=substring"});
         AssertThat(opt.filter_chain(), HasLength(1));
@@ -148,10 +142,6 @@ go_bandit([]() {
         AssertThat(opt.version(), IsFalse());
       });
 
-      it("cannot find '--no-color'", [&]() {
-        AssertThat(opt.no_color(), IsFalse());
-      });
-
       it("cannot find '--break-on-failure'", [&]() {
         AssertThat(opt.break_on_failure(), IsFalse());
       });
@@ -185,11 +175,10 @@ go_bandit([]() {
 
       it("ignores unknown options and arguments", [&] {
         options opt({"--unknown-option", "--formatter=vs", "--reporter", "xunit",
-            "--no-color", "unknown-argument", "--dry-run"});
+            "unknown-argument", "--dry-run"});
         AssertThat(opt.parsed_ok(), IsTrue());
         AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
         AssertThat(opt.reporter(), Equals(bd::options::reporters::XUNIT));
-        AssertThat(opt.no_color(), IsTrue());
         AssertThat(opt.dry_run(), IsFalse());
         AssertThat(opt.has_further_arguments(), IsTrue());
         AssertThat(opt.has_unknown_options(), IsTrue());
@@ -213,6 +202,13 @@ go_bandit([]() {
             {"xunit", bd::options::reporters::XUNIT},
           }, [&](const bd::options& opt) {
             return opt.reporter();
+          });
+      choice_tests<bd::options::colorizers>("colorizer",
+          bd::options::colorizers::UNKNOWN, {
+            {"off", bd::options::colorizers::OFF},
+            {"light", bd::options::colorizers::LIGHT},
+          }, [&](const bd::options& opt) {
+            return opt.colorizer();
           });
     });
 

@@ -70,6 +70,13 @@ namespace bandit {
         };
       };
 
+      enum class colorizers {
+        OFF,
+        LIGHT,
+        DARK,
+        UNKNOWN
+      };
+
       enum class formatters {
         POSIX,
         VS,
@@ -102,6 +109,14 @@ namespace bandit {
           return {
               {formatters::POSIX, "posix"},
               {formatters::VS, "vs"},
+          };
+        }
+
+        static const argstrs<colorizers> colorizer_list() {
+          return {
+              {colorizers::OFF, "off"},
+              {colorizers::LIGHT, "light"},
+              {colorizers::DARK, "dark"},
           };
         }
 
@@ -146,6 +161,10 @@ namespace bandit {
             status = option::ARG_ILLEGAL;
           }
           return status;
+        }
+
+        static option::ArgStatus Colorizer(const option::Option& option, bool msg) {
+          return OneOf(option, msg, colorizer_list());
         }
 
         static option::ArgStatus Reporter(const option::Option& option, bool msg) {
@@ -209,8 +228,8 @@ namespace bandit {
         return get_enumerator_from_string(argument::reporter_list(), options_[REPORTER].arg);
       }
 
-      bool no_color() const {
-        return options_[NO_COLOR] != nullptr;
+      colorizers colorizer() const {
+        return get_enumerator_from_string(argument::colorizer_list(), options_[COLORIZER].arg);
       }
 
       formatters formatter() const {
@@ -246,7 +265,7 @@ namespace bandit {
         VERSION,
         HELP,
         REPORTER,
-        NO_COLOR,
+        COLORIZER,
         FORMATTER,
         SKIP,
         ONLY,
@@ -262,6 +281,8 @@ namespace bandit {
       static const option::Descriptor* usage() {
         static std::string reporter_help = append_list("  --reporter=<reporter>, "
             "\tSelect reporter", argument::reporter_list());
+        static std::string colorizer_help = append_list("  --colorizer=<colorizer>, "
+            "\tSelect color theme", argument::colorizer_list());
         static std::string formatter_help = append_list("  --formatter=<formatter>, "
             "\tSelect error formatter", argument::formatter_list());
         static const option::Descriptor usage[] = {
@@ -273,8 +294,7 @@ namespace bandit {
             {HELP, 0, "", "help", argument::None,
                 "  --help, \tPrint usage and exit."},
             {REPORTER, 0, "", "reporter", argument::Reporter, reporter_help.c_str()},
-            {NO_COLOR, 0, "", "no-color", argument::None,
-                "  --no-color, \tSuppress colors in output"},
+            {COLORIZER, 0, "", "colorizer", argument::Colorizer, colorizer_help.c_str()},
             {FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help.c_str()},
             {SKIP, 0, "", "skip", argument::Required,
                 "  --skip=<substring>, \tSkip all 'describe' and 'it' containing substring"},
