@@ -8,23 +8,23 @@ namespace bandit {
   namespace colorizer {
     struct light : interface, private backend {
       const std::string good() const override {
-        return backend::green();
+        return green();
       }
 
       const std::string neutral() const override {
-        return backend::yellow();
+        return yellow();
       }
 
       const std::string info() const override {
-        return backend::blue();
+        return blue();
       }
 
       const std::string bad() const override {
-        return backend::red();
+        return red();
       }
 
       const std::string emphasize() const override {
-        return backend::white();
+        return white();
       }
 
       const std::string reset() const override {
