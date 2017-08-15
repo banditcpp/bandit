@@ -231,7 +231,7 @@ go_bandit([]() {
         AssertThat(output(), Contains("(*) context nested context fails:\nsome_file:123: assertion failed!"));
       });
 
-      it("reports a failed test run", [&]() {
+      it("does not end successfully", [&]() {
         AssertThat(reporter->did_we_pass(), IsFalse());
       });
     });
@@ -258,7 +258,7 @@ go_bandit([]() {
         AssertThat(output(), Contains("Tests run: 0\nErrors: 1"));
       });
 
-      it("does not end succesful", [&]() {
+      it("does not end succesfully", [&]() {
         AssertThat(reporter->did_we_pass(), IsFalse());
       });
     });
