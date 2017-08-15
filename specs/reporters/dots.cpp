@@ -22,7 +22,7 @@ go_bandit([]() {
         reporter->test_run_complete();
       });
 
-      it("reports no tests where run", [&]() {
+      it("reports that no tests were run", [&]() {
         AssertThat(output(), Equals("\nCould not find any tests.\n"));
       });
 
