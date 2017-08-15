@@ -40,7 +40,7 @@ namespace bandit {
           return non_const_argv_;
         }
 
-        int argc() {
+        int argc() const {
           return argc_;
         }
 

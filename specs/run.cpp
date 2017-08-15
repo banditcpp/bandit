@@ -20,13 +20,10 @@ go_bandit([]() {
     };
 
     before_each([&]() {
-      specs = std::unique_ptr<bd::spec_registry>(new bd::spec_registry());
-
-      reporter = fake_reporter_ptr(new fake_reporter());
-
-      context_stack = std::unique_ptr<context::stack_t>(new context::stack_t());
-
-      argv = std::unique_ptr<argv_helper>(new argv_helper({}));
+      specs.reset(new bd::spec_registry());
+      reporter.reset(new fake_reporter());
+      context_stack.reset(new context::stack_t());
+      argv.reset(new argv_helper({}));
     });
 
     it("pushes the global context on the context stack", [&]() {
