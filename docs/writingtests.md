@@ -89,6 +89,7 @@ This is conveyed by the '`describe()`/`it()`' syntax.
 
 `describe()` specifies what we are testing and `it()` specifies what should hold
 true for that thing.
+Every `it()` must be inside a `describe()`.
 
 A slightly more elaborate example:
 
