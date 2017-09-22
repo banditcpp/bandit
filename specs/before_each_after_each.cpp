@@ -23,6 +23,13 @@ go_bandit([]() {
         before_each(before_each_fn, *context_stack);
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("register_before_each"));
       });
+
+      it("does not work without context", [&] {
+        context_stack->pop_back();
+        AssertThrows(bandit::detail::test_run_error, before_each(before_each_fn, *context_stack));
+        AssertThat(LastException<bandit::detail::test_run_error>().what(),
+            Equals("'before_each' was called without surrounding 'describe'"));
+      });
     });
 
     describe("after_each", [&]() {
@@ -35,6 +42,13 @@ go_bandit([]() {
       it("registers itself for the current context in the stack", [&]() {
         after_each(after_each_fn, *context_stack);
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("register_after_each"));
+      });
+
+      it("does not work without context", [&] {
+        context_stack->pop_back();
+        AssertThrows(bandit::detail::test_run_error, after_each(after_each_fn, *context_stack));
+        AssertThat(LastException<bandit::detail::test_run_error>().what(),
+            Equals("'after_each' was called without surrounding 'describe'"));
       });
     });
   });

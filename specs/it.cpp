@@ -36,6 +36,13 @@ go_bandit([]() {
       AssertThat(context->call_log(), Has().AtLeast(1).EqualTo("execution_is_starting"));
     });
 
+    it("does not work without context", [&] {
+      contexts->pop_back();
+      AssertThrows(bandit::detail::test_run_error, call_it());
+      AssertThat(LastException<bandit::detail::test_run_error>().what(),
+          Equals("'it' was called without surrounding 'describe'"));
+    });
+
     describe("with succeeding test", [&]() {
       before_each([&]() {
         it_func = []() {};
