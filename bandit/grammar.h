@@ -50,6 +50,9 @@ namespace bandit {
 
   inline void before_each(std::function<void()> func,
       context::stack_t& context_stack) {
+    if (context_stack.empty()) {
+      throw detail::test_run_error("'before_each' was called without surrounding 'describe'");
+    }
     context_stack.back()->register_before_each(func);
   }
 
@@ -59,6 +62,9 @@ namespace bandit {
 
   inline void after_each(std::function<void()> func,
       context::stack_t& context_stack) {
+    if (context_stack.empty()) {
+      throw detail::test_run_error("'after_each' was called without surrounding 'describe'");
+    }
     context_stack.back()->register_after_each(func);
   }
 
@@ -84,6 +90,9 @@ namespace bandit {
       detail::assertion_adapter_t& assertion_adapter,
       detail::run_policy_t& run_policy,
       bool hard_skip = false) {
+    if (context_stack.empty()) {
+      throw detail::test_run_error("'it' was called without surrounding 'describe'");
+    }
     if (hard_skip || !run_policy.should_run(desc, context_stack)) {
       it_skip(desc, func, reporter);
       return;
