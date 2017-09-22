@@ -35,7 +35,7 @@ namespace bandit {
 
       void register_before_each(std::function<void()> func) override {
         if (is_executing_) {
-          throw detail::test_run_error("before_each was called after 'describe' or 'it'");
+          throw detail::test_run_error("'before_each' was called after 'describe' or 'it'");
         }
 
         before_eaches_.push_back(func);
@@ -43,7 +43,7 @@ namespace bandit {
 
       void register_after_each(std::function<void()> func) override {
         if (is_executing_) {
-          throw detail::test_run_error("after_each was called after 'describe' or 'it'");
+          throw detail::test_run_error("'after_each' was called after 'describe' or 'it'");
         }
 
         after_eaches_.push_back(func);
