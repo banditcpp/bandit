@@ -2,7 +2,7 @@
 #define BANDIT_REPORTERS_COLORED_BASE_H
 
 #include <ostream>
-#include <bandit/colorizers.h>
+#include <bandit/colorizers/interface.h>
 #include <bandit/reporters/progress_base.h>
 
 namespace bandit {

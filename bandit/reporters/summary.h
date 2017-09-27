@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <list>
 #include <iostream>
-#include <bandit/colorizers.h>
+#include <bandit/colorizers/interface.h>
 
 namespace bandit {
   namespace reporter {
