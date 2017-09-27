@@ -64,9 +64,6 @@ namespace bandit {
         }
       }
     };
-
-    using reporter_factory_fn = std::function<reporter_ptr(const std::string&, const failure_formatter_t*)>;
-    using register_reporter_fn = std::function<detail::reporter_t*(detail::reporter_t*)>;
   }
 
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
