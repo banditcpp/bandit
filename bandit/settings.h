@@ -21,7 +21,39 @@ namespace bandit {
             reporter(create_reporter(opt)),
             run_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run())) {}
 
+      reporter_t& get_reporter() {
+        return *reporter;
+      }
+
+      run_policy_t& get_policy() {
+        return *run_policy;
+      }
+
+      // A function is required to initialize a static settings variable in a header file
+      // and this struct aims at encapsulating this function
+      static void register_settings(settings_t* settings) {
+        if (settings == nullptr) {
+          throw std::runtime_error("Invalid null settings passed to "
+                                   "bandit::detail::register_settings");
+        }
+        get_settings_address() = settings;
+      }
+
+      static settings_t& registered_settings() {
+        auto settings = get_settings_address();
+        if (settings == nullptr) {
+          throw std::runtime_error("No settings set. Please call "
+                                   "bandit::detail::register_settings with a non-null settings");
+        }
+        return *settings;
+      }
+
     private:
+      static settings_t*& get_settings_address() {
+        static settings_t* settings_ = nullptr;
+        return settings_;
+      }
+
       colorizer_ptr create_colorizer(const options& opt) const {
         switch (opt.colorizer()) {
         case options::colorizers::OFF:
@@ -62,6 +94,14 @@ namespace bandit {
         }
       }
     };
+
+    inline void register_settings(settings_t* settings) {
+      settings_t::register_settings(settings);
+    }
+
+    inline settings_t& registered_settings() {
+      return settings_t::registered_settings();
+    }
   }
 }
 #endif

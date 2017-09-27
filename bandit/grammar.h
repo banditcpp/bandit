@@ -2,8 +2,7 @@
 #define BANDIT_GRAMMAR_H
 
 #include <bandit/adapters.h>
-#include <bandit/reporters.h>
-#include <bandit/run_policies.h>
+#include <bandit/settings.h>
 
 namespace bandit {
   inline void describe(const std::string& desc, std::function<void()> func,
@@ -29,7 +28,7 @@ namespace bandit {
   }
 
   inline void describe(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    describe(desc, func, detail::registered_reporter(), context::stack(), hard_skip);
+    describe(desc, func, detail::registered_settings().get_reporter(), context::stack(), hard_skip);
   }
 
   inline void describe_skip(const std::string& desc, std::function<void()> func,
@@ -38,12 +37,12 @@ namespace bandit {
   }
 
   inline void describe_skip(const std::string& desc, std::function<void()> func) {
-    describe_skip(desc, func, detail::registered_reporter(),
+    describe_skip(desc, func, detail::registered_settings().get_reporter(),
         context::stack());
   }
 
   inline void xdescribe(const std::string& desc, std::function<void()> func,
-      detail::reporter_t& reporter = detail::registered_reporter(),
+      detail::reporter_t& reporter = detail::registered_settings().get_reporter(),
       context::stack_t& context_stack = context::stack()) {
     describe_skip(desc, func, reporter, context_stack);
   }
@@ -79,11 +78,11 @@ namespace bandit {
   }
 
   inline void it_skip(const std::string& desc, std::function<void()> func) {
-    it_skip(desc, func, detail::registered_reporter());
+    it_skip(desc, func, detail::registered_settings().get_reporter());
   }
 
   inline void xit(const std::string& desc, std::function<void()> func,
-      detail::reporter_t& reporter = detail::registered_reporter()) {
+      detail::reporter_t& reporter = detail::registered_settings().get_reporter()) {
     it_skip(desc, func, reporter);
   }
 
@@ -156,8 +155,8 @@ namespace bandit {
   }
 
   inline void it(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    it(desc, func, detail::registered_reporter(), context::stack(),
-        detail::registered_adapter(), detail::registered_run_policy(), hard_skip);
+    it(desc, func, detail::registered_settings().get_reporter(), context::stack(),
+        detail::registered_adapter(), detail::registered_settings().get_policy(), hard_skip);
   }
 }
 #endif

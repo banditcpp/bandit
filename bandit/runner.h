@@ -8,7 +8,7 @@
 namespace bandit {
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
       context::stack_t& context_stack,
-      detail::reporter_t& reporter = detail::registered_reporter()) {
+      detail::reporter_t& reporter = detail::registered_settings().get_reporter()) {
     if (opt.help() || !opt.parsed_ok()) {
       opt.print_usage();
       return !opt.parsed_ok();
@@ -43,9 +43,7 @@ namespace bandit {
     }
 
     detail::settings_t settings(opt);
-    detail::register_reporter(settings.reporter.get());
-    detail::register_run_policy(settings.run_policy.get());
-
+    detail::register_settings(&settings);
     return run(opt, detail::specs(), context::stack());
   }
 }
