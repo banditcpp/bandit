@@ -19,11 +19,11 @@ namespace bandit {
       settings(const options& opt)
           : colorizer(create_colorizer(opt)),
             formatter(create_formatter(opt)),
-            reporter(create_reporter(opt, *formatter, *colorizer)),
+            reporter(create_reporter(opt)),
             run_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run())) {}
 
     private:
-      static inline colorizer_ptr create_colorizer(const options& opt) {
+      colorizer_ptr create_colorizer(const options& opt) const {
         switch (opt.colorizer()) {
         case options::colorizers::OFF:
           return colorizer_ptr(new colorizer::off());
@@ -35,7 +35,7 @@ namespace bandit {
         }
       }
 
-      static inline failure_formatter_ptr create_formatter(const options& opt) {
+      failure_formatter_ptr create_formatter(const options& opt) const {
         switch (opt.formatter()) {
         case options::formatters::VS:
           return failure_formatter_ptr(new failure_formatter::visual_studio());
@@ -45,22 +45,21 @@ namespace bandit {
         }
       }
 
-      static inline reporter_ptr create_reporter(const options& opt,
-          const failure_formatter_t& formatter, const colorizer_t& colorizer) {
+      reporter_ptr create_reporter(const options& opt) const {
         switch (opt.reporter()) {
         case options::reporters::SINGLELINE:
-          return reporter_ptr(new bandit::reporter::singleline(formatter, colorizer));
+          return reporter_ptr(new bandit::reporter::singleline(*formatter, *colorizer));
         case options::reporters::XUNIT:
-          return reporter_ptr(new bandit::reporter::xunit(formatter));
+          return reporter_ptr(new bandit::reporter::xunit(*formatter));
         case options::reporters::INFO:
-          return reporter_ptr(new bandit::reporter::info(formatter, colorizer));
+          return reporter_ptr(new bandit::reporter::info(*formatter, *colorizer));
         case options::reporters::SPEC:
-          return reporter_ptr(new bandit::reporter::spec(formatter, colorizer));
+          return reporter_ptr(new bandit::reporter::spec(*formatter, *colorizer));
         case options::reporters::CRASH:
-          return reporter_ptr(new bandit::reporter::crash(formatter));
+          return reporter_ptr(new bandit::reporter::crash(*formatter));
         case options::reporters::DOTS:
         default:
-          return reporter_ptr(new bandit::reporter::dots(formatter, colorizer));
+          return reporter_ptr(new bandit::reporter::dots(*formatter, *colorizer));
         }
       }
     };
