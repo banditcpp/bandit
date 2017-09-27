@@ -4,3 +4,6 @@
 [submodule "bandit/assertion_frameworks/snowhouse"]
 	path = bandit/assertion_frameworks/snowhouse
 	url = https://github.com/banditcpp/snowhouse.git
+[submodule "bandit/external/CLI11"]
+	path = bandit/external/CLI11
+	url = https://github.com/CLIUtils/CLI11
