@@ -42,7 +42,7 @@ namespace bandit {
       return 1;
     }
 
-    detail::settings settings(opt);
+    detail::settings_t settings(opt);
     detail::register_reporter(settings.reporter.get());
     detail::register_run_policy(settings.run_policy.get());
 

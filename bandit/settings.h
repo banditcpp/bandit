@@ -9,13 +9,13 @@
 
 namespace bandit {
   namespace detail {
-    struct settings {
+    struct settings_t {
       colorizer_ptr colorizer;
       failure_formatter_ptr formatter;
       reporter_ptr reporter;
       run_policy_ptr run_policy;
 
-      settings(const options& opt)
+      settings_t(const options& opt)
           : colorizer(create_colorizer(opt)),
             formatter(create_formatter(opt)),
             reporter(create_reporter(opt)),
