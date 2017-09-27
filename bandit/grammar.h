@@ -1,7 +1,6 @@
 #ifndef BANDIT_GRAMMAR_H
 #define BANDIT_GRAMMAR_H
 
-#include <bandit/adapters.h>
 #include <bandit/settings.h>
 
 namespace bandit {
@@ -156,7 +155,9 @@ namespace bandit {
 
   inline void it(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
     it(desc, func, detail::registered_settings().get_reporter(), context::stack(),
-        detail::registered_adapter(), detail::registered_settings().get_policy(), hard_skip);
+        detail::registered_settings().get_adapter(),
+        detail::registered_settings().get_policy(),
+        hard_skip);
   }
 }
 #endif

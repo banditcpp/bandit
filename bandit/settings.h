@@ -1,6 +1,7 @@
 #ifndef BANDIT_SETTINGS_H
 #define BANDIT_SETTINGS_H
 
+#include <bandit/adapters.h>
 #include <bandit/colorizers.h>
 #include <bandit/failure_formatters.h>
 #include <bandit/options.h>
@@ -10,16 +11,22 @@
 namespace bandit {
   namespace detail {
     struct settings_t {
+      assertion_adapter_ptr adapter;
       colorizer_ptr colorizer;
       failure_formatter_ptr formatter;
       reporter_ptr reporter;
       run_policy_ptr run_policy;
 
       settings_t(const options& opt)
-          : colorizer(create_colorizer(opt)),
+          : adapter(new adapter::snowhouse),
+            colorizer(create_colorizer(opt)),
             formatter(create_formatter(opt)),
             reporter(create_reporter(opt)),
             run_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run())) {}
+
+      assertion_adapter_t& get_adapter() {
+        return *adapter;
+      }
 
       reporter_t& get_reporter() {
         return *reporter;
