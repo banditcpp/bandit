@@ -1,3 +1,3 @@
 [submodule "bandit/assertion_frameworks/snowhouse"]
-	path = bandit/assertion_frameworks/snowhouse
+	path = assertion_frameworks/snowhouse
 	url = https://github.com/banditcpp/snowhouse.git
