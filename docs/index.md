@@ -89,8 +89,15 @@ can start using it. (CMake is only necessary to compile the specs for bandit its
 If you want to use bandit inside your projects,
 add the parent directory of the `bandit` directory to your project's
 include directories and you are ready to go.
+
 Note that you can remove all directories except the `bandit` directory.
 Also keep license and copyright information intact.
+You can also simply use the `headers-only` branch as a submodule:
+
+```sh
+git submodule add -b headers-only https://github.com/banditcpp/bandit bandit
+git submodule update --init --recursive
+```
 
 ## Compilers
 
