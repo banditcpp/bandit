@@ -61,6 +61,26 @@ int main(int argc, char* argv[]) {
 }
 ```
 
+## Download
+
+Clone the Git repository:
+
+```sh
+git clone --recursive https://github.com/banditcpp/bandit.git
+```
+
+or if you have already cloned the repository without `--recursive`, do
+
+```sh
+cd bandit
+git submodule update --init --recursive
+```
+
+The Git repository contains several directories besides bandit itself,
+that is, the specifications (or tests) for bandit (in `specs`),
+the bandit website and documentation (in `docs`),
+and auxiliary tools for CMake (in `cmake`) and continuous integration (in `util`).
+
 ## Installing
 
 Bandit is header-only, so there is no need for additional compilation before you
