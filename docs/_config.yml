@@ -1,4 +1,0 @@
-name: bandit
-highlighter: rouge
-gems:
-  - jekyll-default-layout
