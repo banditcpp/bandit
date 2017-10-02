@@ -8,7 +8,7 @@
 namespace bandit {
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
       context::stack_t& context_stack,
-      detail::reporter_t& reporter = detail::registered_settings().get_reporter()) {
+      detail::settings_t& settings = detail::registered_settings()) {
     if (opt.help() || !opt.parsed_ok()) {
       opt.print_usage();
       return !opt.parsed_ok();
@@ -19,7 +19,7 @@ namespace bandit {
       return 0;
     }
 
-    reporter.test_run_starting();
+    settings.get_reporter().test_run_starting();
 
     bool hard_skip = false;
     context::bandit global_context("", hard_skip);
@@ -29,9 +29,9 @@ namespace bandit {
       func();
     };
 
-    reporter.test_run_complete();
+    settings.get_reporter().test_run_complete();
 
-    return reporter.did_we_pass() ? 0 : 1;
+    return settings.get_reporter().did_we_pass() ? 0 : 1;
   }
 
   inline int run(int argc, char* argv[], bool allow_further = true) {
