@@ -6,23 +6,7 @@
 namespace bandit {
   inline void describe(const std::string& desc, std::function<void()> func,
       detail::settings_t& settings, bool hard_skip = false) {
-    settings.get_reporter().context_starting(desc);
-
-    settings.get_contexts().back()->execution_is_starting();
-
-    context::bandit ctxt(desc, hard_skip);
-
-    settings.get_contexts().push_back(&ctxt);
-
-    try {
-      func();
-    } catch (const bandit::detail::test_run_error& error) {
-      settings.get_reporter().test_run_error(desc, error);
-    }
-
-    settings.get_contexts().pop_back();
-
-    settings.get_reporter().context_ended(desc);
+    settings.describe(desc, func, hard_skip);
   }
 
   inline void describe(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
@@ -63,8 +47,8 @@ namespace bandit {
     after_each(func, detail::registered_settings().get_contexts());
   }
 
-  inline void it_skip(const std::string& desc, std::function<void()>, detail::settings_t& settings) {
-    settings.get_reporter().it_skip(desc);
+  inline void it_skip(const std::string& desc, std::function<void()> func, detail::settings_t& settings) {
+    settings.it(desc, func, true);
   }
 
   inline void it_skip(const std::string& desc, std::function<void()> func) {
@@ -78,70 +62,7 @@ namespace bandit {
 
   inline void it(const std::string& desc, std::function<void()> func, detail::settings_t& settings,
       bool hard_skip = false) {
-    detail::reporter_t& reporter = settings.get_reporter();
-    detail::assertion_adapter_t& assertion_adapter = settings.get_adapter();
-    detail::run_policy_t& run_policy = settings.get_policy();
-    settings.get_contexts().throw_if_empty("it");
-    if (hard_skip || !run_policy.should_run(desc, settings.get_contexts())) {
-      it_skip(desc, func, settings);
-      return;
-    }
-
-    reporter.it_starting(desc);
-
-    settings.get_contexts().back()->execution_is_starting();
-
-    auto try_with_adapter = [&](bool allow_fail, std::function<void()> do_it) {
-      if (allow_fail) {
-        try {
-          assertion_adapter.adapt_exceptions([&] { do_it(); });
-        } catch (const bandit::detail::assertion_exception& ex) {
-          reporter.it_failed(desc, ex);
-          run_policy.encountered_failure();
-        } catch (const std::exception& ex) {
-          std::string err = std::string("exception: ") + ex.what();
-          reporter.it_failed(desc, bandit::detail::assertion_exception(err));
-          run_policy.encountered_failure();
-        } catch (...) {
-          reporter.it_unknown_error(desc);
-          run_policy.encountered_failure();
-        }
-      } else {
-        try {
-          do_it();
-        } catch (...) {
-          /* ignore */
-        }
-      }
-    };
-
-    bool success = false;
-    context::interface* last_successful_before_each_context = nullptr;
-    try_with_adapter(true, [&] {
-      for (auto context : settings.get_contexts()) {
-        context->run_before_eaches();
-        last_successful_before_each_context = context;
-      }
-
-      func();
-      success = true;
-    });
-
-    try_with_adapter(success, [&] {
-      bool do_run_after_each = false;
-      std::for_each(settings.get_contexts().rbegin(), settings.get_contexts().rend(), [&](context::interface* context) {
-        if (context == last_successful_before_each_context) {
-          do_run_after_each = true;
-        }
-        if (do_run_after_each) {
-          context->run_after_eaches();
-        }
-      });
-
-      if (success) {
-        reporter.it_succeeded(desc);
-      }
-    });
+    settings.it(desc, func, hard_skip);
   }
 
   inline void it(const std::string& desc, std::function<void()> func, bool hard_skip = false) {

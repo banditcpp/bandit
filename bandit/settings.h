@@ -48,6 +48,89 @@ namespace bandit {
         run_policy.reset(run_policy_);
       }
 
+      void describe(const std::string& desc, std::function<void()> func, bool hard_skip) {
+        reporter->context_starting(desc);
+
+        context_stack.back()->execution_is_starting();
+
+        context::bandit ctxt(desc, hard_skip);
+
+        context_stack.push_back(&ctxt);
+
+        try {
+          func();
+        } catch (const bandit::detail::test_run_error& error) {
+          reporter->test_run_error(desc, error);
+        }
+
+        context_stack.pop_back();
+
+        reporter->context_ended(desc);
+      }
+
+      void it(const std::string& desc, std::function<void()> func, bool hard_skip) {
+        context_stack.throw_if_empty("it");
+        if (hard_skip || !run_policy->should_run(desc, context_stack)) {
+          reporter->it_skip(desc);
+          return;
+        }
+
+        reporter->it_starting(desc);
+        context_stack.back()->execution_is_starting();
+
+        auto try_with_adapter = [&](bool allow_fail, std::function<void()> do_it) {
+          if (allow_fail) {
+            try {
+              adapter->adapt_exceptions([&] { do_it(); });
+            } catch (const bandit::detail::assertion_exception& ex) {
+              reporter->it_failed(desc, ex);
+              run_policy->encountered_failure();
+            } catch (const std::exception& ex) {
+              std::string err = std::string("exception: ") + ex.what();
+              reporter->it_failed(desc, bandit::detail::assertion_exception(err));
+              run_policy->encountered_failure();
+            } catch (...) {
+              reporter->it_unknown_error(desc);
+              run_policy->encountered_failure();
+            }
+          } else {
+            try {
+              do_it();
+            } catch (...) {
+              /* ignore */
+            }
+          }
+        };
+
+        bool success = false;
+        context::interface* last_successful_before_each_context = nullptr;
+        try_with_adapter(true, [&] {
+          for (auto context : context_stack) {
+            context->run_before_eaches();
+            last_successful_before_each_context = context;
+          }
+
+          func();
+          success = true;
+        });
+
+        try_with_adapter(success, [&] {
+          bool do_run_after_each = false;
+          std::for_each(context_stack.rbegin(), context_stack.rend(), [&](context::interface* context) {
+            if (context == last_successful_before_each_context) {
+              do_run_after_each = true;
+            }
+            if (do_run_after_each) {
+              context->run_after_eaches();
+            }
+          });
+
+          if (success) {
+            reporter->it_succeeded(desc);
+          }
+        });
+      }
+
       // A function is required to initialize a static settings variable in a header file
       // and this struct aims at encapsulating this function
       static void register_settings(settings_t* settings) {
