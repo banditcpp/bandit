@@ -67,6 +67,16 @@ namespace bandit {
         reporter->context_ended(desc);
       }
 
+      void before_each(std::function<void()> func) {
+        context_stack.throw_if_empty("before_each");
+        context_stack.back()->register_before_each(func);
+      }
+
+      void after_each(std::function<void()> func) {
+        context_stack.throw_if_empty("after_each");
+        context_stack.back()->register_after_each(func);
+      }
+
       void it(const std::string& desc, std::function<void()> func, bool hard_skip) {
         context_stack.throw_if_empty("it");
         if (hard_skip || !run_policy->should_run(desc, context_stack)) {

@@ -28,23 +28,13 @@ namespace bandit {
   }
 
   inline void before_each(std::function<void()> func,
-      context::stack_t& context_stack) {
-    context_stack.throw_if_empty("before_each");
-    context_stack.back()->register_before_each(func);
-  }
-
-  inline void before_each(std::function<void()> func) {
-    before_each(func, detail::registered_settings().get_contexts());
+      detail::settings_t& settings = detail::registered_settings()) {
+    settings.before_each(func);
   }
 
   inline void after_each(std::function<void()> func,
-      context::stack_t& context_stack) {
-    context_stack.throw_if_empty("after_each");
-    context_stack.back()->register_after_each(func);
-  }
-
-  inline void after_each(std::function<void()> func) {
-    after_each(func, detail::registered_settings().get_contexts());
+      detail::settings_t& settings = detail::registered_settings()) {
+    settings.after_each(func);
   }
 
   inline void it_skip(const std::string& desc, std::function<void()> func, detail::settings_t& settings) {

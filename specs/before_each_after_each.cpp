@@ -3,13 +3,13 @@
 
 go_bandit([]() {
   describe("before_each/after_each", [&]() {
-    std::unique_ptr<context::stack_t> context_stack;
+    std::unique_ptr<bandit::detail::settings_t> settings;
     std::unique_ptr<fakes::fake_context> context;
 
     before_each([&]() {
+      settings.reset(new bandit::detail::settings_t());
       context = std::unique_ptr<fakes::fake_context>(new fakes::fake_context());
-      context_stack = std::unique_ptr<context::stack_t>(new context::stack_t());
-      context_stack->push_back(context.get());
+      settings->get_contexts().push_back(context.get());
     });
 
     describe("before_each", [&]() {
@@ -20,13 +20,13 @@ go_bandit([]() {
       });
 
       it("registers itself for the current context in the stack", [&]() {
-        before_each(before_each_fn, *context_stack);
+        before_each(before_each_fn, *settings);
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("register_before_each"));
       });
 
       it("does not work without context", [&] {
-        context_stack->pop_back();
-        AssertThrows(bandit::detail::test_run_error, before_each(before_each_fn, *context_stack));
+        settings->get_contexts().pop_back();
+        AssertThrows(bandit::detail::test_run_error, before_each(before_each_fn, *settings));
         AssertThat(LastException<bandit::detail::test_run_error>().what(),
             Equals("'before_each' was called without surrounding 'describe'"));
       });
@@ -40,13 +40,13 @@ go_bandit([]() {
       });
 
       it("registers itself for the current context in the stack", [&]() {
-        after_each(after_each_fn, *context_stack);
+        after_each(after_each_fn, *settings);
         AssertThat(context->call_log(), Has().Exactly(1).EqualTo("register_after_each"));
       });
 
       it("does not work without context", [&] {
-        context_stack->pop_back();
-        AssertThrows(bandit::detail::test_run_error, after_each(after_each_fn, *context_stack));
+        settings->get_contexts().pop_back();
+        AssertThrows(bandit::detail::test_run_error, after_each(after_each_fn, *settings));
         AssertThat(LastException<bandit::detail::test_run_error>().what(),
             Equals("'after_each' was called without surrounding 'describe'"));
       });
