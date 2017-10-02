@@ -5,15 +5,14 @@
 
 namespace bandit {
   inline void describe(const std::string& desc, std::function<void()> func,
-      detail::settings_t& settings, context::stack_t& context_stack,
-      bool hard_skip = false) {
+      detail::settings_t& settings, bool hard_skip = false) {
     settings.get_reporter().context_starting(desc);
 
-    context_stack.back()->execution_is_starting();
+    settings.get_contexts().back()->execution_is_starting();
 
     context::bandit ctxt(desc, hard_skip);
 
-    context_stack.push_back(&ctxt);
+    settings.get_contexts().push_back(&ctxt);
 
     try {
       func();
@@ -21,28 +20,27 @@ namespace bandit {
       settings.get_reporter().test_run_error(desc, error);
     }
 
-    context_stack.pop_back();
+    settings.get_contexts().pop_back();
 
     settings.get_reporter().context_ended(desc);
   }
 
   inline void describe(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    describe(desc, func, detail::registered_settings(), context::stack(), hard_skip);
+    describe(desc, func, detail::registered_settings(), hard_skip);
   }
 
   inline void describe_skip(const std::string& desc, std::function<void()> func,
-      detail::settings_t& settings, context::stack_t& context_stack) {
-    describe(desc, func, settings, context_stack, true);
+      detail::settings_t& settings) {
+    describe(desc, func, settings, true);
   }
 
   inline void describe_skip(const std::string& desc, std::function<void()> func) {
-    describe_skip(desc, func, detail::registered_settings(), context::stack());
+    describe_skip(desc, func, detail::registered_settings());
   }
 
   inline void xdescribe(const std::string& desc, std::function<void()> func,
-      detail::settings_t& settings = detail::registered_settings(),
-      context::stack_t& context_stack = context::stack()) {
-    describe_skip(desc, func, settings, context_stack);
+      detail::settings_t& settings = detail::registered_settings()) {
+    describe_skip(desc, func, settings);
   }
 
   inline void before_each(std::function<void()> func,
@@ -52,7 +50,7 @@ namespace bandit {
   }
 
   inline void before_each(std::function<void()> func) {
-    before_each(func, context::stack());
+    before_each(func, detail::registered_settings().get_contexts());
   }
 
   inline void after_each(std::function<void()> func,
@@ -62,7 +60,7 @@ namespace bandit {
   }
 
   inline void after_each(std::function<void()> func) {
-    after_each(func, context::stack());
+    after_each(func, detail::registered_settings().get_contexts());
   }
 
   inline void it_skip(const std::string& desc, std::function<void()>, detail::settings_t& settings) {
@@ -79,20 +77,19 @@ namespace bandit {
   }
 
   inline void it(const std::string& desc, std::function<void()> func, detail::settings_t& settings,
-      context::stack_t& context_stack,
       bool hard_skip = false) {
     detail::reporter_t& reporter = settings.get_reporter();
     detail::assertion_adapter_t& assertion_adapter = settings.get_adapter();
     detail::run_policy_t& run_policy = settings.get_policy();
-    context_stack.throw_if_empty("it");
-    if (hard_skip || !run_policy.should_run(desc, context_stack)) {
+    settings.get_contexts().throw_if_empty("it");
+    if (hard_skip || !run_policy.should_run(desc, settings.get_contexts())) {
       it_skip(desc, func, settings);
       return;
     }
 
     reporter.it_starting(desc);
 
-    context_stack.back()->execution_is_starting();
+    settings.get_contexts().back()->execution_is_starting();
 
     auto try_with_adapter = [&](bool allow_fail, std::function<void()> do_it) {
       if (allow_fail) {
@@ -121,7 +118,7 @@ namespace bandit {
     bool success = false;
     context::interface* last_successful_before_each_context = nullptr;
     try_with_adapter(true, [&] {
-      for (auto context : context_stack) {
+      for (auto context : settings.get_contexts()) {
         context->run_before_eaches();
         last_successful_before_each_context = context;
       }
@@ -132,7 +129,7 @@ namespace bandit {
 
     try_with_adapter(success, [&] {
       bool do_run_after_each = false;
-      std::for_each(context_stack.rbegin(), context_stack.rend(), [&](context::interface* context) {
+      std::for_each(settings.get_contexts().rbegin(), settings.get_contexts().rend(), [&](context::interface* context) {
         if (context == last_successful_before_each_context) {
           do_run_after_each = true;
         }
@@ -148,7 +145,7 @@ namespace bandit {
   }
 
   inline void it(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    it(desc, func, detail::registered_settings(), context::stack(), hard_skip);
+    it(desc, func, detail::registered_settings(), hard_skip);
   }
 }
 #endif

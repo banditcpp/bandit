@@ -7,7 +7,6 @@
 
 namespace bandit {
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
-      context::stack_t& context_stack,
       detail::settings_t& settings = detail::registered_settings()) {
     if (opt.help() || !opt.parsed_ok()) {
       opt.print_usage();
@@ -23,7 +22,7 @@ namespace bandit {
 
     bool hard_skip = false;
     context::bandit global_context("", hard_skip);
-    context_stack.push_back(&global_context);
+    settings.get_contexts().push_back(&global_context);
 
     for (auto func : specs) {
       func();
@@ -44,7 +43,7 @@ namespace bandit {
 
     detail::settings_t settings(opt);
     detail::register_settings(&settings);
-    return run(opt, detail::specs(), context::stack());
+    return run(opt, detail::specs());
   }
 }
 #endif

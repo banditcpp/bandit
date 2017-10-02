@@ -12,25 +12,24 @@ go_bandit([]() {
     std::unique_ptr<bd::spec_registry> specs;
     std::unique_ptr<argv_helper> argv;
     fake_reporter* reporter;
-    bd::settings_t settings;
-    std::unique_ptr<context::stack_t> context_stack;
+    std::unique_ptr<bd::settings_t> settings;
 
     auto call_run = [&]() -> int {
       bd::options opt(argv->argc(), argv->argv());
-      return run(opt, *specs, *context_stack, settings);
+      return run(opt, *specs, *settings);
     };
 
     before_each([&]() {
       specs.reset(new bd::spec_registry());
       reporter = new fake_reporter();
-      settings.set_reporter(reporter);
-      context_stack.reset(new context::stack_t());
+      settings.reset(new bd::settings_t());
+      settings->set_reporter(reporter);
       argv.reset(new argv_helper({}));
     });
 
     it("pushes the global context on the context stack", [&]() {
       call_run();
-      AssertThat(*context_stack, Is().OfLength(1));
+      AssertThat(settings->get_contexts(), Is().OfLength(1));
     });
 
     describe("a successful test run", [&]() {

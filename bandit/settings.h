@@ -20,6 +20,10 @@ namespace bandit {
 
       settings_t() : settings_t(options(0, nullptr)) {}
 
+      context::stack_t& get_contexts() {
+        return context_stack;
+      }
+
       assertion_adapter_t& get_adapter() {
         return *adapter;
       }
@@ -109,6 +113,7 @@ namespace bandit {
         }
       }
 
+      context::stack_t context_stack;
       assertion_adapter_ptr adapter;
       colorizer_ptr colorizer;
       failure_formatter_ptr formatter;

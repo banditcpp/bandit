@@ -82,11 +82,6 @@ namespace bandit {
         }
       }
     };
-
-    inline stack_t& stack() {
-      static stack_t contexts;
-      return contexts;
-    }
   }
 }
 #endif
