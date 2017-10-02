@@ -45,15 +45,9 @@ namespace bandit {
     describe_skip(desc, func, settings, context_stack);
   }
 
-  inline void throw_if_no_context(std::string&& method, const context::stack_t& context_stack) {
-    if (context_stack.empty()) {
-      throw detail::test_run_error("'" + method + "' was called without surrounding 'describe'");
-    }
-  }
-
   inline void before_each(std::function<void()> func,
       context::stack_t& context_stack) {
-    throw_if_no_context("before_each", context_stack);
+    context_stack.throw_if_empty("before_each");
     context_stack.back()->register_before_each(func);
   }
 
@@ -63,7 +57,7 @@ namespace bandit {
 
   inline void after_each(std::function<void()> func,
       context::stack_t& context_stack) {
-    throw_if_no_context("after_each", context_stack);
+    context_stack.throw_if_empty("after_each");
     context_stack.back()->register_after_each(func);
   }
 
@@ -90,7 +84,7 @@ namespace bandit {
     detail::reporter_t& reporter = settings.get_reporter();
     detail::assertion_adapter_t& assertion_adapter = settings.get_adapter();
     detail::run_policy_t& run_policy = settings.get_policy();
-    throw_if_no_context("it", context_stack);
+    context_stack.throw_if_empty("it");
     if (hard_skip || !run_policy.should_run(desc, context_stack)) {
       it_skip(desc, func, settings);
       return;
