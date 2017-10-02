@@ -25,6 +25,10 @@ In the following, we list breaking changes per major release.
   `const char*`. This should not break any existing code but you can write
   description-generating code more nicely.
 
+* The grammar now uses `bandit::detail::settings_t` as optional parameters
+  instead of reporters, run policies, etc. This is a change of the public
+  API that is probably only of internal interest.
+
 * The behavior of combined `--only` and `--skip` has changed.
   You can now use these switches multiple times and they always act as a filter,
   that is, you can only reduce the list of tests by adding a `--only` or `--skip`

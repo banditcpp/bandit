@@ -8,12 +8,14 @@ SPEC_BEGIN(describe)
 
 describe("describe", []() {
   std::function<void()> describe_fn;
-  fake_reporter_ptr reporter;
+  fake_reporter* reporter;
+  bandit::detail::settings_t settings;
   std::unique_ptr<bandit::context::stack_t> context_stack;
   std::unique_ptr<fake_context> global_context;
 
   before_each([&]() {
-    reporter = fake_reporter_ptr(new fake_reporter());
+    reporter = new fake_reporter();
+    settings.set_reporter(reporter);
 
     context_stack = std::unique_ptr<bandit::context::stack_t>(new bandit::context::stack_t());
 
@@ -22,7 +24,7 @@ describe("describe", []() {
   });
 
   auto call_describe = [&]() {
-    describe("context name", describe_fn, *reporter, *context_stack);
+    describe("context name", describe_fn, settings, *context_stack);
   };
 
   describe("with a succeeding 'it'", [&]() {
@@ -95,14 +97,14 @@ describe("describe", []() {
 
     describe("describe_skip", [&]() {
       it("pushes a context marked as skipped on the stack", [&]() {
-        describe_skip("context name", describe_fn, *reporter, *context_stack);
+        describe_skip("context name", describe_fn, settings, *context_stack);
         AssertThat(context_is_hard_skip, IsTrue());
       });
     });
 
     describe("xdescribe", [&]() {
       it("pushes a context marked as skipped on the stack", [&]() {
-        xdescribe("context name", describe_fn, *reporter, *context_stack);
+        xdescribe("context name", describe_fn, settings, *context_stack);
         AssertThat(context_is_hard_skip, IsTrue());
       });
     });

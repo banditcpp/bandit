@@ -5,9 +5,9 @@
 
 namespace bandit {
   inline void describe(const std::string& desc, std::function<void()> func,
-      detail::reporter_t& reporter, context::stack_t& context_stack,
+      detail::settings_t& settings, context::stack_t& context_stack,
       bool hard_skip = false) {
-    reporter.context_starting(desc);
+    settings.get_reporter().context_starting(desc);
 
     context_stack.back()->execution_is_starting();
 
@@ -18,32 +18,31 @@ namespace bandit {
     try {
       func();
     } catch (const bandit::detail::test_run_error& error) {
-      reporter.test_run_error(desc, error);
+      settings.get_reporter().test_run_error(desc, error);
     }
 
     context_stack.pop_back();
 
-    reporter.context_ended(desc);
+    settings.get_reporter().context_ended(desc);
   }
 
   inline void describe(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    describe(desc, func, detail::registered_settings().get_reporter(), context::stack(), hard_skip);
+    describe(desc, func, detail::registered_settings(), context::stack(), hard_skip);
   }
 
   inline void describe_skip(const std::string& desc, std::function<void()> func,
-      detail::reporter_t& reporter, context::stack_t& context_stack) {
-    describe(desc, func, reporter, context_stack, true);
+      detail::settings_t& settings, context::stack_t& context_stack) {
+    describe(desc, func, settings, context_stack, true);
   }
 
   inline void describe_skip(const std::string& desc, std::function<void()> func) {
-    describe_skip(desc, func, detail::registered_settings().get_reporter(),
-        context::stack());
+    describe_skip(desc, func, detail::registered_settings(), context::stack());
   }
 
   inline void xdescribe(const std::string& desc, std::function<void()> func,
-      detail::reporter_t& reporter = detail::registered_settings().get_reporter(),
+      detail::settings_t& settings = detail::registered_settings(),
       context::stack_t& context_stack = context::stack()) {
-    describe_skip(desc, func, reporter, context_stack);
+    describe_skip(desc, func, settings, context_stack);
   }
 
   inline void throw_if_no_context(std::string&& method, const context::stack_t& context_stack) {
@@ -72,17 +71,17 @@ namespace bandit {
     after_each(func, context::stack());
   }
 
-  inline void it_skip(const std::string& desc, std::function<void()>, detail::reporter_t& reporter) {
-    reporter.it_skip(desc);
+  inline void it_skip(const std::string& desc, std::function<void()>, detail::settings_t& settings) {
+    settings.get_reporter().it_skip(desc);
   }
 
   inline void it_skip(const std::string& desc, std::function<void()> func) {
-    it_skip(desc, func, detail::registered_settings().get_reporter());
+    it_skip(desc, func, detail::registered_settings());
   }
 
   inline void xit(const std::string& desc, std::function<void()> func,
-      detail::reporter_t& reporter = detail::registered_settings().get_reporter()) {
-    it_skip(desc, func, reporter);
+      detail::settings_t& settings = detail::registered_settings()) {
+    it_skip(desc, func, settings);
   }
 
   inline void it(const std::string& desc, std::function<void()> func, detail::settings_t& settings,
@@ -93,7 +92,7 @@ namespace bandit {
     detail::run_policy_t& run_policy = settings.get_policy();
     throw_if_no_context("it", context_stack);
     if (hard_skip || !run_policy.should_run(desc, context_stack)) {
-      it_skip(desc, func, reporter);
+      it_skip(desc, func, settings);
       return;
     }
 

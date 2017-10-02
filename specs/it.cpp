@@ -278,26 +278,26 @@ go_bandit([]() {
 
     describe("it_skip", [&]() {
       it("tells reporter it's skipped", [&]() {
-        it_skip("my it", []() {}, *reporter);
+        it_skip("my it", []() {}, settings);
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
       });
 
       it("doesn't call function", [&]() {
         bool called = false;
-        it_skip("my it", [&]() { called = true; }, *reporter);
+        it_skip("my it", [&]() { called = true; }, settings);
         AssertThat(called, IsFalse());
       });
     });
 
     describe("xit", [&]() {
       it("tells reporter it's skipped", [&]() {
-        xit("my it", []() {}, *reporter);
+        xit("my it", []() {}, settings);
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
       });
 
       it("doesn't call function", [&]() {
         bool called = false;
-        xit("my it", [&]() { called = true; }, *reporter);
+        xit("my it", [&]() { called = true; }, settings);
         AssertThat(called, IsFalse());
       });
     });
