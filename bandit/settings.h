@@ -11,12 +11,6 @@
 namespace bandit {
   namespace detail {
     struct settings_t {
-      assertion_adapter_ptr adapter;
-      colorizer_ptr colorizer;
-      failure_formatter_ptr formatter;
-      reporter_ptr reporter;
-      run_policy_ptr run_policy;
-
       settings_t(const options& opt)
           : adapter(new adapter::snowhouse),
             colorizer(create_colorizer(opt)),
@@ -24,16 +18,30 @@ namespace bandit {
             reporter(create_reporter(opt)),
             run_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run())) {}
 
+      settings_t() : settings_t(options(0, nullptr)) {}
+
       assertion_adapter_t& get_adapter() {
         return *adapter;
+      }
+
+      void set_adapter(assertion_adapter_t* adapter_) {
+        adapter.reset(adapter_);
       }
 
       reporter_t& get_reporter() {
         return *reporter;
       }
 
+      void set_reporter(reporter_t* reporter_) {
+        reporter.reset(reporter_);
+      }
+
       run_policy_t& get_policy() {
         return *run_policy;
+      }
+
+      void set_policy(run_policy_t* run_policy_) {
+        run_policy.reset(run_policy_);
       }
 
       // A function is required to initialize a static settings variable in a header file
@@ -100,6 +108,12 @@ namespace bandit {
           return reporter_ptr(new bandit::reporter::dots(*formatter, *colorizer));
         }
       }
+
+      assertion_adapter_ptr adapter;
+      colorizer_ptr colorizer;
+      failure_formatter_ptr formatter;
+      reporter_ptr reporter;
+      run_policy_ptr run_policy;
     };
 
     inline void register_settings(settings_t* settings) {

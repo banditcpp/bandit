@@ -85,11 +85,12 @@ namespace bandit {
     it_skip(desc, func, reporter);
   }
 
-  inline void it(const std::string& desc, std::function<void()> func, detail::reporter_t& reporter,
+  inline void it(const std::string& desc, std::function<void()> func, detail::settings_t& settings,
       context::stack_t& context_stack,
-      detail::assertion_adapter_t& assertion_adapter,
-      detail::run_policy_t& run_policy,
       bool hard_skip = false) {
+    detail::reporter_t& reporter = settings.get_reporter();
+    detail::assertion_adapter_t& assertion_adapter = settings.get_adapter();
+    detail::run_policy_t& run_policy = settings.get_policy();
     throw_if_no_context("it", context_stack);
     if (hard_skip || !run_policy.should_run(desc, context_stack)) {
       it_skip(desc, func, reporter);
@@ -154,10 +155,7 @@ namespace bandit {
   }
 
   inline void it(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    it(desc, func, detail::registered_settings().get_reporter(), context::stack(),
-        detail::registered_settings().get_adapter(),
-        detail::registered_settings().get_policy(),
-        hard_skip);
+    it(desc, func, detail::registered_settings(), context::stack(), hard_skip);
   }
 }
 #endif

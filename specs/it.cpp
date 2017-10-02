@@ -8,23 +8,23 @@ namespace bd = bandit::detail;
 go_bandit([]() {
   describe("it", [&]() {
     std::function<void()> it_func;
-    fake_reporter_ptr reporter;
+    fake_reporter* reporter;
+    bd::settings_t settings;
     std::unique_ptr<context::stack_t> contexts;
     std::unique_ptr<fake_context> context;
-    adapter::snowhouse assertion_adapter;
-    bd::run_policy_ptr run_policy;
 
     before_each([&]() {
-      reporter = fake_reporter_ptr(new fake_reporter());
+      reporter = new fake_reporter();
+      settings.set_reporter(reporter);
       contexts = std::unique_ptr<bandit::context::stack_t>(new bandit::context::stack_t());
       context = std::unique_ptr<fake_context>(new fake_context());
       contexts->push_back(context.get());
 
-      run_policy = bd::run_policy_ptr(new run_policy::always());
+      settings.set_policy(new run_policy::always());
     });
 
     auto call_it = [&]() {
-      it("my it", it_func, *reporter, *contexts, assertion_adapter, *run_policy);
+      it("my it", it_func, settings, *contexts);
     };
 
     it("tells the current context that execution has started", [&]() {
@@ -86,7 +86,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -107,7 +107,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -128,7 +128,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -150,7 +150,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -171,7 +171,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -192,7 +192,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
         });
       });
     });
@@ -220,7 +220,7 @@ go_bandit([]() {
 
       it("tells run_policy that we have a failing test", [&]() {
         call_it();
-        AssertThat(run_policy->has_encountered_failure(), IsTrue());
+        AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
       });
     });
 
@@ -246,7 +246,7 @@ go_bandit([]() {
 
       it("tells run_policy that we have a failing test", [&]() {
         call_it();
-        AssertThat(run_policy->has_encountered_failure(), IsTrue());
+        AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
       });
     });
 
@@ -272,7 +272,7 @@ go_bandit([]() {
 
       it("tells run_policy that we have a failing test", [&]() {
         call_it();
-        AssertThat(run_policy->has_encountered_failure(), IsTrue());
+        AssertThat(settings.get_policy().has_encountered_failure(), IsTrue());
       });
     });
 
@@ -306,7 +306,7 @@ go_bandit([]() {
       bool it_was_called;
 
       before_each([&]() {
-        run_policy = bd::run_policy_ptr(new run_policy::never());
+        settings.set_policy(new run_policy::never());
         it_func = [&]() { it_was_called = true; };
         it_was_called = false;
       });
@@ -332,7 +332,7 @@ go_bandit([]() {
 
       describe("with a policy that says to skip this it", [&]() {
         before_each([&]() {
-          run_policy = bd::run_policy_ptr(new run_policy::never());
+          settings.set_policy(new run_policy::never());
         });
 
         it("tells reporter it's skipped", [&]() {
