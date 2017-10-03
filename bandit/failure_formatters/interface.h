@@ -13,7 +13,6 @@ namespace bandit {
 
   namespace detail {
     using failure_formatter_t = ::bandit::failure_formatter::interface;
-    using failure_formatter_ptr = std::unique_ptr<failure_formatter_t>;
   }
 }
 #endif

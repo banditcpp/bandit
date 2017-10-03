@@ -18,7 +18,6 @@ namespace bandit {
 
   namespace detail {
     using colorizer_t = ::bandit::colorizer::interface;
-    using colorizer_ptr = std::unique_ptr<colorizer_t>;
   }
 }
 #endif

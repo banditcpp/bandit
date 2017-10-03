@@ -13,7 +13,6 @@ namespace bandit {
 
   namespace detail {
     using assertion_adapter_t = adapter::interface;
-    using assertion_adapter_ptr = std::unique_ptr<assertion_adapter_t>;
   }
 }
 #endif

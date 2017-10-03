@@ -29,7 +29,6 @@ namespace bandit {
 
   namespace detail {
     using reporter_t = reporter::interface;
-    using reporter_ptr = std::unique_ptr<reporter_t>;
   }
 }
 #endif
