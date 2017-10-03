@@ -2,23 +2,15 @@
 #define BANDIT_SETTINGS_H
 
 #include <bandit/adapters.h>
-#include <bandit/colorizers.h>
-#include <bandit/failure_formatters.h>
-#include <bandit/options.h>
-#include <bandit/reporters.h>
-#include <bandit/run_policies.h>
+#include <bandit/colorizers/interface.h>
+#include <bandit/failure_formatters/interface.h>
+#include <bandit/reporters/interface.h>
+#include <bandit/run_policies/interface.h>
 
 namespace bandit {
   namespace detail {
     struct settings_t {
-      settings_t(const options& opt)
-          : adapter(new adapter::snowhouse),
-            colorizer(create_colorizer(opt)),
-            formatter(create_formatter(opt)),
-            reporter(create_reporter(opt)),
-            run_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run())) {}
-
-      settings_t() : settings_t(options(0, nullptr)) {}
+      settings_t() : adapter(new adapter::snowhouse) {}
 
       context::stack_t& get_contexts() {
         return context_stack;
@@ -30,6 +22,22 @@ namespace bandit {
 
       void set_adapter(assertion_adapter_t* adapter_) {
         adapter.reset(adapter_);
+      }
+
+      colorizer_t& get_colorizer() {
+        return *colorizer;
+      }
+
+      void set_colorizer(colorizer_t* colorizer_) {
+        colorizer.reset(colorizer_);
+      }
+
+      failure_formatter_t& get_formatter() {
+        return *formatter;
+      }
+
+      void set_formatter(failure_formatter_t* formatter_) {
+        formatter.reset(formatter_);
       }
 
       reporter_t& get_reporter() {
@@ -161,46 +169,6 @@ namespace bandit {
           } catch (...) {
             /* ignore */
           }
-        }
-      }
-
-      colorizer_t* create_colorizer(const options& opt) const {
-        switch (opt.colorizer()) {
-        case options::colorizers::OFF:
-          return new colorizer::off();
-        case options::colorizers::DARK:
-          return new colorizer::dark();
-        case options::colorizers::LIGHT:
-        default:
-          return new colorizer::light();
-        }
-      }
-
-      failure_formatter_t* create_formatter(const options& opt) const {
-        switch (opt.formatter()) {
-        case options::formatters::VS:
-          return new failure_formatter::visual_studio();
-        case options::formatters::POSIX:
-        default:
-          return new failure_formatter::posix();
-        }
-      }
-
-      reporter_t* create_reporter(const options& opt) const {
-        switch (opt.reporter()) {
-        case options::reporters::SINGLELINE:
-          return new bandit::reporter::singleline(*formatter, *colorizer);
-        case options::reporters::XUNIT:
-          return new bandit::reporter::xunit(*formatter);
-        case options::reporters::INFO:
-          return new bandit::reporter::info(*formatter, *colorizer);
-        case options::reporters::SPEC:
-          return new bandit::reporter::spec(*formatter, *colorizer);
-        case options::reporters::CRASH:
-          return new bandit::reporter::crash(*formatter);
-        case options::reporters::DOTS:
-        default:
-          return new bandit::reporter::dots(*formatter, *colorizer);
         }
       }
 
