@@ -22,7 +22,7 @@ describe("describe", []() {
   });
 
   auto call_describe = [&]() {
-    describe("context name", describe_fn, *settings);
+    describe("context name", describe_fn, false, *settings);
   };
 
   describe("with a succeeding 'it'", [&]() {

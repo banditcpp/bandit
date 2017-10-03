@@ -5,26 +5,19 @@
 
 namespace bandit {
   inline void describe(const std::string& desc, std::function<void()> func,
-      detail::settings_t& settings, bool hard_skip = false) {
+      bool hard_skip = false,
+      detail::settings_t& settings = detail::registered_settings()) {
     settings.describe(desc, func, hard_skip);
   }
 
-  inline void describe(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    describe(desc, func, detail::registered_settings(), hard_skip);
-  }
-
   inline void describe_skip(const std::string& desc, std::function<void()> func,
-      detail::settings_t& settings) {
-    describe(desc, func, settings, true);
-  }
-
-  inline void describe_skip(const std::string& desc, std::function<void()> func) {
-    describe_skip(desc, func, detail::registered_settings());
+      detail::settings_t& settings = detail::registered_settings()) {
+    describe(desc, func, true, settings);
   }
 
   inline void xdescribe(const std::string& desc, std::function<void()> func,
       detail::settings_t& settings = detail::registered_settings()) {
-    describe_skip(desc, func, settings);
+    describe(desc, func, true, settings);
   }
 
   inline void before_each(std::function<void()> func,
@@ -37,26 +30,19 @@ namespace bandit {
     settings.after_each(func);
   }
 
-  inline void it_skip(const std::string& desc, std::function<void()> func, detail::settings_t& settings) {
-    settings.it(desc, func, true);
+  inline void it(const std::string& desc, std::function<void()> func,
+      bool hard_skip = false, detail::settings_t& settings = detail::registered_settings()) {
+    settings.it(desc, func, hard_skip);
   }
 
-  inline void it_skip(const std::string& desc, std::function<void()> func) {
-    it_skip(desc, func, detail::registered_settings());
+  inline void it_skip(const std::string& desc, std::function<void()> func,
+      detail::settings_t& settings = detail::registered_settings()) {
+    it(desc, func, true, settings);
   }
 
   inline void xit(const std::string& desc, std::function<void()> func,
       detail::settings_t& settings = detail::registered_settings()) {
-    it_skip(desc, func, settings);
-  }
-
-  inline void it(const std::string& desc, std::function<void()> func, detail::settings_t& settings,
-      bool hard_skip = false) {
-    settings.it(desc, func, hard_skip);
-  }
-
-  inline void it(const std::string& desc, std::function<void()> func, bool hard_skip = false) {
-    it(desc, func, detail::registered_settings(), hard_skip);
+    it(desc, func, true, settings);
   }
 }
 #endif

@@ -23,7 +23,7 @@ go_bandit([]() {
     });
 
     auto call_it = [&]() {
-      it("my it", it_func, *settings);
+      it("my it", it_func, false, *settings);
     };
 
     it("tells the current context that execution has started", [&]() {
