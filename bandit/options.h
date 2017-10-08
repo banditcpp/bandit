@@ -176,7 +176,39 @@ namespace bandit {
         }
       };
 
-      options(int argc, char* argv[]) {
+      options(int argc, char* argv[])
+          : usage_{
+                {UNKNOWN, 0, "", "", argument::None,
+                    "USAGE: <executable> [options]\n\n"
+                    "Options:"},
+                {VERSION, 0, "", "version", argument::None,
+                    "  --version, \tPrint version of bandit"},
+                {HELP, 0, "", "help", argument::None,
+                    "  --help, \tPrint usage and exit."},
+                {SKIP, 0, "", "skip", argument::Required,
+                    "  --skip=<substring>, "
+                    "\tSkip all 'describe' and 'it' containing substring"},
+                {ONLY, 0, "", "only", argument::Required,
+                    "  --only=<substring>, "
+                    "\tRun only 'describe' and 'it' containing substring"},
+                {BREAK_ON_FAILURE, 0, "", "break-on-failure", argument::None,
+                    "  --break-on-failure, "
+                    "\tStop test run on first failing test"},
+                {DRY_RUN, 0, "", "dry-run", argument::None,
+                    "  --dry-run, "
+                    "\tSkip all tests. Use to list available tests"},
+            },
+            reporter_help_(append_list("  --reporter=<reporter>, "
+                "\tSelect reporter", argument::reporter_list())),
+            colorizer_help_(append_list("  --colorizer=<colorizer>, "
+                "\tSelect color theme", argument::colorizer_list())),
+            formatter_help_(append_list("  --formatter=<formatter>, "
+                "\tSelect error formatter", argument::formatter_list())) {
+        usage_.push_back(option::Descriptor{REPORTER, 0, "", "reporter", argument::Reporter, reporter_help_.c_str()});
+        usage_.push_back(option::Descriptor{COLORIZER, 0, "", "colorizer", argument::Colorizer, colorizer_help_.c_str()});
+        usage_.push_back(option::Descriptor{FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help_.c_str()});
+        usage_.push_back(option::Descriptor{0, 0, 0, 0, 0, 0});
+
         argc -= (argc > 0);
         argv += (argc > 0); // Skip program name (argv[0]) if present
         option::Stats stats(usage(), argc, argv);
@@ -249,6 +281,10 @@ namespace bandit {
       }
 
     private:
+      const option::Descriptor* usage() const {
+        return &usage_[0];
+      }
+
       template<typename ENUM>
       ENUM get_enumerator_from_string(const argstrs<ENUM>& list, const char* str) const {
         if (str != nullptr) {
@@ -278,38 +314,11 @@ namespace bandit {
         return desc + ": " + argument::comma_separated_list(list);
       }
 
-      static const option::Descriptor* usage() {
-        static std::string reporter_help = append_list("  --reporter=<reporter>, "
-            "\tSelect reporter", argument::reporter_list());
-        static std::string colorizer_help = append_list("  --colorizer=<colorizer>, "
-            "\tSelect color theme", argument::colorizer_list());
-        static std::string formatter_help = append_list("  --formatter=<formatter>, "
-            "\tSelect error formatter", argument::formatter_list());
-        static const option::Descriptor usage[] = {
-            {UNKNOWN, 0, "", "", argument::None,
-                "USAGE: <executable> [options]\n\n"
-                "Options:"},
-            {VERSION, 0, "", "version", argument::None,
-                "  --version, \tPrint version of bandit"},
-            {HELP, 0, "", "help", argument::None,
-                "  --help, \tPrint usage and exit."},
-            {REPORTER, 0, "", "reporter", argument::Reporter, reporter_help.c_str()},
-            {COLORIZER, 0, "", "colorizer", argument::Colorizer, colorizer_help.c_str()},
-            {FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help.c_str()},
-            {SKIP, 0, "", "skip", argument::Required,
-                "  --skip=<substring>, \tSkip all 'describe' and 'it' containing substring"},
-            {ONLY, 0, "", "only", argument::Required,
-                "  --only=<substring>, \tRun only 'describe' and 'it' containing substring"},
-            {BREAK_ON_FAILURE, 0, "", "break-on-failure", argument::None,
-                "  --break-on-failure, \tStop test run on first failing test"},
-            {DRY_RUN, 0, "", "dry-run", argument::None,
-                "  --dry-run, \tSkip all tests. Use to list available tests"},
-            {0, 0, 0, 0, 0, 0}};
-
-        return usage;
-      }
-
     private:
+      std::vector<option::Descriptor> usage_;
+      std::string reporter_help_;
+      std::string colorizer_help_;
+      std::string formatter_help_;
       std::vector<option::Option> options_;
       run_policy::filter_chain_t filter_chain_;
       bool parsed_ok_;
