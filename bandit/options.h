@@ -2,137 +2,56 @@
 #define BANDIT_OPTIONS_H
 
 #include <algorithm>
+#include <functional>
+#include <map>
 #include <vector>
 #include <iostream>
 
 #include <bandit/external/optionparser.h>
 #include <bandit/run_policies/filter_chain.h>
+#include <bandit/settings.h>
 
 namespace bandit {
   namespace detail {
+    using settings_func_t = std::function<void(detail::settings_t&)>;
+
+    struct option_map {
+      option_map() : default_it(nullptr) {}
+
+      void add(const std::string& name, settings_func_t func, bool is_default = false) {
+        auto it = map.emplace(std::make_pair(name, func));
+        if (is_default || map.size() == 1) {
+          default_it = it.first;
+        }
+      }
+
+      std::string comma_separated_list() const {
+        std::string csl;
+        auto it = map.begin();
+        if (it != map.end()) {
+          csl += it->first;
+          std::for_each(++it, map.end(), [&](const std::pair<std::string, settings_func_t>& val) {
+            csl += ", " + val.first;
+          });
+        } else {
+          csl = "[no registered entities]";
+        }
+        return csl;
+      }
+
+      using map_type = std::map<std::string, settings_func_t>;
+      map_type map;
+      map_type::iterator default_it;
+    };
+
+    struct choice_options {
+      option_map colorizers;
+      option_map formatters;
+      option_map reporters;
+    };
+
     struct options {
-      template<typename ENUM>
-      struct argstr {
-        ENUM id;
-        std::string str;
-      };
-
-      // a vector of argstr that allows to iterate over the strings only
-      template<typename ENUM>
-      struct argstrs : std::vector<argstr<ENUM>> {
-        using std::vector<argstr<ENUM>>::vector;
-
-        struct str_iterator
-            : public std::iterator<std::input_iterator_tag, std::string, int, const std::string*, std::string> {
-          using base_iterator = typename std::vector<argstr<ENUM>>::const_iterator;
-
-          str_iterator() = delete;
-
-          explicit str_iterator(base_iterator it) : it_(it) {}
-
-          str_iterator& operator++() {
-            ++it_;
-            return *this;
-          }
-
-          str_iterator operator++(int) {
-            str_iterator it(*this);
-            ++(*this);
-            return it;
-          }
-
-          bool operator==(const str_iterator& other) const {
-            return it_ == other.it_;
-          }
-
-          bool operator!=(const str_iterator& other) const {
-            return it_ != other.it_;
-          }
-
-          reference operator*() const {
-            return it_->str;
-          }
-
-          ENUM id() {
-            return it_->id;
-          }
-
-        private:
-          base_iterator it_;
-        };
-
-        str_iterator strbegin() const {
-          return str_iterator(this->begin());
-        };
-
-        str_iterator strend() const {
-          return str_iterator(this->end());
-        };
-      };
-
-      enum class colorizers {
-        OFF,
-        LIGHT,
-        DARK,
-        UNKNOWN
-      };
-
-      enum class formatters {
-        POSIX,
-        VS,
-        UNKNOWN
-      };
-
-      enum class reporters {
-        SINGLELINE,
-        XUNIT,
-        INFO,
-        SPEC,
-        DOTS,
-        CRASH,
-        UNKNOWN
-      };
-
       struct argument : public option::Arg {
-        static const argstrs<reporters> reporter_list() {
-          return {
-              {reporters::CRASH, "crash"},
-              {reporters::DOTS, "dots"},
-              {reporters::SINGLELINE, "singleline"},
-              {reporters::XUNIT, "xunit"},
-              {reporters::INFO, "info"},
-              {reporters::SPEC, "spec"},
-          };
-        }
-
-        static const argstrs<formatters> formatter_list() {
-          return {
-              {formatters::POSIX, "posix"},
-              {formatters::VS, "vs"},
-          };
-        }
-
-        static const argstrs<colorizers> colorizer_list() {
-          return {
-              {colorizers::OFF, "off"},
-              {colorizers::LIGHT, "light"},
-              {colorizers::DARK, "dark"},
-          };
-        }
-
-        template<typename ENUM>
-        static std::string comma_separated_list(argstrs<ENUM> list) {
-          std::string csl;
-          auto first = list.strbegin();
-          if (first != list.strend()) {
-            csl += *first;
-            std::for_each(++first, list.strend(), [&](const std::string& elem) {
-              csl += ", " + elem;
-            });
-          }
-          return csl;
-        }
-
         static std::string name(const option::Option& option) {
           std::string copy(option.name);
           return copy.substr(0, option.namelen);
@@ -148,36 +67,23 @@ namespace bandit {
           return option::ARG_ILLEGAL;
         }
 
-        template<typename ENUM>
-        static option::ArgStatus OneOf(const option::Option& option, bool msg, const argstrs<ENUM>&& list) {
-          auto status = Required(option, msg);
-          if (status == option::ARG_OK && std::find(list.strbegin(), list.strend(), option.arg) == list.strend()) {
-            if (msg) {
-              std::cerr
-                  << "Option argument of '" << name(option) << "' must be one of: "
-                  << comma_separated_list(list)
-                  << std::endl;
-            }
-            status = option::ARG_ILLEGAL;
-          }
-          return status;
-        }
-
+        // XXX: It would be nice to move the code from runner.h here
         static option::ArgStatus Colorizer(const option::Option& option, bool msg) {
-          return OneOf(option, msg, colorizer_list());
+          return Required(option, msg);
         }
 
         static option::ArgStatus Reporter(const option::Option& option, bool msg) {
-          return OneOf(option, msg, reporter_list());
+          return Required(option, msg);
         }
 
         static option::ArgStatus Formatter(const option::Option& option, bool msg) {
-          return OneOf(option, msg, formatter_list());
+          return Required(option, msg);
         }
       };
 
-      options(int argc, char* argv[])
-          : usage_{
+      options(int argc, char* argv[], const choice_options& choices = choice_options())
+          : choices_(choices),
+            usage_{
                 {UNKNOWN, 0, "", "", argument::None,
                     "USAGE: <executable> [options]\n\n"
                     "Options:"},
@@ -198,12 +104,12 @@ namespace bandit {
                     "  --dry-run, "
                     "\tSkip all tests. Use to list available tests"},
             },
-            reporter_help_(append_list("  --reporter=<reporter>, "
-                "\tSelect reporter", argument::reporter_list())),
-            colorizer_help_(append_list("  --colorizer=<colorizer>, "
-                "\tSelect color theme", argument::colorizer_list())),
-            formatter_help_(append_list("  --formatter=<formatter>, "
-                "\tSelect error formatter", argument::formatter_list())) {
+            reporter_help_("  --reporter=<reporter>, "
+                "\tSelect reporter: " + choices_.reporters.comma_separated_list()),
+            colorizer_help_("  --colorizer=<colorizer>, "
+                "\tSelect color theme: " + choices_.colorizers.comma_separated_list()),
+            formatter_help_("  --formatter=<formatter>, "
+                "\tSelect error formatter: " + choices_.formatters.comma_separated_list()) {
         usage_.push_back(option::Descriptor{REPORTER, 0, "", "reporter", argument::Reporter, reporter_help_.c_str()});
         usage_.push_back(option::Descriptor{COLORIZER, 0, "", "colorizer", argument::Colorizer, colorizer_help_.c_str()});
         usage_.push_back(option::Descriptor{FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help_.c_str()});
@@ -256,16 +162,28 @@ namespace bandit {
         return options_[VERSION] != nullptr;
       }
 
-      reporters reporter() const {
-        return get_enumerator_from_string(argument::reporter_list(), options_[REPORTER].arg);
+      bool apply_colorizer(settings_t& settings) const {
+        return apply(settings, choices_.colorizers, COLORIZER);
       }
 
-      colorizers colorizer() const {
-        return get_enumerator_from_string(argument::colorizer_list(), options_[COLORIZER].arg);
+      bool apply_formatter(settings_t& settings) const {
+        return apply(settings, choices_.formatters, FORMATTER);
       }
 
-      formatters formatter() const {
-        return get_enumerator_from_string(argument::formatter_list(), options_[FORMATTER].arg);
+      bool apply_reporter(settings_t& settings) const {
+        return apply(settings, choices_.reporters, REPORTER);
+      }
+
+      void print_usage_colorizer() const {
+        print_usage("colorizer", choices_.colorizers, COLORIZER);
+      }
+
+      void print_usage_formatter() const {
+        print_usage("formatter", choices_.formatters, FORMATTER);
+      }
+
+      void print_usage_reporter() const {
+        print_usage("reporter", choices_.reporters, REPORTER);
       }
 
       const run_policy::filter_chain_t& filter_chain() const {
@@ -281,21 +199,6 @@ namespace bandit {
       }
 
     private:
-      const option::Descriptor* usage() const {
-        return &usage_[0];
-      }
-
-      template<typename ENUM>
-      ENUM get_enumerator_from_string(const argstrs<ENUM>& list, const char* str) const {
-        if (str != nullptr) {
-          auto it = std::find(list.strbegin(), list.strend(), str);
-          if (it != list.strend()) {
-            return it.id();
-          }
-        }
-        return ENUM::UNKNOWN;
-      }
-
       enum option_index {
         UNKNOWN,
         VERSION,
@@ -309,16 +212,35 @@ namespace bandit {
         DRY_RUN,
       };
 
-      template<typename ENUM>
-      static std::string append_list(std::string desc, argstrs<ENUM> list) {
-        return desc + ": " + argument::comma_separated_list(list);
+      bool apply(settings_t& settings, const option_map& choice, enum option_index index) const {
+        option_map::map_type::const_iterator it{choice.default_it};
+        if (options_[index] != nullptr) {
+          it = choice.map.find(std::string(options_[index].arg));
+          if (it == choice.map.end()) {
+            return false;
+          }
+        }
+        it->second(settings);
+        return true;
       }
 
-    private:
+      void print_usage(std::string&& what, const option_map& choice, option_index index) const {
+        std::cerr << "Unknown " << what << " '" << options_[index].arg << "'." << std::endl;
+        std::cout << "Option argument of '--" << what << "' must be one of: " << choice.comma_separated_list() << std::endl;
+      }
+
+      const option::Descriptor* usage() const {
+        return &usage_[0];
+      }
+
+      const choice_options& choices_;
+
       std::vector<option::Descriptor> usage_;
+
       std::string reporter_help_;
       std::string colorizer_help_;
       std::string formatter_help_;
+
       std::vector<option::Option> options_;
       run_policy::filter_chain_t filter_chain_;
       bool parsed_ok_;

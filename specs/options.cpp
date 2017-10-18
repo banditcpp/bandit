@@ -31,38 +31,6 @@ struct options : private argv_helper, public bd::options {
       : argv_helper(std::move(args)), bd::options(argc(), argv()) {}
 };
 
-template<typename ENUM>
-static void choice_tests(std::string&& optname, ENUM unknown,
-    std::initializer_list<std::pair<std::string, ENUM>>&& list,
-    std::function<ENUM(const bd::options& opt)> tester) {
-  describe(optname, [&] {
-    for (auto pair : list) {
-      it("parses the '--" + optname + "=" + pair.first + "' option", [&] {
-        error_collector cerr;
-        for (auto& opt : {options({"--" + optname + "=" + pair.first}),
-                 options({"--" + optname, pair.first})}) {
-          AssertThat(tester(opt), Equals(pair.second));
-          all_ok(opt);
-        }
-        AssertThat(cerr.get(), IsEmpty());
-      });
-    }
-
-    it("does not know " + optname + " when not given", [&] {
-      options opt({});
-      AssertThat(tester(opt), Equals(unknown));
-    });
-
-    it("is not ok with unknown " + optname, [&] {
-      error_collector cerr;
-      options opt({"--" + optname + "=__unknown__"});
-      AssertThat(opt.parsed_ok(), IsFalse());
-      AssertThat(tester(opt), Equals(unknown));
-      AssertThat(cerr.get(), !IsEmpty());
-    });
-  });
-}
-
 go_bandit([]() {
   describe("options", [&]() {
     describe("with valid options", [&] {
@@ -177,39 +145,10 @@ go_bandit([]() {
         options opt({"--unknown-option", "--formatter=vs", "--reporter", "xunit",
             "unknown-argument", "--dry-run"});
         AssertThat(opt.parsed_ok(), IsTrue());
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
-        AssertThat(opt.reporter(), Equals(bd::options::reporters::XUNIT));
         AssertThat(opt.dry_run(), IsFalse());
         AssertThat(opt.has_further_arguments(), IsTrue());
         AssertThat(opt.has_unknown_options(), IsTrue());
       });
-    });
-
-    describe("with choice options", [&] {
-      choice_tests<bd::options::formatters>("formatter",
-          bd::options::formatters::UNKNOWN, {
-            {"vs", bd::options::formatters::VS},
-            {"posix", bd::options::formatters::POSIX},
-          }, [&](const bd::options& opt) {
-            return opt.formatter();
-          });
-      choice_tests<bd::options::reporters>("reporter",
-          bd::options::reporters::UNKNOWN, {
-            {"dots", bd::options::reporters::DOTS},
-            {"info", bd::options::reporters::INFO},
-            {"singleline", bd::options::reporters::SINGLELINE},
-            {"spec", bd::options::reporters::SPEC},
-            {"xunit", bd::options::reporters::XUNIT},
-          }, [&](const bd::options& opt) {
-            return opt.reporter();
-          });
-      choice_tests<bd::options::colorizers>("colorizer",
-          bd::options::colorizers::UNKNOWN, {
-            {"off", bd::options::colorizers::OFF},
-            {"light", bd::options::colorizers::LIGHT},
-          }, [&](const bd::options& opt) {
-            return opt.colorizer();
-          });
     });
 
     describe("with missing option arguments", [&] {

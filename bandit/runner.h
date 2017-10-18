@@ -40,7 +40,44 @@ namespace bandit {
   }
 
   inline int run(int argc, char* argv[], bool allow_further = true) {
-    detail::options opt(argc, argv);
+    detail::choice_options choices;
+
+    choices.colorizers.add("off", [&](detail::settings_t& settings) {
+      settings.set_colorizer(new colorizer::off());
+    });
+    choices.colorizers.add("dark", [&](detail::settings_t& settings) {
+      settings.set_colorizer(new colorizer::dark());
+    });
+    choices.colorizers.add("light", [&](detail::settings_t& settings) {
+      settings.set_colorizer(new colorizer::light());
+    }, true);
+    choices.formatters.add("vs", [&](detail::settings_t& settings) {
+      settings.set_formatter(new failure_formatter::visual_studio());
+    });
+    choices.formatters.add("posix", [&](detail::settings_t& settings) {
+      settings.set_formatter(new failure_formatter::posix());
+    }, true);
+    choices.reporters.add("singleline", [&](detail::settings_t& settings) {
+      settings.set_reporter(new bandit::reporter::singleline(settings.get_formatter(), settings.get_colorizer()));
+    });
+    choices.reporters.add("xunit", [&](detail::settings_t& settings) {
+      settings.set_reporter(new bandit::reporter::xunit(settings.get_formatter()));
+    });
+    choices.reporters.add("info", [&](detail::settings_t& settings) {
+      settings.set_reporter(new bandit::reporter::info(settings.get_formatter(), settings.get_colorizer()));
+    });
+    choices.reporters.add("spec", [&](detail::settings_t& settings) {
+      settings.set_reporter(new bandit::reporter::spec(settings.get_formatter(), settings.get_colorizer()));
+    });
+    choices.reporters.add("crash", [&](detail::settings_t& settings) {
+      settings.set_reporter(new bandit::reporter::crash(settings.get_formatter()));
+    });
+    choices.reporters.add("dots", [&](detail::settings_t& settings) {
+      settings.set_reporter(new bandit::reporter::dots(settings.get_formatter(), settings.get_colorizer()));
+    }, true);
+
+    detail::options opt(argc, argv, choices);
+
     if (!allow_further &&
         (opt.has_further_arguments() || opt.has_unknown_options())) {
       opt.print_usage();
@@ -48,46 +85,19 @@ namespace bandit {
     }
 
     detail::settings_t settings;
-    switch (opt.colorizer()) {
-    case detail::options::colorizers::OFF:
-      settings.set_colorizer(new colorizer::off());
-      break;
-    case detail::options::colorizers::DARK:
-      settings.set_colorizer(new colorizer::dark());
-      break;
-    case detail::options::colorizers::LIGHT:
-    default:
-      settings.set_colorizer(new colorizer::light());
-    }
 
-    switch (opt.formatter()) {
-    case detail::options::formatters::VS:
-      settings.set_formatter(new failure_formatter::visual_studio());
-      break;
-    case detail::options::formatters::POSIX:
-    default:
-      settings.set_formatter(new failure_formatter::posix());
+    // XXX: It would be nice to have that moved into bandit::options::arguments
+    if (!opt.apply_colorizer(settings)) {
+      opt.print_usage_colorizer();
+      return 1;
     }
-
-    switch (opt.reporter()) {
-    case detail::options::reporters::SINGLELINE:
-      settings.set_reporter(new bandit::reporter::singleline(settings.get_formatter(), settings.get_colorizer()));
-      break;
-    case detail::options::reporters::XUNIT:
-      settings.set_reporter(new bandit::reporter::xunit(settings.get_formatter()));
-      break;
-    case detail::options::reporters::INFO:
-      settings.set_reporter(new bandit::reporter::info(settings.get_formatter(), settings.get_colorizer()));
-      break;
-    case detail::options::reporters::SPEC:
-      settings.set_reporter(new bandit::reporter::spec(settings.get_formatter(), settings.get_colorizer()));
-      break;
-    case detail::options::reporters::CRASH:
-      settings.set_reporter(new bandit::reporter::crash(settings.get_formatter()));
-      break;
-    case detail::options::reporters::DOTS:
-    default:
-      settings.set_reporter(new bandit::reporter::dots(settings.get_formatter(), settings.get_colorizer()));
+    if (!opt.apply_formatter(settings)) {
+      opt.print_usage_formatter();
+      return 1;
+    }
+    if (!opt.apply_reporter(settings)) {
+      opt.print_usage_reporter();
+      return 1;
     }
 
     settings.set_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
