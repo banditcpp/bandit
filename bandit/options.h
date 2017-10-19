@@ -16,8 +16,6 @@ namespace bandit {
     using settings_func_t = std::function<void(detail::settings_t&)>;
 
     struct option_map {
-      option_map() : default_it(nullptr) {}
-
       void add(const std::string& name, settings_func_t func, bool is_default = false) {
         auto it = map.emplace(std::make_pair(name, func));
         if (is_default || map.size() == 1) {
