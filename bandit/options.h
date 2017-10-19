@@ -66,19 +66,6 @@ namespace bandit {
           }
           return option::ARG_ILLEGAL;
         }
-
-        // XXX: It would be nice to move the code from runner.h here
-        static option::ArgStatus Colorizer(const option::Option& option, bool msg) {
-          return Required(option, msg);
-        }
-
-        static option::ArgStatus Reporter(const option::Option& option, bool msg) {
-          return Required(option, msg);
-        }
-
-        static option::ArgStatus Formatter(const option::Option& option, bool msg) {
-          return Required(option, msg);
-        }
       };
 
       options(int argc, char* argv[], const choice_options& choices = choice_options())
@@ -110,9 +97,9 @@ namespace bandit {
                 "\tSelect color theme: " + choices_.colorizers.comma_separated_list()),
             formatter_help_("  --formatter=<formatter>, "
                 "\tSelect error formatter: " + choices_.formatters.comma_separated_list()) {
-        usage_.push_back(option::Descriptor{REPORTER, 0, "", "reporter", argument::Reporter, reporter_help_.c_str()});
-        usage_.push_back(option::Descriptor{COLORIZER, 0, "", "colorizer", argument::Colorizer, colorizer_help_.c_str()});
-        usage_.push_back(option::Descriptor{FORMATTER, 0, "", "formatter", argument::Formatter, formatter_help_.c_str()});
+        usage_.push_back(option::Descriptor{REPORTER, 0, "", "reporter", argument::Required, reporter_help_.c_str()});
+        usage_.push_back(option::Descriptor{COLORIZER, 0, "", "colorizer", argument::Required, colorizer_help_.c_str()});
+        usage_.push_back(option::Descriptor{FORMATTER, 0, "", "formatter", argument::Required, formatter_help_.c_str()});
         usage_.push_back(option::Descriptor{0, 0, 0, 0, 0, 0});
 
         argc -= (argc > 0);
@@ -162,28 +149,24 @@ namespace bandit {
         return options_[VERSION] != nullptr;
       }
 
-      bool apply_colorizer(settings_t& settings) const {
-        return apply(settings, choices_.colorizers, COLORIZER);
-      }
-
-      bool apply_formatter(settings_t& settings) const {
-        return apply(settings, choices_.formatters, FORMATTER);
-      }
-
-      bool apply_reporter(settings_t& settings) const {
-        return apply(settings, choices_.reporters, REPORTER);
-      }
-
-      void print_usage_colorizer() const {
-        print_usage("colorizer", choices_.colorizers, COLORIZER);
-      }
-
-      void print_usage_formatter() const {
-        print_usage("formatter", choices_.formatters, FORMATTER);
-      }
-
-      void print_usage_reporter() const {
-        print_usage("reporter", choices_.reporters, REPORTER);
+      bool update_settings(settings_t& settings) {
+        struct chooser_t {
+          const char* name;
+          const option_map& choice;
+          option_index index;
+        };
+        for (auto chooser : {
+            chooser_t{"colorizer", choices_.colorizers, COLORIZER},
+            chooser_t{"formatter", choices_.formatters, FORMATTER},
+            chooser_t{"reporter", choices_.reporters, REPORTER},
+        }) {
+          if (!apply(settings, chooser.choice, chooser.index)) {
+            print_usage(chooser.name, chooser.choice, chooser.index);
+            parsed_ok_ = false;
+            return false;
+          }
+        }
+        return true;
       }
 
       const run_policy::filter_chain_t& filter_chain() const {

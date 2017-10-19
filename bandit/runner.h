@@ -85,18 +85,7 @@ namespace bandit {
     }
 
     detail::settings_t settings;
-
-    // XXX: It would be nice to have that moved into bandit::options::arguments
-    if (!opt.apply_colorizer(settings)) {
-      opt.print_usage_colorizer();
-      return 1;
-    }
-    if (!opt.apply_formatter(settings)) {
-      opt.print_usage_formatter();
-      return 1;
-    }
-    if (!opt.apply_reporter(settings)) {
-      opt.print_usage_reporter();
+    if (!opt.update_settings(settings)) {
       return 1;
     }
 
