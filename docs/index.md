@@ -5,7 +5,7 @@ bandit
 [![Watchers](https://img.shields.io/github/watchers/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/watchers)
 [![Stars](https://img.shields.io/github/stars/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/stargazers)
 [![Forks](https://img.shields.io/github/forks/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/network/members)
-[![Commits per year](https://img.shields.io/github/commit-activity/y/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/graphs/commit-activity)
+[![Commits per year](https://img.shields.io/github/commit-activity/y/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/graphs/code-frequency)
 [![Last commit](https://img.shields.io/github/last-commit/banditcpp/bandit/master.svg)](https://github.com/banditcpp/bandit/commits/master)
 [![Travis CI Status](https://img.shields.io/travis/banditcpp/bandit/master.svg?label=tests+on+UNIX)](https://travis-ci.org/banditcpp/bandit)
 [![AppVeyor Status](https://img.shields.io/appveyor/ci/banditcpp/bandit/master.svg?label=tests+on+Windows)](https://ci.appveyor.com/project/banditcpp/bandit)
