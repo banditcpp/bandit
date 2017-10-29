@@ -20,8 +20,6 @@ Human-friendly unit testing for C++11
 Bandit is a framework for C++11 that wants to make working with unit tests a
 pleasant experience.
 
-Bandit is released under the [MIT license](LICENSE.txt)
-
 ## An example
 
 This is a complete test application written in bandit:
