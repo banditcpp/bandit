@@ -1,9 +1,9 @@
 bandit
 ======
-[![Travis CI Status](https://travis-ci.org/banditcpp/bandit.svg?branch=master)](https://travis-ci.org/banditcpp/bandit)
-[![AppVeyor Status](https://ci.appveyor.com/api/projects/status/github/banditcpp/bandit?branch=master&svg=true)](https://ci.appveyor.com/project/banditcpp/bandit)
-[![Codecov Badge](https://codecov.io/gh/banditcpp/bandit/branch/master/graph/badge.svg)](https://codecov.io/gh/banditcpp/bandit)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8b00743b0047469bbe794cdc35832a73)](https://www.codacy.com/app/sbeyer/bandit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=banditcpp/bandit&amp;utm_campaign=Badge_Grade)
+[![Travis CI Status](https://img.shields.io/travis/banditcpp/bandit/master.svg?label=tests+on+UNIX)](https://travis-ci.org/banditcpp/bandit)
+[![AppVeyor Status](https://img.shields.io/appveyor/ci/banditcpp/bandit/master.svg?label=tests+on+Windows)](https://ci.appveyor.com/project/banditcpp/bandit)
+[![Codecov Badge](https://img.shields.io/codecov/c/github/banditcpp/bandit/master.svg)](https://codecov.io/gh/banditcpp/bandit)
+[![Codacy Badge](https://img.shields.io/codacy/grade/8b00743b0047469bbe794cdc35832a73/master.svg)](https://www.codacy.com/app/sbeyer/bandit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=banditcpp/bandit&amp;utm_campaign=Badge_Grade)
 
 Human-friendly unit testing for C++11
 
