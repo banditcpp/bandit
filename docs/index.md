@@ -11,6 +11,7 @@ bandit
 [![AppVeyor Status](https://img.shields.io/appveyor/ci/banditcpp/bandit/master.svg?label=tests+on+Windows)](https://ci.appveyor.com/project/banditcpp/bandit)
 [![Codecov Badge](https://img.shields.io/codecov/c/github/banditcpp/bandit/master.svg)](https://codecov.io/gh/banditcpp/bandit)
 [![Codacy Badge](https://img.shields.io/codacy/grade/8b00743b0047469bbe794cdc35832a73/master.svg)](https://www.codacy.com/app/sbeyer/bandit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=banditcpp/bandit&amp;utm_campaign=Badge_Grade)
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/14169.svg)](https://scan.coverity.com/projects/banditcpp-bandit)
 [![Issues](https://img.shields.io/github/issues/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/pulls)
 [![freenode](https://img.shields.io/badge/chat-%20on%20freenode-brightgreen.svg)](//webchat.freenode.net/?channels=%23banditcpp)
