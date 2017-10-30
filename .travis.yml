@@ -14,15 +14,19 @@ addons:
 matrix:
   include:
     - env: BUILD_TYPE=check
+      if: branch != coverity-scan
     - compiler: gcc
       env: BUILD_TYPE=codecov
+      if: branch != coverity-scan
     - compiler: clang
       env: BUILD_TYPE=normal
+      if: branch != coverity-scan
     - compiler: gcc
       env: BUILD_TYPE=coverity
       # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
       #   via the "travis encrypt" command using the project repo's public key
       secure: "nzZtb3SPJOrytb6KjqdjWSx/A/yx1tuZ5oBBXkuLzmB9Wc4bJiucy+Cxih4GlWRu1XnKA+dJ2EzhVhUigjHgRfBvnCpCaBBb2ABVJpPGq+MBNDqYdXa72NVSEJPI8jWs28a/fvigXDadQFmW3782iifOghXAWwfsfJYz27VYTrM="
+      if: branch = coverity-scan
 
 before_script:
   - util/travis_before_script.sh
