@@ -61,7 +61,7 @@ namespace bandit {
         run_policy.reset(run_policy_);
       }
 
-      void describe(const std::string& desc, std::function<void()> func, bool hard_skip) {
+      void describe(const std::string& desc, const std::function<void()>& func, bool hard_skip) {
         reporter->context_starting(desc);
 
         context_stack.back()->execution_is_starting();
@@ -80,17 +80,17 @@ namespace bandit {
         reporter->context_ended(desc);
       }
 
-      void before_each(std::function<void()> func) {
+      void before_each(const std::function<void()>& func) {
         context_stack.throw_if_empty("before_each");
         context_stack.back()->register_before_each(func);
       }
 
-      void after_each(std::function<void()> func) {
+      void after_each(const std::function<void()>& func) {
         context_stack.throw_if_empty("after_each");
         context_stack.back()->register_after_each(func);
       }
 
-      void it(const std::string& desc, std::function<void()> func, bool hard_skip) {
+      void it(const std::string& desc, const std::function<void()>& func, bool hard_skip) {
         context_stack.throw_if_empty("it");
         if (hard_skip || !run_policy->should_run(desc, context_stack)) {
           reporter->it_skip(desc);
@@ -155,7 +155,7 @@ namespace bandit {
         }
       }
 
-      void try_with_adapter(const std::string& desc, bool allow_fail, std::function<void()> do_it) {
+      void try_with_adapter(const std::string& desc, bool allow_fail, const std::function<void()>& do_it) {
         if (allow_fail) {
           try {
             adapter->adapt_exceptions([&] { do_it(); });
