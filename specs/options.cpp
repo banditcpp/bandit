@@ -29,6 +29,9 @@ static void all_ok(const bd::options& opt) {
 struct options : private argv_helper, public bd::options {
   options(std::list<std::string>&& args)
       : argv_helper(std::move(args)), bd::options(argc(), argv()) {}
+
+  options(std::list<std::string>&& args, const bd::choice_options& choices)
+      : argv_helper(std::move(args)), bd::options(argc(), argv(), choices) {}
 };
 
 go_bandit([]() {
@@ -119,6 +122,61 @@ go_bandit([]() {
       });
     });
 
+    describe("update_settings()", [&] {
+      std::unique_ptr<bd::settings_t> settings;
+
+      before_each([&] {
+        settings.reset(new bd::settings_t);
+      });
+
+      it("throws exception if no choice_options given", [&] {
+        options opt({});
+        AssertThrows(std::runtime_error, opt.update_settings(*settings));
+      });
+
+      describe("with default choice_options", [&] {
+        std::unique_ptr<bd::choice_options> copts;
+
+        before_each([&] {
+          copts.reset(new bd::choice_options);
+          use_defaults(*copts);
+        });
+
+        it("works without any options default choice_options given", [&] {
+          options opt({}, *copts);
+          AssertThat(opt.update_settings(*settings), IsTrue());
+          all_ok(opt);
+        });
+
+        using slpair = std::pair<std::string, std::vector<std::string>>;
+        for (auto pair : std::initializer_list<slpair>{
+              {"colorizer", {"off", "dark", "light"}},
+              {"formatter", {"posix", "vs"}},
+              {"reporter", {"singleline", "xunit", "info", "spec", "crash", "dots"}}}) {
+          for (std::string name : pair.second) {
+            it("works with known " + pair.first + " '" + name + "'", [&] {
+              error_collector cerr;
+              options opt({"--" + pair.first, name}, *copts);
+              AssertThat(opt.update_settings(*settings), IsTrue());
+              all_ok(opt);
+              AssertThat(cerr.get(), IsEmpty());
+            });
+          }
+
+          it("fails with unknown " + pair.first, [&] {
+            error_collector cerr;
+            options opt({"--" + pair.first + "=__unknown__"}, *copts);
+            all_ok(opt);
+            AssertThat(cerr.get(), IsEmpty());
+            AssertThat(opt.update_settings(*settings), IsFalse());
+            AssertThat(opt.parsed_ok(), IsFalse());
+            AssertThat(cerr.get(), Contains("Unknown"));
+            AssertThat(cerr.get(), Contains(pair.first));
+          });
+        }
+      });
+    });
+
     describe("with unknown arguments", [&] {
       it("recognizes unknown arguments", [&] {
         options opt({"unknown-argument"});
@@ -142,7 +200,7 @@ go_bandit([]() {
       });
 
       it("ignores unknown options and arguments", [&] {
-        options opt({"--unknown-option", "--formatter=vs", "--reporter", "xunit",
+        options opt({"--unknown-option", "--formatter=something", "--reporter", "something",
             "unknown-argument", "--dry-run"});
         AssertThat(opt.parsed_ok(), IsTrue());
         AssertThat(opt.dry_run(), IsFalse());

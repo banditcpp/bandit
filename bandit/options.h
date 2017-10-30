@@ -66,7 +66,12 @@ namespace bandit {
         }
       };
 
-      options(int argc, char* argv[], const choice_options& choices = choice_options())
+      static const choice_options& empty_choice_options() {
+        static choice_options choices;
+        return choices;
+      }
+
+      options(int argc, char* argv[], const choice_options& choices = empty_choice_options())
           : choices_(choices),
             usage_{
                 {UNKNOWN, 0, "", "", argument::None,
@@ -158,6 +163,9 @@ namespace bandit {
             chooser_t{"formatter", choices_.formatters, FORMATTER},
             chooser_t{"reporter", choices_.reporters, REPORTER},
         }) {
+          if (chooser.choice.map.empty()) {
+            throw std::runtime_error(std::string("No ") + chooser.name + " set.");
+          }
           if (!apply(settings, chooser.choice, chooser.index)) {
             print_usage(chooser.name, chooser.choice, chooser.index);
             parsed_ok_ = false;
@@ -207,7 +215,7 @@ namespace bandit {
 
       void print_usage(std::string&& what, const option_map& choice, option_index index) const {
         std::cerr << "Unknown " << what << " '" << options_[index].arg << "'." << std::endl;
-        std::cout << "Option argument of '--" << what << "' must be one of: " << choice.comma_separated_list() << std::endl;
+        std::cerr << "Option argument of '--" << what << "' must be one of: " << choice.comma_separated_list() << std::endl;
       }
 
       const option::Descriptor* usage() const {
