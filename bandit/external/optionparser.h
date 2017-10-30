@@ -1993,9 +1993,9 @@ struct PrintUsageImplementation
   public:
     //! @brief Creates an iterator for @c usage.
     LinePartIterator(const Descriptor usage[]) :
-        tablestart(usage), rowdesc(0), rowstart(0), ptr(0), col(-1), len(0), max_line_in_block(0), line_in_block(0),
-        target_line_in_block(0), hit_target_line(true)
+        tablestart(usage), rowdesc(0), rowstart(0)
     {
+      restartRow();
     }
 
     /**
