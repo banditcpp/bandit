@@ -159,10 +159,10 @@ namespace bandit {
           option_index index;
         };
         for (auto chooser : {
-            chooser_t{"colorizer", choices_.colorizers, COLORIZER},
-            chooser_t{"formatter", choices_.formatters, FORMATTER},
-            chooser_t{"reporter", choices_.reporters, REPORTER},
-        }) {
+                 chooser_t{"colorizer", choices_.colorizers, COLORIZER},
+                 chooser_t{"formatter", choices_.formatters, FORMATTER},
+                 chooser_t{"reporter", choices_.reporters, REPORTER},
+             }) {
           if (chooser.choice.map.empty()) {
             throw std::runtime_error(std::string("No ") + chooser.name + " set.");
           }
