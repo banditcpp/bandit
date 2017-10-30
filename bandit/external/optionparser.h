@@ -1,7 +1,7 @@
 /*
  * The Lean Mean C++ Option Parser
  *
- * Copyright (C) 2012 Matthias S. Benkmann
+ * Copyright (C) 2012-2017 Matthias S. Benkmann
  *
  * The "Software" in the following 2 paragraphs refers to this file containing
  * the code to The Lean Mean C++ Option Parser.
@@ -47,7 +47,9 @@
  * (argc, argv).
  * It supports the short and long option formats of getopt(), getopt_long()
  * and getopt_long_only() but has a more convenient interface.
- * The following features set it apart from other option parsers:
+ *
+ * @par Feedback:
+ * Send questions, bug reports, feature requests etc. to: <tt><b>optionparser-feedback(a)lists.sourceforge.net</b></tt>
  *
  * @par Highlights:
  * <ul style="padding-left:1em;margin-left:0">
@@ -89,11 +91,13 @@
  *
  * @par Download:
  * Tarball with examples and test programs:
- * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.5.tar.gz/download">optionparser-1.5.tar.gz</a> @n
+ * <a style="font-size:larger;font-weight:bold" href="http://sourceforge.net/projects/optionparser/files/optionparser-1.7.tar.gz/download">optionparser-1.7.tar.gz</a> @n
  * Just the header (this is all you really need):
  * <a style="font-size:larger;font-weight:bold" href="http://optionparser.sourceforge.net/optionparser.h">optionparser.h</a>
  *
  * @par Changelog:
+ * <b>Version 1.7:</b> Work on const-correctness. @n
+ * <b>Version 1.6:</b> Fix for MSC compiler. @n
  * <b>Version 1.5:</b> Fixed 2 warnings about potentially uninitialized variables. @n
  *                     Added const version of Option::next(). @n
  * <b>Version 1.4:</b> Fixed 2 printUsage() bugs that messed up output with small COLUMNS values. @n
@@ -106,10 +110,6 @@
  * <b>Version 1.1:</b> Optional mode with argument reordering as done by GNU getopt(), so that
  *                     options and non-options can be mixed. See
  *                     @ref option::Parser::parse() "Parser::parse()".
- *
- * @par Feedback:
- * Send questions, bug reports, feature requests etc. to: <tt><b>optionparser-feedback<span id="antispam">&nbsp;(a)&nbsp;</span>lists.sourceforge.net</b></tt>
- * @htmlonly <script type="text/javascript">document.getElementById("antispam").innerHTML="@"</script> @endhtmlonly
  *
  *
  * @par Example program:
@@ -220,6 +220,7 @@
 
 #ifdef _MSC_VER
 #include <intrin.h>
+#pragma intrinsic(_BitScanReverse)
 #endif
 
 /** @brief The namespace of The Lean Mean C++ Option Parser. */
@@ -227,7 +228,6 @@ namespace option
 {
 
 #ifdef _MSC_VER
-#pragma intrinsic(_BitScanReverse)
 struct MSC_Builtin_CLZ
 {
   static int builtin_clz(unsigned x)
@@ -556,10 +556,10 @@ public:
    *
    * Returns 0 when called for an unused/invalid option.
    */
-  int count()
+  int count() const
   {
     int c = (desc == 0 ? 0 : 1);
-    Option* p = first();
+    const Option* p = first();
     while (!p->isLast())
     {
       ++c;
@@ -614,6 +614,14 @@ public:
   }
 
   /**
+  * const version of Option::first().
+  */
+  const Option* first() const
+  {
+    return const_cast<Option*>(this)->first();
+  }
+
+  /**
    * @brief Returns a pointer to the last element of the linked list.
    *
    * Use this when you want the last occurrence of an option on the command line to
@@ -630,6 +638,14 @@ public:
    * the state listed last on the command line.
    */
   Option* last()
+  {
+    return first()->prevwrap();
+  }
+
+  /**
+  * const version of Option::last().
+  */
+  const Option* last() const
   {
     return first()->prevwrap();
   }
@@ -656,6 +672,14 @@ public:
    * line.
    */
   Option* prevwrap()
+  {
+    return untag(prev_);
+  }
+
+  /**
+  * const version of Option::prevwrap().
+  */
+  const Option* prevwrap() const
   {
     return untag(prev_);
   }
