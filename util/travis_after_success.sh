@@ -13,7 +13,7 @@ codecov)
 	echo "Sending information to codecov.io"
 	curl -s https://codecov.io/bash | bash
 	;;
-check|normal)
+check|coverity|normal)
 	;;
 *)
 	echo "BUILD_TYPE \"$BUILD_TYPE\" not set or unknown." >&2
