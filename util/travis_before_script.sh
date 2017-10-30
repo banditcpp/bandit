@@ -1,6 +1,8 @@
 #!/bin/sh
 # Script that is run by .travis.yml's before_script step
 
+. util/travis_common.sh || exit 1
+
 mkdir -p build
 cd build
 

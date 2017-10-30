@@ -1,6 +1,8 @@
 #!/bin/sh
 # Script that is run by .travis.yml's script step
 
+. util/travis_common.sh || exit 1
+
 case "$BUILD_TYPE" in
 check)
 	./util/check_header_guards.sh &&

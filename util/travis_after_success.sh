@@ -1,6 +1,8 @@
 #!/bin/sh
 # Script that is run by .travis.yml's after_success step
 
+. util/travis_common.sh || exit 1
+
 case "$BUILD_TYPE" in
 codecov)
 	echo "Collecting coverage information"
