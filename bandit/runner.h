@@ -39,9 +39,7 @@ namespace bandit {
     return settings.get_reporter().did_we_pass() ? 0 : 1;
   }
 
-  inline int run(int argc, char* argv[], bool allow_further = true) {
-    detail::choice_options choices;
-
+  inline void use_default_colorizers(detail::choice_options& choices) {
     choices.colorizers.add("off", [&](detail::settings_t& settings) {
       settings.set_colorizer(new colorizer::off());
     });
@@ -51,12 +49,18 @@ namespace bandit {
     choices.colorizers.add("light", [&](detail::settings_t& settings) {
       settings.set_colorizer(new colorizer::light());
     }, true);
+  }
+
+  inline void use_default_formatters(detail::choice_options& choices) {
     choices.formatters.add("vs", [&](detail::settings_t& settings) {
       settings.set_formatter(new failure_formatter::visual_studio());
     });
     choices.formatters.add("posix", [&](detail::settings_t& settings) {
       settings.set_formatter(new failure_formatter::posix());
     }, true);
+  }
+
+  inline void use_default_reporters(detail::choice_options& choices) {
     choices.reporters.add("singleline", [&](detail::settings_t& settings) {
       settings.set_reporter(new bandit::reporter::singleline(settings.get_formatter(), settings.get_colorizer()));
     });
@@ -75,7 +79,15 @@ namespace bandit {
     choices.reporters.add("dots", [&](detail::settings_t& settings) {
       settings.set_reporter(new bandit::reporter::dots(settings.get_formatter(), settings.get_colorizer()));
     }, true);
+  }
 
+  inline void use_defaults(detail::choice_options& choices) {
+    use_default_colorizers(choices);
+    use_default_formatters(choices);
+    use_default_reporters(choices);
+  }
+
+  inline int run(int argc, char* argv[], const detail::choice_options& choices, bool allow_further = true) {
     detail::options opt(argc, argv, choices);
 
     if (!allow_further &&
@@ -93,6 +105,14 @@ namespace bandit {
 
     detail::register_settings(&settings);
     return run(opt, detail::specs());
+  }
+
+  inline int run(int argc, char* argv[], bool allow_further = true) {
+    detail::choice_options choices;
+
+    use_defaults(choices);
+
+    return run(argc, argv, choices, allow_further);
   }
 }
 #endif
