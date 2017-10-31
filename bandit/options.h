@@ -226,9 +226,9 @@ namespace bandit {
 
       std::vector<option::Descriptor> usage_;
 
-      std::string reporter_help_;
-      std::string colorizer_help_;
-      std::string formatter_help_;
+      const std::string reporter_help_;
+      const std::string colorizer_help_;
+      const std::string formatter_help_;
 
       std::vector<option::Option> options_;
       run_policy::filter_chain_t filter_chain_;
