@@ -1,6 +1,8 @@
 #!/bin/sh
 # Script that is run by .travis.yml's before_script step
 
+. util/travis_common.sh || exit 1
+
 mkdir -p build
 cd build
 
@@ -11,7 +13,7 @@ codecov)
 		-DCMAKE_BUILD_TYPE=Debug \
 		-DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -fprofile-arcs -ftest-coverage" ..
 	;;
-normal)
+normal|coverity)
 	echo "Building in release mode"
 	cmake -DCMAKE_BUILD_TYPE=Release ..
 	;;
