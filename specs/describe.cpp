@@ -9,20 +9,20 @@ SPEC_BEGIN(describe)
 describe("describe", []() {
   std::function<void()> describe_fn;
   fake_reporter* reporter;
-  std::unique_ptr<bandit::detail::settings_t> settings;
+  std::unique_ptr<bandit::detail::controller_t> controller;
   std::unique_ptr<fake_context> global_context;
 
   before_each([&]() {
     reporter = new fake_reporter();
-    settings.reset(new bandit::detail::settings_t());
-    settings->set_reporter(reporter);
+    controller.reset(new bandit::detail::controller_t());
+    controller->set_reporter(reporter);
 
     global_context = std::unique_ptr<fake_context>(new fake_context());
-    settings->get_contexts().push_back(global_context.get());
+    controller->get_contexts().push_back(global_context.get());
   });
 
   auto call_describe = [&]() {
-    describe("context name", describe_fn, false, *settings);
+    describe("context name", describe_fn, false, *controller);
   };
 
   describe("with a succeeding 'it'", [&]() {
@@ -30,7 +30,7 @@ describe("describe", []() {
 
     before_each([&]() {
       context_stack_size_while_running = 0;
-      describe_fn = [&]() { context_stack_size_while_running = settings->get_contexts().size(); };
+      describe_fn = [&]() { context_stack_size_while_running = controller->get_contexts().size(); };
     });
 
     it("tells its parent context that execution has started", [&]() {
@@ -59,7 +59,7 @@ describe("describe", []() {
 
     it("pops the context from the stack after execution so that only the global context is left", [&]() {
       call_describe();
-      AssertThat(settings->get_contexts(), Is().OfLength(1));
+      AssertThat(controller->get_contexts(), Is().OfLength(1));
     });
 
   });
@@ -86,7 +86,7 @@ describe("describe", []() {
   describe("skip", [&]() {
     bool context_is_hard_skip;
     describe_fn = [&]() {
-      context_is_hard_skip = settings->get_contexts().back()->hard_skip();
+      context_is_hard_skip = controller->get_contexts().back()->hard_skip();
     };
 
     before_each([&]() {
@@ -95,14 +95,14 @@ describe("describe", []() {
 
     describe("describe_skip", [&]() {
       it("pushes a context marked as skipped on the stack", [&]() {
-        describe_skip("context name", describe_fn, *settings);
+        describe_skip("context name", describe_fn, *controller);
         AssertThat(context_is_hard_skip, IsTrue());
       });
     });
 
     describe("xdescribe", [&]() {
       it("pushes a context marked as skipped on the stack", [&]() {
-        xdescribe("context name", describe_fn, *settings);
+        xdescribe("context name", describe_fn, *controller);
         AssertThat(context_is_hard_skip, IsTrue());
       });
     });

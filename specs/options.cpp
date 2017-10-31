@@ -122,16 +122,16 @@ go_bandit([]() {
       });
     });
 
-    describe("update_settings()", [&] {
-      std::unique_ptr<bd::settings_t> settings;
+    describe("update_controller_settings()", [&] {
+      std::unique_ptr<bd::controller_t> controller;
 
       before_each([&] {
-        settings.reset(new bd::settings_t);
+        controller.reset(new bd::controller_t);
       });
 
       it("throws exception if no choice_options given", [&] {
         options opt({});
-        AssertThrows(std::runtime_error, opt.update_settings(*settings));
+        AssertThrows(std::runtime_error, opt.update_controller_settings(*controller));
       });
 
       describe("with default choice_options", [&] {
@@ -144,7 +144,7 @@ go_bandit([]() {
 
         it("works without any options default choice_options given", [&] {
           options opt({}, *copts);
-          AssertThat(opt.update_settings(*settings), IsTrue());
+          AssertThat(opt.update_controller_settings(*controller), IsTrue());
           all_ok(opt);
         });
 
@@ -157,7 +157,7 @@ go_bandit([]() {
             it("works with known " + pair.first + " '" + name + "'", [&] {
               error_collector cerr;
               options opt({"--" + pair.first, name}, *copts);
-              AssertThat(opt.update_settings(*settings), IsTrue());
+              AssertThat(opt.update_controller_settings(*controller), IsTrue());
               all_ok(opt);
               AssertThat(cerr.get(), IsEmpty());
             });
@@ -168,7 +168,7 @@ go_bandit([]() {
             options opt({"--" + pair.first + "=__unknown__"}, *copts);
             all_ok(opt);
             AssertThat(cerr.get(), IsEmpty());
-            AssertThat(opt.update_settings(*settings), IsFalse());
+            AssertThat(opt.update_controller_settings(*controller), IsFalse());
             AssertThat(opt.parsed_ok(), IsFalse());
             AssertThat(cerr.get(), Contains("Unknown"));
             AssertThat(cerr.get(), Contains(pair.first));

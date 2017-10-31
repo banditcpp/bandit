@@ -1,5 +1,5 @@
-#ifndef BANDIT_SETTINGS_H
-#define BANDIT_SETTINGS_H
+#ifndef BANDIT_CONTROLLER_H
+#define BANDIT_CONTROLLER_H
 
 #include <bandit/adapters.h>
 #include <bandit/colorizers/interface.h>
@@ -9,15 +9,15 @@
 
 namespace bandit {
   namespace detail {
-    struct settings_t {
-      settings_t() : adapter(new adapter::snowhouse) {}
+    struct controller_t {
+      controller_t() : adapter(new adapter::snowhouse) {}
 
       context::stack_t& get_contexts() {
         return context_stack;
       }
 
       assertion_adapter_t& get_adapter() {
-        throw_if_nullptr(adapter.get(), "assertion adapter", "bandit::detail::settings_t::set_adapter()");
+        throw_if_nullptr(adapter.get(), "assertion adapter", "bandit::detail::controller_t::set_adapter()");
         return *adapter;
       }
 
@@ -26,7 +26,7 @@ namespace bandit {
       }
 
       colorizer_t& get_colorizer() {
-        throw_if_nullptr(colorizer.get(), "colorizer", "bandit::detail::settings_t::set_colorizer()");
+        throw_if_nullptr(colorizer.get(), "colorizer", "bandit::detail::controller_t::set_colorizer()");
         return *colorizer;
       }
 
@@ -35,7 +35,7 @@ namespace bandit {
       }
 
       failure_formatter_t& get_formatter() {
-        throw_if_nullptr(formatter.get(), "formatter", "bandit::detail::settings_t::set_formatter()");
+        throw_if_nullptr(formatter.get(), "formatter", "bandit::detail::controller_t::set_formatter()");
         return *formatter;
       }
 
@@ -44,7 +44,7 @@ namespace bandit {
       }
 
       reporter_t& get_reporter() {
-        throw_if_nullptr(reporter.get(), "reporter", "bandit::detail::settings_t::set_reporter()");
+        throw_if_nullptr(reporter.get(), "reporter", "bandit::detail::controller_t::set_reporter()");
         return *reporter;
       }
 
@@ -53,7 +53,7 @@ namespace bandit {
       }
 
       run_policy_t& get_policy() {
-        throw_if_nullptr(run_policy.get(), "run policy", "bandit::detail::settings_t::set_policy()");
+        throw_if_nullptr(run_policy.get(), "run policy", "bandit::detail::controller_t::set_policy()");
         return *run_policy;
       }
 
@@ -128,25 +128,25 @@ namespace bandit {
         }
       }
 
-      // A function is required to initialize a static settings variable in a header file
+      // A function is required to initialize a static controller variable in a header file
       // and this struct aims at encapsulating this function
-      static void register_settings(settings_t* settings) {
-        if (settings == nullptr) {
-          throw std::runtime_error("Invalid null settings passed to bandit::detail::register_settings()");
+      static void register_controller(controller_t* controller) {
+        if (controller == nullptr) {
+          throw std::runtime_error("Invalid null controller passed to bandit::detail::register_controller()");
         }
-        get_settings_address() = settings;
+        get_controller_address() = controller;
       }
 
-      static settings_t& registered_settings() {
-        auto settings = get_settings_address();
-        throw_if_nullptr(settings, "settings", "bandit::detail::register_settings()");
-        return *settings;
+      static controller_t& registered_controller() {
+        auto controller = get_controller_address();
+        throw_if_nullptr(controller, "controller", "bandit::detail::register_controller()");
+        return *controller;
       }
 
     private:
-      static settings_t*& get_settings_address() {
-        static settings_t* settings_ = nullptr;
-        return settings_;
+      static controller_t*& get_controller_address() {
+        static controller_t* controller_ = nullptr;
+        return controller_;
       }
 
       static void throw_if_nullptr(const void* ptr, const std::string& name, const std::string& setter) {
@@ -187,12 +187,12 @@ namespace bandit {
       std::unique_ptr<run_policy_t> run_policy;
     };
 
-    inline void register_settings(settings_t* settings) {
-      settings_t::register_settings(settings);
+    inline void register_controller(controller_t* controller) {
+      controller_t::register_controller(controller);
     }
 
-    inline settings_t& registered_settings() {
-      return settings_t::registered_settings();
+    inline controller_t& registered_controller() {
+      return controller_t::registered_controller();
     }
   }
 }

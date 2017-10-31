@@ -29,7 +29,7 @@ In the following, we list breaking changes per major release.
   allows to write description-generating code more nicely and
   the latter eases skipping (or not) based on the program flow.
 
-* The grammar and runner now use `bandit::detail::settings_t` as optional parameters
+* The grammar and runner now use `bandit::detail::controller_t` as optional parameters
   instead of reporters, run policies, etc. This is a change of the public
   API that is probably only of internal interest.
 

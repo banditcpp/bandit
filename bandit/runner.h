@@ -3,7 +3,7 @@
 
 #include <bandit/registration/registrar.h>
 #include <bandit/options.h>
-#include <bandit/settings.h>
+#include <bandit/controller.h>
 #include <bandit/version.h>
 
 #include <bandit/colorizers.h>
@@ -13,7 +13,7 @@
 
 namespace bandit {
   inline int run(const detail::options& opt, const detail::spec_registry& specs,
-      detail::settings_t& settings = detail::registered_settings()) {
+      detail::controller_t& controller = detail::registered_controller()) {
     if (opt.help() || !opt.parsed_ok()) {
       opt.print_usage();
       return !opt.parsed_ok();
@@ -24,60 +24,60 @@ namespace bandit {
       return 0;
     }
 
-    settings.get_reporter().test_run_starting();
+    controller.get_reporter().test_run_starting();
 
     bool hard_skip = false;
     context::bandit global_context("", hard_skip);
-    settings.get_contexts().push_back(&global_context);
+    controller.get_contexts().push_back(&global_context);
 
     for (auto func : specs) {
       func();
     };
 
-    settings.get_reporter().test_run_complete();
+    controller.get_reporter().test_run_complete();
 
-    return settings.get_reporter().did_we_pass() ? 0 : 1;
+    return controller.get_reporter().did_we_pass() ? 0 : 1;
   }
 
   inline void use_default_colorizers(detail::choice_options& choices) {
-    choices.colorizers.add("off", [&](detail::settings_t& settings) {
-      settings.set_colorizer(new colorizer::off());
+    choices.colorizers.add("off", [&](detail::controller_t& controller) {
+      controller.set_colorizer(new colorizer::off());
     });
-    choices.colorizers.add("dark", [&](detail::settings_t& settings) {
-      settings.set_colorizer(new colorizer::dark());
+    choices.colorizers.add("dark", [&](detail::controller_t& controller) {
+      controller.set_colorizer(new colorizer::dark());
     });
-    choices.colorizers.add("light", [&](detail::settings_t& settings) {
-      settings.set_colorizer(new colorizer::light());
+    choices.colorizers.add("light", [&](detail::controller_t& controller) {
+      controller.set_colorizer(new colorizer::light());
     }, true);
   }
 
   inline void use_default_formatters(detail::choice_options& choices) {
-    choices.formatters.add("vs", [&](detail::settings_t& settings) {
-      settings.set_formatter(new failure_formatter::visual_studio());
+    choices.formatters.add("vs", [&](detail::controller_t& controller) {
+      controller.set_formatter(new failure_formatter::visual_studio());
     });
-    choices.formatters.add("posix", [&](detail::settings_t& settings) {
-      settings.set_formatter(new failure_formatter::posix());
+    choices.formatters.add("posix", [&](detail::controller_t& controller) {
+      controller.set_formatter(new failure_formatter::posix());
     }, true);
   }
 
   inline void use_default_reporters(detail::choice_options& choices) {
-    choices.reporters.add("singleline", [&](detail::settings_t& settings) {
-      settings.set_reporter(new bandit::reporter::singleline(settings.get_formatter(), settings.get_colorizer()));
+    choices.reporters.add("singleline", [&](detail::controller_t& controller) {
+      controller.set_reporter(new bandit::reporter::singleline(controller.get_formatter(), controller.get_colorizer()));
     });
-    choices.reporters.add("xunit", [&](detail::settings_t& settings) {
-      settings.set_reporter(new bandit::reporter::xunit(settings.get_formatter()));
+    choices.reporters.add("xunit", [&](detail::controller_t& controller) {
+      controller.set_reporter(new bandit::reporter::xunit(controller.get_formatter()));
     });
-    choices.reporters.add("info", [&](detail::settings_t& settings) {
-      settings.set_reporter(new bandit::reporter::info(settings.get_formatter(), settings.get_colorizer()));
+    choices.reporters.add("info", [&](detail::controller_t& controller) {
+      controller.set_reporter(new bandit::reporter::info(controller.get_formatter(), controller.get_colorizer()));
     });
-    choices.reporters.add("spec", [&](detail::settings_t& settings) {
-      settings.set_reporter(new bandit::reporter::spec(settings.get_formatter(), settings.get_colorizer()));
+    choices.reporters.add("spec", [&](detail::controller_t& controller) {
+      controller.set_reporter(new bandit::reporter::spec(controller.get_formatter(), controller.get_colorizer()));
     });
-    choices.reporters.add("crash", [&](detail::settings_t& settings) {
-      settings.set_reporter(new bandit::reporter::crash(settings.get_formatter()));
+    choices.reporters.add("crash", [&](detail::controller_t& controller) {
+      controller.set_reporter(new bandit::reporter::crash(controller.get_formatter()));
     });
-    choices.reporters.add("dots", [&](detail::settings_t& settings) {
-      settings.set_reporter(new bandit::reporter::dots(settings.get_formatter(), settings.get_colorizer()));
+    choices.reporters.add("dots", [&](detail::controller_t& controller) {
+      controller.set_reporter(new bandit::reporter::dots(controller.get_formatter(), controller.get_colorizer()));
     }, true);
   }
 
@@ -96,14 +96,14 @@ namespace bandit {
       return 1;
     }
 
-    detail::settings_t settings;
-    if (!opt.update_settings(settings)) {
+    detail::controller_t controller;
+    if (!opt.update_controller_settings(controller)) {
       return 1;
     }
 
-    settings.set_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
+    controller.set_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
 
-    detail::register_settings(&settings);
+    detail::register_controller(&controller);
     return run(opt, detail::specs());
   }
 

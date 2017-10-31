@@ -9,14 +9,14 @@
 
 #include <bandit/external/optionparser.h>
 #include <bandit/run_policies/filter_chain.h>
-#include <bandit/settings.h>
+#include <bandit/controller.h>
 
 namespace bandit {
   namespace detail {
-    using settings_func_t = std::function<void(detail::settings_t&)>;
+    using controller_func_t = std::function<void(detail::controller_t&)>;
 
     struct option_map {
-      void add(const std::string& name, settings_func_t func, bool is_default = false) {
+      void add(const std::string& name, controller_func_t func, bool is_default = false) {
         auto it = map.emplace(std::make_pair(name, func));
         if (is_default || map.size() == 1) {
           default_it = it.first;
@@ -28,7 +28,7 @@ namespace bandit {
         auto it = map.begin();
         if (it != map.end()) {
           csl += it->first;
-          std::for_each(++it, map.end(), [&](const std::pair<std::string, settings_func_t>& val) {
+          std::for_each(++it, map.end(), [&](const std::pair<std::string, controller_func_t>& val) {
             csl += ", " + val.first;
           });
         } else {
@@ -37,7 +37,7 @@ namespace bandit {
         return csl;
       }
 
-      using map_type = std::map<std::string, settings_func_t>;
+      using map_type = std::map<std::string, controller_func_t>;
       map_type map;
       map_type::iterator default_it;
     };
@@ -152,7 +152,7 @@ namespace bandit {
         return options_[VERSION] != nullptr;
       }
 
-      bool update_settings(settings_t& settings) {
+      bool update_controller_settings(controller_t& controller) {
         struct chooser_t {
           const char* name;
           const option_map& choice;
@@ -166,7 +166,7 @@ namespace bandit {
           if (chooser.choice.map.empty()) {
             throw std::runtime_error(std::string("No ") + chooser.name + " set.");
           }
-          if (!apply(settings, chooser.choice, chooser.index)) {
+          if (!apply(controller, chooser.choice, chooser.index)) {
             print_usage(chooser.name, chooser.choice, chooser.index);
             parsed_ok_ = false;
             return false;
@@ -201,7 +201,7 @@ namespace bandit {
         DRY_RUN,
       };
 
-      bool apply(settings_t& settings, const option_map& choice, enum option_index index) const {
+      bool apply(controller_t& controller, const option_map& choice, enum option_index index) const {
         option_map::map_type::const_iterator it{choice.default_it};
         if (options_[index] != nullptr) {
           it = choice.map.find(std::string(options_[index].arg));
@@ -209,7 +209,7 @@ namespace bandit {
             return false;
           }
         }
-        it->second(settings);
+        it->second(controller);
         return true;
       }
 
