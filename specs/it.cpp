@@ -8,23 +8,22 @@ namespace bd = bandit::detail;
 go_bandit([]() {
   describe("it", [&]() {
     std::function<void()> it_func;
-    fake_reporter_ptr reporter;
-    std::unique_ptr<context::stack_t> contexts;
+    fake_reporter* reporter;
+    std::unique_ptr<bandit::detail::controller_t> controller;
     std::unique_ptr<fake_context> context;
-    adapter::snowhouse assertion_adapter;
-    bd::run_policy_ptr run_policy;
 
     before_each([&]() {
-      reporter = fake_reporter_ptr(new fake_reporter());
-      contexts = std::unique_ptr<bandit::context::stack_t>(new bandit::context::stack_t());
+      reporter = new fake_reporter();
+      controller.reset(new bandit::detail::controller_t());
+      controller->set_reporter(reporter);
       context = std::unique_ptr<fake_context>(new fake_context());
-      contexts->push_back(context.get());
+      controller->get_contexts().push_back(context.get());
 
-      run_policy = bd::run_policy_ptr(new run_policy::always());
+      controller->set_policy(new run_policy::always());
     });
 
     auto call_it = [&]() {
-      it("my it", it_func, *reporter, *contexts, assertion_adapter, *run_policy);
+      it("my it", it_func, false, *controller);
     };
 
     it("tells the current context that execution has started", [&]() {
@@ -37,7 +36,7 @@ go_bandit([]() {
     });
 
     it("does not work without context", [&] {
-      contexts->pop_back();
+      controller->get_contexts().pop_back();
       AssertThrows(bandit::detail::test_run_error, call_it());
       AssertThat(LastException<bandit::detail::test_run_error>().what(),
           Equals("'it' was called without surrounding 'describe'"));
@@ -86,7 +85,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -107,7 +106,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -128,7 +127,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -150,7 +149,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -171,7 +170,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
         });
       });
 
@@ -192,7 +191,7 @@ go_bandit([]() {
 
         it("tells run_policy that we have a failing test", [&]() {
           call_it();
-          AssertThat(run_policy->has_encountered_failure(), IsTrue());
+          AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
         });
       });
     });
@@ -220,7 +219,7 @@ go_bandit([]() {
 
       it("tells run_policy that we have a failing test", [&]() {
         call_it();
-        AssertThat(run_policy->has_encountered_failure(), IsTrue());
+        AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
       });
     });
 
@@ -246,7 +245,7 @@ go_bandit([]() {
 
       it("tells run_policy that we have a failing test", [&]() {
         call_it();
-        AssertThat(run_policy->has_encountered_failure(), IsTrue());
+        AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
       });
     });
 
@@ -272,32 +271,32 @@ go_bandit([]() {
 
       it("tells run_policy that we have a failing test", [&]() {
         call_it();
-        AssertThat(run_policy->has_encountered_failure(), IsTrue());
+        AssertThat(controller->get_policy().has_encountered_failure(), IsTrue());
       });
     });
 
     describe("it_skip", [&]() {
       it("tells reporter it's skipped", [&]() {
-        it_skip("my it", []() {}, *reporter);
+        it_skip("my it", []() {}, *controller);
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
       });
 
       it("doesn't call function", [&]() {
         bool called = false;
-        it_skip("my it", [&]() { called = true; }, *reporter);
+        it_skip("my it", [&]() { called = true; }, *controller);
         AssertThat(called, IsFalse());
       });
     });
 
     describe("xit", [&]() {
       it("tells reporter it's skipped", [&]() {
-        xit("my it", []() {}, *reporter);
+        xit("my it", []() {}, *controller);
         AssertThat(reporter->call_log(), Has().Exactly(1).EqualTo("it_skip: my it"));
       });
 
       it("doesn't call function", [&]() {
         bool called = false;
-        xit("my it", [&]() { called = true; }, *reporter);
+        xit("my it", [&]() { called = true; }, *controller);
         AssertThat(called, IsFalse());
       });
     });
@@ -306,7 +305,7 @@ go_bandit([]() {
       bool it_was_called;
 
       before_each([&]() {
-        run_policy = bd::run_policy_ptr(new run_policy::never());
+        controller->set_policy(new run_policy::never());
         it_func = [&]() { it_was_called = true; };
         it_was_called = false;
       });
@@ -332,7 +331,7 @@ go_bandit([]() {
 
       describe("with a policy that says to skip this it", [&]() {
         before_each([&]() {
-          run_policy = bd::run_policy_ptr(new run_policy::never());
+          controller->set_policy(new run_policy::never());
         });
 
         it("tells reporter it's skipped", [&]() {

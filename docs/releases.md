@@ -18,12 +18,20 @@ In the following, we list breaking changes per major release.
   or all tests were skipped. Now the exit code is `0` in these cases because
   no tests are failing.
 
-* The signature of the short grammar of `it` and `describe` became a third
-  (but optional) parameter: if the `it`/`describe` should be skipped or not.
+* The signatures of the grammar functions (`it()`, `describe()`,
+  `before_each()`, etc.) have changed.
+  For `it()` and `describe()` (and their skipping counterparts),
+  the first parameter (the description) is now a `const std::string&`
+  instead of `const char*`.
+  `it()` and `describe()` also got an optional third parameter that says
+  if it should be skipped or not.
+  Both changes should not break any sane existing code but the former
+  allows to write description-generating code more nicely and
+  the latter eases skipping (or not) based on the program flow.
 
-* The grammar now uses `const std::string&` as description type instead of
-  `const char*`. This should not break any existing code but you can write
-  description-generating code more nicely.
+* The grammar and runner now use `bandit::detail::controller_t` as optional parameters
+  instead of reporters, run policies, etc. This is a change of the public
+  API that is probably only of internal interest.
 
 * The behavior of combined `--only` and `--skip` has changed.
   You can now use these switches multiple times and they always act as a filter,

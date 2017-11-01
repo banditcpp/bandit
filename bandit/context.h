@@ -75,12 +75,13 @@ namespace bandit {
       std::list<std::function<void()>> after_eaches_;
     };
 
-    using stack_t = std::deque<context::interface*>;
-
-    inline stack_t& stack() {
-      static stack_t contexts;
-      return contexts;
-    }
+    struct stack_t : public std::deque<context::interface*> {
+      void throw_if_empty(std::string&& method) const {
+        if (empty()) {
+          throw detail::test_run_error("'" + method + "' was called without surrounding 'describe'");
+        }
+      }
+    };
   }
 }
 #endif

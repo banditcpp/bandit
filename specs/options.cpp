@@ -29,39 +29,10 @@ static void all_ok(const bd::options& opt) {
 struct options : private argv_helper, public bd::options {
   options(std::list<std::string>&& args)
       : argv_helper(std::move(args)), bd::options(argc(), argv()) {}
+
+  options(std::list<std::string>&& args, const bd::choice_options& choices)
+      : argv_helper(std::move(args)), bd::options(argc(), argv(), choices) {}
 };
-
-template<typename ENUM>
-static void choice_tests(std::string&& optname, ENUM unknown,
-    std::initializer_list<std::pair<std::string, ENUM>>&& list,
-    std::function<ENUM(const bd::options& opt)> tester) {
-  describe(optname, [&] {
-    for (auto pair : list) {
-      it("parses the '--" + optname + "=" + pair.first + "' option", [&] {
-        error_collector cerr;
-        for (auto& opt : {options({"--" + optname + "=" + pair.first}),
-                 options({"--" + optname, pair.first})}) {
-          AssertThat(tester(opt), Equals(pair.second));
-          all_ok(opt);
-        }
-        AssertThat(cerr.get(), IsEmpty());
-      });
-    }
-
-    it("does not know " + optname + " when not given", [&] {
-      options opt({});
-      AssertThat(tester(opt), Equals(unknown));
-    });
-
-    it("is not ok with unknown " + optname, [&] {
-      error_collector cerr;
-      options opt({"--" + optname + "=__unknown__"});
-      AssertThat(opt.parsed_ok(), IsFalse());
-      AssertThat(tester(opt), Equals(unknown));
-      AssertThat(cerr.get(), !IsEmpty());
-    });
-  });
-}
 
 go_bandit([]() {
   describe("options", [&]() {
@@ -151,6 +122,61 @@ go_bandit([]() {
       });
     });
 
+    describe("update_controller_settings()", [&] {
+      std::unique_ptr<bd::controller_t> controller;
+
+      before_each([&] {
+        controller.reset(new bd::controller_t);
+      });
+
+      it("throws exception if no choice_options given", [&] {
+        options opt({});
+        AssertThrows(std::runtime_error, opt.update_controller_settings(*controller));
+      });
+
+      describe("with default choice_options", [&] {
+        std::unique_ptr<bd::choice_options> copts;
+
+        before_each([&] {
+          copts.reset(new bd::choice_options);
+          use_defaults(*copts);
+        });
+
+        it("works without any options default choice_options given", [&] {
+          options opt({}, *copts);
+          AssertThat(opt.update_controller_settings(*controller), IsTrue());
+          all_ok(opt);
+        });
+
+        using slpair = std::pair<std::string, std::vector<std::string>>;
+        for (auto pair : {
+                 slpair{"colorizer", {"off", "dark", "light"}},
+                 slpair{"formatter", {"posix", "vs"}},
+                 slpair{"reporter", {"singleline", "xunit", "info", "spec", "crash", "dots"}}}) {
+          for (std::string name : pair.second) {
+            it("works with known " + pair.first + " '" + name + "'", [&] {
+              error_collector cerr;
+              options opt({"--" + pair.first, name}, *copts);
+              AssertThat(opt.update_controller_settings(*controller), IsTrue());
+              all_ok(opt);
+              AssertThat(cerr.get(), IsEmpty());
+            });
+          }
+
+          it("fails with unknown " + pair.first, [&] {
+            error_collector cerr;
+            options opt({"--" + pair.first + "=__unknown__"}, *copts);
+            all_ok(opt);
+            AssertThat(cerr.get(), IsEmpty());
+            AssertThat(opt.update_controller_settings(*controller), IsFalse());
+            AssertThat(opt.parsed_ok(), IsFalse());
+            AssertThat(cerr.get(), Contains("Unknown"));
+            AssertThat(cerr.get(), Contains(pair.first));
+          });
+        }
+      });
+    });
+
     describe("with unknown arguments", [&] {
       it("recognizes unknown arguments", [&] {
         options opt({"unknown-argument"});
@@ -174,42 +200,13 @@ go_bandit([]() {
       });
 
       it("ignores unknown options and arguments", [&] {
-        options opt({"--unknown-option", "--formatter=vs", "--reporter", "xunit",
+        options opt({"--unknown-option", "--formatter=something", "--reporter", "something",
             "unknown-argument", "--dry-run"});
         AssertThat(opt.parsed_ok(), IsTrue());
-        AssertThat(opt.formatter(), Equals(bd::options::formatters::VS));
-        AssertThat(opt.reporter(), Equals(bd::options::reporters::XUNIT));
         AssertThat(opt.dry_run(), IsFalse());
         AssertThat(opt.has_further_arguments(), IsTrue());
         AssertThat(opt.has_unknown_options(), IsTrue());
       });
-    });
-
-    describe("with choice options", [&] {
-      choice_tests<bd::options::formatters>("formatter",
-          bd::options::formatters::UNKNOWN, {
-            {"vs", bd::options::formatters::VS},
-            {"posix", bd::options::formatters::POSIX},
-          }, [&](const bd::options& opt) {
-            return opt.formatter();
-          });
-      choice_tests<bd::options::reporters>("reporter",
-          bd::options::reporters::UNKNOWN, {
-            {"dots", bd::options::reporters::DOTS},
-            {"info", bd::options::reporters::INFO},
-            {"singleline", bd::options::reporters::SINGLELINE},
-            {"spec", bd::options::reporters::SPEC},
-            {"xunit", bd::options::reporters::XUNIT},
-          }, [&](const bd::options& opt) {
-            return opt.reporter();
-          });
-      choice_tests<bd::options::colorizers>("colorizer",
-          bd::options::colorizers::UNKNOWN, {
-            {"off", bd::options::colorizers::OFF},
-            {"light", bd::options::colorizers::LIGHT},
-          }, [&](const bd::options& opt) {
-            return opt.colorizer();
-          });
     });
 
     describe("with missing option arguments", [&] {
