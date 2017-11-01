@@ -1,6 +1,7 @@
 #ifndef BANDIT_CONTROLLER_H
 #define BANDIT_CONTROLLER_H
 
+#include <memory>
 #include <bandit/adapters.h>
 #include <bandit/colorizers/interface.h>
 #include <bandit/failure_formatters/interface.h>

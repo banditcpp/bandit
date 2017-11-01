@@ -1,7 +1,6 @@
 #ifndef BANDIT_RUN_POLICIES_INTERFACE_H
 #define BANDIT_RUN_POLICIES_INTERFACE_H
 
-#include <memory>
 #include <stdexcept>
 #include <bandit/context.h>
 

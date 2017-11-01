@@ -1,7 +1,6 @@
 #ifndef BANDIT_REPORTERS_INTERFACE_H
 #define BANDIT_REPORTERS_INTERFACE_H
 
-#include <memory>
 #include <bandit/assertion_exception.h>
 #include <bandit/test_run_error.h>
 

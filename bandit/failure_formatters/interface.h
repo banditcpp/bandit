@@ -1,7 +1,6 @@
 #ifndef BANDIT_FAILURE_FORMATTERS_INTERFACE_H
 #define BANDIT_FAILURE_FORMATTERS_INTERFACE_H
 
-#include <memory>
 #include <bandit/assertion_exception.h>
 
 namespace bandit {

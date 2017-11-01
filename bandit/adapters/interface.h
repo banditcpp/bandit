@@ -2,7 +2,6 @@
 #define BANDIT_ADAPTERS_INTERFACE_H
 
 #include <functional>
-#include <memory>
 
 namespace bandit {
   namespace adapter {

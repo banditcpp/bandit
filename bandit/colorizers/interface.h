@@ -1,7 +1,6 @@
 #ifndef BANDIT_COLORIZERS_INTERFACE_H
 #define BANDIT_COLORIZERS_INTERFACE_H
 
-#include <memory>
 #include <string>
 
 namespace bandit {
