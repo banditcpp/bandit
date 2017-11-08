@@ -1,7 +1,6 @@
 #ifndef BANDIT_RUN_POLICIES_INTERFACE_H
 #define BANDIT_RUN_POLICIES_INTERFACE_H
 
-#include <memory>
 #include <stdexcept>
 #include <bandit/context.h>
 
@@ -36,7 +35,6 @@ namespace bandit {
 
   namespace detail {
     using run_policy_t = run_policy::interface;
-    using run_policy_ptr = std::unique_ptr<run_policy_t>;
   }
 }
 #endif
