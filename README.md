@@ -1,16 +1,25 @@
 bandit
 ======
-[![Travis CI Status](https://travis-ci.org/banditcpp/bandit.svg?branch=master)](https://travis-ci.org/banditcpp/bandit)
-[![AppVeyor Status](https://ci.appveyor.com/api/projects/status/github/banditcpp/bandit?branch=master&svg=true)](https://ci.appveyor.com/project/banditcpp/bandit)
-[![Codecov Badge](https://codecov.io/gh/banditcpp/bandit/branch/master/graph/badge.svg)](https://codecov.io/gh/banditcpp/bandit)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8b00743b0047469bbe794cdc35832a73)](https://www.codacy.com/app/sbeyer/bandit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=banditcpp/bandit&amp;utm_campaign=Badge_Grade)
+[![MIT License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](LICENSE.txt)
+[![Contributors](https://img.shields.io/github/contributors/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/graphs/contributors)
+[![Watchers](https://img.shields.io/github/watchers/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/watchers)
+[![Stars](https://img.shields.io/github/stars/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/stargazers)
+[![Forks](https://img.shields.io/github/forks/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/network/members)
+[![Commits per year](https://img.shields.io/github/commit-activity/y/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/graphs/code-frequency)
+[![Last commit](https://img.shields.io/github/last-commit/banditcpp/bandit/master.svg)](https://github.com/banditcpp/bandit/commits/master)
+[![Travis CI Status](https://img.shields.io/travis/banditcpp/bandit/master.svg?label=tests+on+UNIX)](https://travis-ci.org/banditcpp/bandit)
+[![AppVeyor Status](https://img.shields.io/appveyor/ci/banditcpp/bandit/master.svg?label=tests+on+Windows)](https://ci.appveyor.com/project/banditcpp/bandit)
+[![Codecov Badge](https://img.shields.io/codecov/c/github/banditcpp/bandit/master.svg)](https://codecov.io/gh/banditcpp/bandit)
+[![Codacy Badge](https://img.shields.io/codacy/grade/8b00743b0047469bbe794cdc35832a73/master.svg)](https://www.codacy.com/app/sbeyer/bandit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=banditcpp/bandit&amp;utm_campaign=Badge_Grade)
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/14169.svg)](https://scan.coverity.com/projects/banditcpp-bandit)
+[![Issues](https://img.shields.io/github/issues/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/pulls)
+[![freenode](https://img.shields.io/badge/chat-%20on%20freenode-brightgreen.svg)](//webchat.freenode.net/?channels=%23banditcpp)
 
 Human-friendly unit testing for C++11
 
 Bandit is a framework for C++11 that wants to make working with unit tests a
 pleasant experience.
-
-Bandit is released under the [MIT license](LICENSE.txt)
 
 ## An example
 
@@ -89,8 +98,15 @@ can start using it. (CMake is only necessary to compile the specs for bandit its
 If you want to use bandit inside your projects,
 add the parent directory of the `bandit` directory to your project's
 include directories and you are ready to go.
+
 Note that you can remove all directories except the `bandit` directory.
 Also keep license and copyright information intact.
+You can also simply use the `headers-only` branch as a submodule:
+
+```sh
+git submodule add -b headers-only https://github.com/banditcpp/bandit bandit
+git submodule update --init --recursive
+```
 
 ## Compilers
 
