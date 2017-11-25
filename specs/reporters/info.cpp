@@ -375,5 +375,7 @@ go_bandit([]() {
         AssertThat(reporter->did_we_pass(), IsTrue());
       });
     });
+
+    reporter.reset(); // necessary so that reporter dtor is called before colorizer dtor
   });
 });

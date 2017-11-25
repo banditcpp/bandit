@@ -244,5 +244,7 @@ go_bandit([]() {
         AssertThat(output(), Contains("Test run complete. 1 tests run. 0 succeeded. 1 skipped. 1 failed."));
       });
     });
+
+    reporter.reset(); // necessary so that reporter dtor is called before colorizer dtor
   });
 });
