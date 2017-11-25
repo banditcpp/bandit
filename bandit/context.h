@@ -11,7 +11,8 @@
 namespace bandit {
   namespace context {
     struct interface {
-      virtual ~interface() {}
+      virtual ~interface() = default;
+
       virtual const std::string& name() = 0;
       virtual void execution_is_starting() = 0;
       virtual void register_before_each(std::function<void()> func) = 0;

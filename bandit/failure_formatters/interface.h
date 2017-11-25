@@ -6,6 +6,8 @@
 namespace bandit {
   namespace failure_formatter {
     struct interface {
+      virtual ~interface() = default;
+
       virtual std::string format(const detail::assertion_exception&) const = 0;
     };
   }

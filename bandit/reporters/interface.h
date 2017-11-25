@@ -7,7 +7,7 @@
 namespace bandit {
   namespace reporter {
     struct interface {
-      virtual ~interface() {}
+      virtual ~interface() = default;
 
       virtual void test_run_starting() = 0;
       virtual void test_run_complete() = 0;
