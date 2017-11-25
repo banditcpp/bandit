@@ -8,7 +8,7 @@ go_bandit([]() {
 
     before_each([&]() {
       controller.reset(new bandit::detail::controller_t());
-      context = std::unique_ptr<fakes::fake_context>(new fakes::fake_context());
+      context.reset(new fakes::fake_context());
       controller->get_contexts().push_back(context.get());
     });
 

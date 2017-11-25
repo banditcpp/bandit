@@ -6,6 +6,8 @@
 namespace bandit {
   namespace adapter {
     struct interface {
+      virtual ~interface() = default;
+
       virtual void adapt_exceptions(std::function<void()>) = 0;
     };
   }

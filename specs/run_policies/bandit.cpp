@@ -20,8 +20,8 @@ go_bandit([]() {
       break_on_failure = false;
       dry_run = false;
 
-      contextstack = std::unique_ptr<bandit::context::stack_t>(new bandit::context::stack_t());
-      global_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("", hard_skip));
+      contextstack.reset(new bandit::context::stack_t());
+      global_context.reset(new bandit::context::bandit("", hard_skip));
       contextstack->push_back(global_context.get());
     });
 
@@ -57,7 +57,7 @@ go_bandit([]() {
 
         before_each([&]() {
           hard_skip = true;
-          hard_skip_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("always ignore", hard_skip));
+          hard_skip_context.reset(new bandit::context::bandit("always ignore", hard_skip));
           contextstack->push_back(hard_skip_context.get());
         });
 
@@ -79,7 +79,7 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> current_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context matches 'skip'", hard_skip));
+          current_context.reset(new bandit::context::bandit("context matches 'skip'", hard_skip));
           contextstack->push_back(current_context.get());
         });
 
@@ -93,7 +93,7 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> current_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context doesn't match", hard_skip));
+          current_context.reset(new bandit::context::bandit("context doesn't match", hard_skip));
           contextstack->push_back(current_context.get());
         });
 
@@ -118,7 +118,7 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> current_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context matches 'only'", hard_skip));
+          current_context.reset(new bandit::context::bandit("context matches 'only'", hard_skip));
           contextstack->push_back(current_context.get());
         });
 
@@ -132,7 +132,7 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> current_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context doesn't match", hard_skip));
+          current_context.reset(new bandit::context::bandit("context doesn't match", hard_skip));
           contextstack->push_back(current_context.get());
         });
 
@@ -157,7 +157,7 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> current_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context", hard_skip));
+          current_context.reset(new bandit::context::bandit("context", hard_skip));
           contextstack->push_back(current_context.get());
         });
 
@@ -176,7 +176,7 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> current_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context matches 'skip'", hard_skip));
+          current_context.reset(new bandit::context::bandit("context matches 'skip'", hard_skip));
           contextstack->push_back(current_context.get());
         });
 
@@ -195,7 +195,7 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> current_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context matches 'only'", hard_skip));
+          current_context.reset(new bandit::context::bandit("context matches 'only'", hard_skip));
           contextstack->push_back(current_context.get());
         });
 
@@ -215,8 +215,8 @@ go_bandit([]() {
         std::unique_ptr<bandit::context::interface> parent_context;
 
         before_each([&]() {
-          current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context matches 'only'", hard_skip));
-          parent_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context matches 'skip'", hard_skip));
+          current_context.reset(new bandit::context::bandit("context matches 'only'", hard_skip));
+          parent_context.reset(new bandit::context::bandit("context matches 'skip'", hard_skip));
           contextstack->push_back(parent_context.get());
           contextstack->push_back(current_context.get());
         });
@@ -272,7 +272,7 @@ go_bandit([]() {
       });
 
       it("doesn't run if context contains any 'skip' but spec's name matches all 'only'", [&]() {
-        std::unique_ptr<bandit::context::interface> current_context = std::unique_ptr<bandit::context::interface>(new bandit::context::bandit("context matches 'skip1'", hard_skip));
+        std::unique_ptr<bandit::context::interface> current_context{new bandit::context::bandit("context matches 'skip1'", hard_skip)};
         contextstack->push_back(current_context.get());
         run_policy::bandit policy = create_policy();
         AssertThat(policy.should_run("it name only1 only2", *contextstack), IsFalse());

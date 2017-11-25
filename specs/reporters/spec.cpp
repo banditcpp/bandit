@@ -10,7 +10,7 @@ go_bandit([]() {
 
     before_each([&]() {
       stm.str(std::string());
-      reporter = std::unique_ptr<reporter::spec>(new reporter::spec(stm, formatter, colorizer));
+      reporter.reset(new reporter::spec(stm, formatter, colorizer));
     });
 
     auto output = [&]() {
@@ -244,5 +244,7 @@ go_bandit([]() {
         AssertThat(output(), Contains("Test run complete. 1 tests run. 0 succeeded. 1 skipped. 1 failed."));
       });
     });
+
+    reporter.reset(); // necessary so that reporter dtor is called before colorizer dtor
   });
 });

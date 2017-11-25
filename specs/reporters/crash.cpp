@@ -10,7 +10,7 @@ go_bandit([]() {
 
     before_each([&]() {
       stm.str(std::string());
-      reporter = std::unique_ptr<reporter::crash>(new reporter::crash(stm, formatter));
+      reporter.reset(new reporter::crash(stm, formatter));
     });
 
     auto output = [&]() {
