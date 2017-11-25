@@ -16,7 +16,7 @@ go_bandit([]() {
       reporter = new fake_reporter();
       controller.reset(new bandit::detail::controller_t());
       controller->set_reporter(reporter);
-      context = std::unique_ptr<fake_context>(new fake_context());
+      context.reset(new fake_context());
       controller->get_contexts().push_back(context.get());
 
       controller->set_policy(new run_policy::always());

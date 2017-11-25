@@ -17,7 +17,7 @@ describe("describe", []() {
     controller.reset(new bandit::detail::controller_t());
     controller->set_reporter(reporter);
 
-    global_context = std::unique_ptr<fake_context>(new fake_context());
+    global_context.reset(new fake_context());
     controller->get_contexts().push_back(global_context.get());
   });
 

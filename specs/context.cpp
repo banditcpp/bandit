@@ -6,8 +6,7 @@ go_bandit([]() {
 
     before_each([&]() {
       bool hard_skip = false;
-      context = std::unique_ptr<bandit::context::bandit>(
-          new bandit::context::bandit("context name", hard_skip));
+      context.reset(new bandit::context::bandit("context name", hard_skip));
     });
 
     it("is ok to register before_each as it is not executing", [&]() {
