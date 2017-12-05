@@ -3,7 +3,7 @@
 
 #include <bandit/adapters/interface.h>
 #include <bandit/assertion_exception.h>
-#include <bandit/assertion_frameworks/snowhouse/snowhouse/snowhouse.h>
+#include <bandit/assertion_frameworks/snowhouse/snowhouse.h>
 
 namespace bandit {
   namespace adapter {
