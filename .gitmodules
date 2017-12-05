@@ -2,6 +2,6 @@
 	path = cmake/cotire
 	url = https://github.com/sakra/cotire.git
 [submodule "snowhouse"]
-	path = bandit/assertion_frameworks/snowhouse/snowhouse
+	path = bandit/assertion_frameworks/snowhouse
 	url = https://github.com/banditcpp/snowhouse
 	branch = headers-only
