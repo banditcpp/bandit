@@ -15,7 +15,7 @@ namespace bandit {
 
 #define BANDIT_CONCAT2(a, b) a##b
 #define BANDIT_CONCAT(a, b) BANDIT_CONCAT2(a, b)
-#define BANDIT_ADD_COUNTER(a) SNOWHOUSE_CONCAT(a, __COUNTER__)
+#define BANDIT_ADD_COUNTER(a) BANDIT_CONCAT(a, __COUNTER__)
 
 #define go_bandit \
   static bandit::detail::spec_registrar BANDIT_ADD_COUNTER(bandit_registrar_)
