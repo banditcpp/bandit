@@ -27,8 +27,10 @@ go_bandit([]() {
 
       it("outputs an empty test report", [&]() {
         AssertThat(output(), Contains(
-                                 "<testsuite name=\"bandit\" tests=\"0\" errors=\"0\" failures=\"0\">\n"
-                                 "</testsuite>\n"));
+            "<testsuite name=\"bandit\" tests=\"0\" errors=\"0\" failures=\"0\" time=\"0."));
+        AssertThat(output(), Contains(
+            "\">\n"
+            "</testsuite>\n"));
       });
     });
 
@@ -44,8 +46,12 @@ go_bandit([]() {
 
       it("outputs info about the successful test", [&]() {
         AssertThat(output(), Contains(
-            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"0\">\n"
-            "\t<testcase classname=\"my context\" name=\"my test\" time=\"0.0\">\n"
+            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"0\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
+            "\t<testcase classname=\"my context\" name=\"my test\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
             "\t</testcase>\n"
             "</testsuite>\n"));
       });
@@ -66,8 +72,12 @@ go_bandit([]() {
 
       it("outputs the failing test", [&]() {
         AssertThat(output(), Contains(
-            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"1\">\n"
-            "\t<testcase classname=\"my context\" name=\"my test\" time=\"0.0\">\n"
+            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"1\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
+            "\t<testcase classname=\"my context\" name=\"my test\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
             "\t\t<failure message=\"some_file:123: assertion failed!\" />\n"
             "\t</testcase>\n"
             "</testsuite>\n"));
@@ -88,8 +98,12 @@ go_bandit([]() {
 
       it("outputs the erroneous test", [&]() {
         AssertThat(output(), Contains(
-            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"1\">\n"
-            "\t<testcase classname=\"my context\" name=\"my test\" time=\"0.0\">\n"
+            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"1\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
+            "\t<testcase classname=\"my context\" name=\"my test\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
             "\t\t<failure message=\"Unknown exception\" />\n"
             "\t</testcase>\n"
             "</testsuite>\n"));
@@ -111,9 +125,13 @@ go_bandit([]() {
 
       it("outputs the escaped characters", [&]() {
         AssertThat(output(), Contains(
-            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"1\">\n"
+            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"1\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
             "\t<testcase classname=\"my context &amp; &lt; &gt; &apos; &quot;\" "
-            "name=\"my test &amp; &lt; &gt; &apos; &quot;\" time=\"0.0\">\n"
+            "name=\"my test &amp; &lt; &gt; &apos; &quot;\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
             "\t\t<failure message=\"some_file:123: assertion failed &amp; &lt; &gt; &apos; &quot;\" />\n"
             "\t</testcase>\n"
             "</testsuite>\n"));
@@ -135,8 +153,12 @@ go_bandit([]() {
 
       it("outputs info about the skipped test", [&]() {
         AssertThat(output(), Contains(
-            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"0\" skipped=\"1\">\n"
-            "\t<testcase classname=\"my context\" name=\"my test\" time=\"0.0\">\n"
+            "<testsuite name=\"bandit\" tests=\"1\" errors=\"0\" failures=\"0\" skipped=\"1\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
+            "\t<testcase classname=\"my context\" name=\"my test\" time=\""));
+        AssertThat(output(), Contains(
+            "\">\n"
             "\t</testcase>\n"
             "\t<testcase classname=\"my context\" name=\"my skipped test\" time=\"0.0\">\n"
             "\t\t<skipped />\n"
