@@ -107,7 +107,6 @@ namespace bandit {
         work_stm_ << " time=\"" << std::to_string(dur_in_sec.count()) << "\">\n";
       }
 
-    private:
       std::ostream& stm_;
       std::stringstream work_stm_;
       std::chrono::high_resolution_clock::time_point testcase_start_time_point_;
