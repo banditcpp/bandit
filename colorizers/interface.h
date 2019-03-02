@@ -6,6 +6,8 @@
 namespace bandit {
   namespace colorizer {
     struct interface {
+      virtual ~interface() = default;
+
       virtual const std::string good() const = 0;
       virtual const std::string neutral() const = 0;
       virtual const std::string info() const = 0;

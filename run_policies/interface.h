@@ -16,7 +16,7 @@ namespace bandit {
       interface(interface&& other) : encountered_failure_(other.encountered_failure_) {}
 #endif
 
-      virtual ~interface() {}
+      virtual ~interface() = default;
 
       virtual bool should_run(const std::string& it_name, const context::stack_t& contexts) const = 0;
 
