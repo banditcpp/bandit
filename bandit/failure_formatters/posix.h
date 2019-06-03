@@ -10,7 +10,7 @@ namespace bandit {
       std::string format(const detail::assertion_exception& err) const override {
         std::stringstream ss;
         if (err.file_name().size()) {
-          ss << err.file_name();
+          ss << "file://" << err.file_name();
 
           if (err.line_number()) {
             ss << ":" << err.line_number();
