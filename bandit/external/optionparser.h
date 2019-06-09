@@ -532,7 +532,7 @@ public:
    */
   int type() const
   {
-    return desc == 0 ? 0 : desc->type;
+    return desc == nullptr ? 0 : desc->type;
   }
 
   /**
@@ -541,7 +541,7 @@ public:
    */
   int index() const
   {
-    return desc == 0 ? -1 : static_cast<int>(desc->index);
+    return desc == nullptr ? -1 : static_cast<int>(desc->index);
   }
 
   /**
@@ -558,7 +558,7 @@ public:
    */
   int count() const
   {
-    int c = (desc == 0 ? 0 : 1);
+    int c = (desc == nullptr ? 0 : 1);
     const Option* p = first();
     while (!p->isLast())
     {
@@ -660,7 +660,7 @@ public:
    */
   Option* prev()
   {
-    return isFirst() ? 0 : prev_;
+    return isFirst() ? nullptr : prev_;
   }
 
   /**
@@ -694,7 +694,7 @@ public:
    */
   Option* next()
   {
-    return isLast() ? 0 : next_;
+    return isLast() ? nullptr : next_;
   }
 
   /**
@@ -702,7 +702,7 @@ public:
   */
   const Option* next() const
   {
-    return isLast() ? 0 : next_;
+    return isLast() ? nullptr : next_;
   }
 
   /**
@@ -756,7 +756,7 @@ public:
    */
   operator const Option*() const
   {
-    return desc ? this : 0;
+    return desc ? this : nullptr;
   }
 
   /**
@@ -777,7 +777,7 @@ public:
    */
   operator Option*()
   {
-    return desc ? this : 0;
+    return desc ? this : nullptr;
   }
 
   /**
@@ -785,7 +785,7 @@ public:
    * @ref desc, @ref name, @ref arg and @ref namelen.
    */
   Option() :
-      desc(0), name(0), arg(0), namelen(0)
+      desc(nullptr), name(nullptr), arg(nullptr), namelen(0)
   {
     prev_ = tag(this);
     next_ = tag(this);
@@ -841,7 +841,7 @@ private:
     prev_ = tag(this);
     next_ = tag(this);
     namelen = 0;
-    if (name == 0)
+    if (name == nullptr)
       return;
     namelen = 1;
     if (name[0] != '-')
@@ -1089,7 +1089,7 @@ public:
    * @brief Creates a new Parser.
    */
   Parser() :
-      op_count(0), nonop_count(0), nonop_args(0), err(false)
+      op_count(0), nonop_count(0), nonop_args(nullptr), err(false)
   {
   }
 
@@ -1099,7 +1099,7 @@ public:
    */
   Parser(bool gnu, const Descriptor usage[], int argc, const char** argv, Option options[], Option buffer[],
          int min_abbr_len = 0, bool single_minus_longopt = false, int bufmax = -1) :
-      op_count(0), nonop_count(0), nonop_args(0), err(false)
+      op_count(0), nonop_count(0), nonop_args(nullptr), err(false)
   {
     parse(gnu, usage, argc, argv, options, buffer, min_abbr_len, single_minus_longopt, bufmax);
   }
@@ -1107,7 +1107,7 @@ public:
   //! @brief Parser(...) with non-const argv.
   Parser(bool gnu, const Descriptor usage[], int argc, char** argv, Option options[], Option buffer[],
          int min_abbr_len = 0, bool single_minus_longopt = false, int bufmax = -1) :
-      op_count(0), nonop_count(0), nonop_args(0), err(false)
+      op_count(0), nonop_count(0), nonop_args(nullptr), err(false)
   {
     parse(gnu, usage, argc, const_cast<const char**>(argv), options, buffer, min_abbr_len, single_minus_longopt, bufmax);
   }
@@ -1115,7 +1115,7 @@ public:
   //! @brief POSIX Parser(...) (gnu==false).
   Parser(const Descriptor usage[], int argc, const char** argv, Option options[], Option buffer[], int min_abbr_len = 0,
          bool single_minus_longopt = false, int bufmax = -1) :
-      op_count(0), nonop_count(0), nonop_args(0), err(false)
+      op_count(0), nonop_count(0), nonop_args(nullptr), err(false)
   {
     parse(false, usage, argc, argv, options, buffer, min_abbr_len, single_minus_longopt, bufmax);
   }
@@ -1123,7 +1123,7 @@ public:
   //! @brief POSIX Parser(...) (gnu==false) with non-const argv.
   Parser(const Descriptor usage[], int argc, char** argv, Option options[], Option buffer[], int min_abbr_len = 0,
          bool single_minus_longopt = false, int bufmax = -1) :
-      op_count(0), nonop_count(0), nonop_args(0), err(false)
+      op_count(0), nonop_count(0), nonop_args(nullptr), err(false)
   {
     parse(false, usage, argc, const_cast<const char**>(argv), options, buffer, min_abbr_len, single_minus_longopt, bufmax);
   }
@@ -1524,7 +1524,7 @@ inline void Stats::add(bool gnu, const Descriptor usage[], int argc, const char*
 {
   // determine size of options array. This is the greatest index used in the usage + 1
   int i = 0;
-  while (usage[i].shortopt != 0)
+  while (usage[i].shortopt != nullptr)
   {
     if (usage[i].index + 1 >= options_max)
       options_max = (usage[i].index + 1) + 1; // 1 more than necessary as sentinel
@@ -1540,12 +1540,12 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
                               bool single_minus_longopt, bool print_errors, int min_abbr_len)
 {
   // protect against NULL pointer
-  if (args == 0)
+  if (args == nullptr)
     numargs = 0;
 
   int nonops = 0;
 
-  while (numargs != 0 && *args != 0)
+  while (numargs != 0 && *args != nullptr)
   {
     const char* param = *args; // param can be --long-option, -srto or non-option argument
 
@@ -1595,33 +1595,33 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
     {
       int idx = 0;
 
-      const char* optarg = 0;
+      const char* optarg = nullptr;
 
       /******************** long option **********************/
       if (handle_short_options == false || try_single_minus_longopt)
       {
         idx = 0;
-        while (usage[idx].longopt != 0 && !streq(usage[idx].longopt, longopt_name))
+        while (usage[idx].longopt != nullptr && !streq(usage[idx].longopt, longopt_name))
           ++idx;
 
-        if (usage[idx].longopt == 0 && min_abbr_len > 0) // if we should try to match abbreviated long options
+        if (usage[idx].longopt == nullptr && min_abbr_len > 0) // if we should try to match abbreviated long options
         {
           int i1 = 0;
-          while (usage[i1].longopt != 0 && !streqabbr(usage[i1].longopt, longopt_name, min_abbr_len))
+          while (usage[i1].longopt != nullptr && !streqabbr(usage[i1].longopt, longopt_name, min_abbr_len))
             ++i1;
-          if (usage[i1].longopt != 0)
+          if (usage[i1].longopt != nullptr)
           { // now test if the match is unambiguous by checking for another match
             int i2 = i1 + 1;
-            while (usage[i2].longopt != 0 && !streqabbr(usage[i2].longopt, longopt_name, min_abbr_len))
+            while (usage[i2].longopt != nullptr && !streqabbr(usage[i2].longopt, longopt_name, min_abbr_len))
               ++i2;
 
-            if (usage[i2].longopt == 0) // if there was no second match it's unambiguous, so accept i1 as idx
+            if (usage[i2].longopt == nullptr) // if there was no second match it's unambiguous, so accept i1 as idx
               idx = i1;
           }
         }
 
         // if we found something, disable handle_short_options (only relevant if single_minus_longopt)
-        if (usage[idx].longopt != 0)
+        if (usage[idx].longopt != nullptr)
           handle_short_options = false;
 
         try_single_minus_longopt = false; // prevent looking for longopt in the middle of shortopt group
@@ -1633,7 +1633,7 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
           ++optarg;
         else
           // possibly detached argument
-          optarg = (have_more_args ? args[1] : 0);
+          optarg = (have_more_args ? args[1] : nullptr);
       }
 
       /************************ short option ***********************************/
@@ -1643,11 +1643,11 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
           break; // end of short option group
 
         idx = 0;
-        while (usage[idx].shortopt != 0 && !instr(*param, usage[idx].shortopt))
+        while (usage[idx].shortopt != nullptr && !instr(*param, usage[idx].shortopt))
           ++idx;
 
         if (param[1] == 0) // if the potential argument is separate
-          optarg = (have_more_args ? args[1] : 0);
+          optarg = (have_more_args ? args[1] : nullptr);
         else
           // if the potential argument is attached
           optarg = param + 1;
@@ -1655,16 +1655,16 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
 
       const Descriptor* descriptor = &usage[idx];
 
-      if (descriptor->shortopt == 0) /**************  unknown option ********************/
+      if (descriptor->shortopt == nullptr) /**************  unknown option ********************/
       {
         // look for dummy entry (shortopt == "" and longopt == "") to use as Descriptor for unknown options
         idx = 0;
-        while (usage[idx].shortopt != 0 && (usage[idx].shortopt[0] != 0 || usage[idx].longopt[0] != 0))
+        while (usage[idx].shortopt != nullptr && (usage[idx].shortopt[0] != 0 || usage[idx].longopt[0] != 0))
           ++idx;
-        descriptor = (usage[idx].shortopt == 0 ? 0 : &usage[idx]);
+        descriptor = (usage[idx].shortopt == nullptr ? nullptr : &usage[idx]);
       }
 
-      if (descriptor != 0)
+      if (descriptor != nullptr)
       {
         Option option(descriptor, param, optarg);
         switch (descriptor->check_arg(option, print_errors))
@@ -1673,7 +1673,7 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
             return false; // fatal
           case ARG_OK:
             // skip one element of the argument vector, if it's a separated argument
-            if (optarg != 0 && have_more_args && optarg == args[1])
+            if (optarg != nullptr && have_more_args && optarg == args[1])
             {
               shift(args, nonops);
               if (numargs > 0)
@@ -1687,7 +1687,7 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
             break;
           case ARG_IGNORE:
           case ARG_NONE:
-            option.arg = 0;
+            option.arg = nullptr;
             break;
         }
 
@@ -1704,13 +1704,13 @@ inline bool Parser::workhorse(bool gnu, const Descriptor usage[], int numargs, c
 
   } // while
 
-  if (numargs > 0 && *args == 0) // It's a bug in the caller if numargs is greater than the actual number
+  if (numargs > 0 && *args == nullptr) // It's a bug in the caller if numargs is greater than the actual number
     numargs = 0; // of arguments, but as a service to the user we fix this if we spot it.
 
   if (numargs < 0) // if we don't know the number of remaining non-option arguments
   { // we need to count them
     numargs = 0;
-    while (args[numargs] != 0)
+    while (args[numargs] != nullptr)
       ++numargs;
   }
 
@@ -1993,7 +1993,7 @@ struct PrintUsageImplementation
   public:
     //! @brief Creates an iterator for @c usage.
     LinePartIterator(const Descriptor usage[]) :
-        tablestart(usage), rowdesc(0), rowstart(0)
+        tablestart(usage), rowdesc(nullptr), rowstart(nullptr)
     {
       restartRow();
     }
@@ -2007,18 +2007,18 @@ struct PrintUsageImplementation
     {
       // If this is NOT the first time nextTable() is called after the constructor,
       // then skip to the next table break (i.e. a Descriptor with help == 0)
-      if (rowdesc != 0)
+      if (rowdesc != nullptr)
       {
-        while (tablestart->help != 0 && tablestart->shortopt != 0)
+        while (tablestart->help != nullptr && tablestart->shortopt != nullptr)
           ++tablestart;
       }
 
       // Find the next table after the break (if any)
-      while (tablestart->help == 0 && tablestart->shortopt != 0)
+      while (tablestart->help == nullptr && tablestart->shortopt != nullptr)
         ++tablestart;
 
       restartTable();
-      return rowstart != 0;
+      return rowstart != nullptr;
     }
 
     /**
@@ -2028,7 +2028,7 @@ struct PrintUsageImplementation
     {
       rowdesc = tablestart;
       rowstart = tablestart->help;
-      ptr = 0;
+      ptr = nullptr;
     }
 
     /**
@@ -2038,10 +2038,10 @@ struct PrintUsageImplementation
      */
     bool nextRow()
     {
-      if (ptr == 0)
+      if (ptr == nullptr)
       {
         restartRow();
-        return rowstart != 0;
+        return rowstart != nullptr;
       }
 
       while (*ptr != 0 && *ptr != '\n')
@@ -2049,7 +2049,7 @@ struct PrintUsageImplementation
 
       if (*ptr == 0)
       {
-        if ((rowdesc + 1)->help == 0) // table break
+        if ((rowdesc + 1)->help == nullptr) // table break
           return false;
 
         ++rowdesc;
@@ -2088,7 +2088,7 @@ struct PrintUsageImplementation
      */
     bool next()
     {
-      if (ptr == 0)
+      if (ptr == nullptr)
         return false;
 
       if (col == -1)

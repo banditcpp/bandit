@@ -103,7 +103,7 @@ namespace bandit {
         usage_.push_back(option::Descriptor{REPORTER, 0, "", "reporter", argument::Required, reporter_help_.c_str()});
         usage_.push_back(option::Descriptor{COLORIZER, 0, "", "colorizer", argument::Required, colorizer_help_.c_str()});
         usage_.push_back(option::Descriptor{FORMATTER, 0, "", "formatter", argument::Required, formatter_help_.c_str()});
-        usage_.push_back(option::Descriptor{0, 0, 0, 0, 0, 0});
+        usage_.push_back(option::Descriptor{0, 0, nullptr, nullptr, nullptr, nullptr});
 
         argc -= (argc > 0);
         argv += (argc > 0); // Skip program name (argv[0]) if present
