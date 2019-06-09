@@ -52,6 +52,9 @@ namespace bandit {
   }
 
   inline void use_default_formatters(detail::choice_options& choices) {
+    choices.formatters.add("qt", [&](detail::controller_t& controller) {
+      controller.set_formatter(new failure_formatter::qt_creator());
+    });
     choices.formatters.add("vs", [&](detail::controller_t& controller) {
       controller.set_formatter(new failure_formatter::visual_studio());
     });

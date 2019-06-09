@@ -151,7 +151,7 @@ go_bandit([]() {
         using slpair = std::pair<std::string, std::vector<std::string>>;
         for (auto pair : {
                  slpair{"colorizer", {"off", "dark", "light"}},
-                 slpair{"formatter", {"posix", "vs"}},
+                 slpair{"formatter", {"posix", "vs", "qt"}},
                  slpair{"reporter", {"singleline", "xunit", "info", "spec", "crash", "dots"}}}) {
           for (std::string name : pair.second) {
             it("works with known " + pair.first + " '" + name + "'", [&] {

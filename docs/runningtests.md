@@ -20,7 +20,7 @@ Options:
   --reporter=<reporter>,   Select reporter: crash, dots, singleline, xunit,
                            info, spec
   --colorizer=<colorizer>, Select color theme: off, light, dark
-  --formatter=<formatter>, Select error formatter: posix, vs
+  --formatter=<formatter>, Select error formatter: posix, vs, qt
   --skip=<substring>,      Skip all 'describe' and 'it' containing substring
   --only=<substring>,      Run only 'describe' and 'it' containing substring
   --break-on-failure,      Stop test run on first failing test

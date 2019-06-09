@@ -1,16 +1,16 @@
-#ifndef BANDIT_FAILURE_FORMATTERS_POSIX_H
-#define BANDIT_FAILURE_FORMATTERS_POSIX_H
+#ifndef BANDIT_FAILURE_FORMATTERS_QT_H
+#define BANDIT_FAILURE_FORMATTERS_QT_H
 
 #include <sstream>
 #include <bandit/failure_formatters/interface.h>
 
 namespace bandit {
   namespace failure_formatter {
-    struct posix : public interface {
+    struct qt_creator : public interface {
       std::string format(const detail::assertion_exception& err) const override {
         std::stringstream ss;
         if (err.file_name().size()) {
-          ss << err.file_name();
+          ss << "file://" << err.file_name();
 
           if (err.line_number()) {
             ss << ":" << err.line_number();
