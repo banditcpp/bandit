@@ -2,7 +2,7 @@
 namespace bd = bandit::detail;
 
 go_bandit([]() {
-  describe("qt creator failure formatter", [&]() {
+  describe("Qt Creator failure formatter", [&]() {
     failure_formatter::qt_creator formatter;
 
     it("formats assertions with file and line number", [&]() {

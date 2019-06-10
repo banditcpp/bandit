@@ -1,5 +1,5 @@
-#ifndef BANDIT_FAILURE_FORMATTERS_QT_H
-#define BANDIT_FAILURE_FORMATTERS_QT_H
+#ifndef BANDIT_FAILURE_FORMATTERS_QT_CREATOR_H
+#define BANDIT_FAILURE_FORMATTERS_QT_CREATOR_H
 
 #include <sstream>
 #include <bandit/failure_formatters/interface.h>
