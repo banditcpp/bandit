@@ -11,7 +11,7 @@ specifying command line options.
 Running `[name of your executable] --help` will list the available options.
 
 ```bash
-$ specs --help
+$ bin/bandit-specs --help
 USAGE: <executable> [options]
 
 Options:
