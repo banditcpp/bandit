@@ -13,7 +13,10 @@ codecov)
 	echo "Sending information to codecov.io"
 	curl -s https://codecov.io/bash | bash
 	;;
-check|coverity|normal)
+check|coverity)
+	;;
+normal)
+	../util/check_documentation_output.sh bin/bandit-specs
 	;;
 *)
 	echo "BUILD_TYPE \"$BUILD_TYPE\" not set or unknown." >&2
