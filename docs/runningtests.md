@@ -17,14 +17,14 @@ USAGE: <executable> [options]
 Options:
   --version,               Print version of bandit
   --help,                  Print usage and exit.
-  --reporter=<reporter>,   Select reporter: crash, dots, singleline, xunit,
-                           info, spec
-  --colorizer=<colorizer>, Select color theme: off, light, dark
-  --formatter=<formatter>, Select error formatter: posix, vs
   --skip=<substring>,      Skip all 'describe' and 'it' containing substring
   --only=<substring>,      Run only 'describe' and 'it' containing substring
   --break-on-failure,      Stop test run on first failing test
   --dry-run,               Skip all tests. Use to list available tests
+  --reporter=<reporter>,   Select reporter: crash, dots, info, singleline, spec,
+                           xunit
+  --colorizer=<colorizer>, Select color theme: dark, light, off
+  --formatter=<formatter>, Select error formatter: posix, qt, vs
 ```
 
 ## Running a subset of the tests
@@ -110,6 +110,16 @@ The POSIX formatter reports errors as
 
 This matches how gcc and clang reports errors.
 This formatter is the default.
+
+#### `--formatter=qt`
+
+The Qt Creator formatter reports errors as
+
+```
+file://<filename>:<line>: <error message>
+```
+
+It enables hyperlink from the console ouptut to jump directly to the error.
 
 #### `--formatter=vs`
 
