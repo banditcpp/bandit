@@ -1,7 +1,6 @@
 #ifndef BANDIT_REPORTERS_XUNIT_H
 #define BANDIT_REPORTERS_XUNIT_H
 
-#include <chrono>
 #include <iostream>
 #include <bandit/reporters/progress_base.h>
 
@@ -14,16 +13,10 @@ namespace bandit {
       xunit(const detail::failure_formatter_t& formatter)
           : xunit(std::cout, formatter) {}
 
-      void test_run_starting() override {
-        progress_base::test_run_starting();
-        testsuite_runtime_ = std::chrono::nanoseconds(0);
-      }
-
       void it_starting(const std::string& desc) override {
         progress_base::it_starting(desc);
         work_stm_ << "\t<testcase classname=\"" << escape(current_context_name()) << "\" ";
         work_stm_ << "name=\"" << escape(desc) << "\"";
-        testcase_start_time_point_ = std::chrono::high_resolution_clock::now();
       }
 
       void it_succeeded(const std::string& desc) override {
@@ -101,16 +94,12 @@ namespace bandit {
       }
 
       void print_remaining_header_with_time() {
-        auto dur = std::chrono::high_resolution_clock::now() - testcase_start_time_point_;
-        testsuite_runtime_ += std::chrono::duration_cast<std::chrono::nanoseconds>(dur);
-        std::chrono::duration<double> dur_in_sec(dur);
+        std::chrono::duration<double> dur_in_sec(testcase_duration_);
         work_stm_ << " time=\"" << std::to_string(dur_in_sec.count()) << "\">\n";
       }
 
       std::ostream& stm_;
       std::stringstream work_stm_;
-      std::chrono::high_resolution_clock::time_point testcase_start_time_point_;
-      std::chrono::nanoseconds testsuite_runtime_;
     };
   }
 }

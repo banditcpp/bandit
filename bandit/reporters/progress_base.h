@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <sstream>
 #include <vector>
+#include <chrono>
 #include <bandit/failure_formatters/interface.h>
 #include <bandit/reporters/interface.h>
 
@@ -25,6 +26,7 @@ namespace bandit {
         specs_skipped_ = 0;
         failures_.clear();
         contexts_.clear();
+        testsuite_runtime_ = std::chrono::nanoseconds(0);
       }
 
       void test_run_complete() override {}
@@ -41,14 +43,17 @@ namespace bandit {
 
       void it_starting(const std::string&) override {
         specs_run_++;
+        testcase_start_time_point_ = std::chrono::high_resolution_clock::now();
       }
 
       void it_succeeded(const std::string&) override {
         specs_succeeded_++;
+        update_test_duration();
       }
 
       void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         specs_failed_++;
+        update_test_duration();
 
         std::stringstream ss;
         ss << current_context_name() << " " << desc << ":" << std::endl;
@@ -59,6 +64,7 @@ namespace bandit {
 
       void it_unknown_error(const std::string& desc) override {
         specs_failed_++;
+        update_test_duration();
 
         std::stringstream ss;
         ss << current_context_name() << " " << desc << ":" << std::endl;
@@ -92,6 +98,11 @@ namespace bandit {
       }
 
     protected:
+      void update_test_duration() {
+        testcase_duration_  = std::chrono::high_resolution_clock::now() - testcase_start_time_point_;
+        testsuite_runtime_ += std::chrono::duration_cast<std::chrono::nanoseconds>(testcase_duration_);
+      }
+
       int specs_run_;
       int specs_succeeded_;
       int specs_failed_;
@@ -100,6 +111,9 @@ namespace bandit {
       std::vector<std::string> contexts_;
       std::vector<std::string> failures_;
       std::vector<std::string> test_run_errors_;
+      std::chrono::high_resolution_clock::time_point testcase_start_time_point_;
+      std::chrono::duration<double> testcase_duration_;
+      std::chrono::nanoseconds testsuite_runtime_;
     };
   }
 }
