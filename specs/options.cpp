@@ -96,6 +96,12 @@ go_bandit([]() {
         AssertThat(opt.dry_run(), IsTrue());
         all_ok(opt);
       });
+
+      it("parses the '--report-timing' option", [&]() {
+        options opt({"--report-timing"});
+        AssertThat(opt.report_timing(), IsTrue());
+        all_ok(opt);
+      });
     });
 
     describe("with no arguments", [&]() {
@@ -119,6 +125,10 @@ go_bandit([]() {
 
       it("cannot find '--dry-run'", [&]() {
         AssertThat(opt.dry_run(), IsFalse());
+      });
+
+      it("cannot find '--report-timing'", [&]() {
+        AssertThat(opt.report_timing(), IsFalse());
       });
     });
 
@@ -204,6 +214,7 @@ go_bandit([]() {
             "unknown-argument", "--dry-run"});
         AssertThat(opt.parsed_ok(), IsTrue());
         AssertThat(opt.dry_run(), IsFalse());
+        AssertThat(opt.report_timing(), IsFalse());
         AssertThat(opt.has_further_arguments(), IsTrue());
         AssertThat(opt.has_unknown_options(), IsTrue());
       });
