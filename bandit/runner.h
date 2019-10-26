@@ -68,10 +68,10 @@ namespace bandit {
       controller.set_reporter(new bandit::reporter::singleline(controller.get_formatter(), controller.get_colorizer()));
     });
     choices.reporters.add("xunit", [&](detail::controller_t& controller) {
-      controller.set_reporter(new bandit::reporter::xunit(controller.get_formatter()));
+      controller.set_reporter(new bandit::reporter::xunit(controller.get_formatter(), controller.get_report_timing()));
     });
     choices.reporters.add("info", [&](detail::controller_t& controller) {
-      controller.set_reporter(new bandit::reporter::info(controller.get_formatter(), controller.get_colorizer()));
+      controller.set_reporter(new bandit::reporter::info(controller.get_formatter(), controller.get_colorizer(), controller.get_report_timing()));
     });
     choices.reporters.add("spec", [&](detail::controller_t& controller) {
       controller.set_reporter(new bandit::reporter::spec(controller.get_formatter(), controller.get_colorizer()));
@@ -100,6 +100,9 @@ namespace bandit {
     }
 
     detail::controller_t controller;
+
+    controller.set_report_timing(opt.report_timing());
+
     if (!opt.update_controller_settings(controller)) {
       return 1;
     }

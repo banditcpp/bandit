@@ -7,11 +7,12 @@
 namespace bandit {
   namespace reporter {
     struct xunit : public progress_base {
-      xunit(std::ostream& stm, const detail::failure_formatter_t& formatter)
-          : progress_base(formatter), stm_(stm) {}
+      xunit(std::ostream& stm, const detail::failure_formatter_t& formatter, bool report_timing)
+          : progress_base(formatter), stm_(stm), report_timing_(report_timing) {
+      }
 
-      xunit(const detail::failure_formatter_t& formatter)
-          : xunit(std::cout, formatter) {}
+      xunit(const detail::failure_formatter_t& formatter, bool report_timing)
+          : xunit(std::cout, formatter, report_timing) {}
 
       void it_starting(const std::string& desc) override {
         progress_base::it_starting(desc);
@@ -57,7 +58,9 @@ namespace bandit {
         }
 
         std::chrono::duration<double> dur_in_sec(testsuite_runtime_);
-        stm_ << " time=\"" << std::to_string(dur_in_sec.count()) << "\">\n";
+        stm_ << " time=\""
+             << time_to_string(report_timing_ ? dur_in_sec.count() : 0.000)
+             << "\">\n";
 
         stm_ << work_stm_.str();
 
@@ -94,12 +97,14 @@ namespace bandit {
       }
 
       void print_remaining_header_with_time() {
-        std::chrono::duration<double> dur_in_sec(testcase_duration_);
-        work_stm_ << " time=\"" << std::to_string(dur_in_sec.count()) << "\">\n";
+        work_stm_ << " time=\""
+                  << time_to_string(report_timing_ ? testcase_duration_.count() : 0.000)
+                  << "\">\n";
       }
 
       std::ostream& stm_;
       std::stringstream work_stm_;
+      bool report_timing_;
     };
   }
 }

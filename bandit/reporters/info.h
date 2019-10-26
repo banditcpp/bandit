@@ -7,11 +7,16 @@
 namespace bandit {
   namespace reporter {
     struct info : public colored_base {
-      info(std::ostream& stm, const detail::failure_formatter_t& formatter, const detail::colorizer_t& colorizer)
-          : colored_base(stm, formatter, colorizer), active_context_index_(0) {}
+      info(std::ostream& stm, const detail::failure_formatter_t& formatter,
+          const detail::colorizer_t& colorizer,
+          bool report_timing)
+          : colored_base(stm, formatter, colorizer),
+            active_context_index_(0), report_timing_(report_timing) {}
 
-      info(const detail::failure_formatter_t& formatter, const detail::colorizer_t& colorizer)
-          : info(std::cout, formatter, colorizer) {}
+      info(const detail::failure_formatter_t& formatter,
+          const detail::colorizer_t& colorizer,
+          bool report_timing)
+          : info(std::cout, formatter, colorizer, report_timing) {}
 
       info& operator=(const info&) {
         return *this;
@@ -84,8 +89,9 @@ namespace bandit {
             << colorizer_.good()
             << "[ PASS ]"
             << colorizer_.reset()
-            << " it " << desc
-            << std::endl;
+            << " it " << desc;
+        print_timing();
+        stm_ << std::endl;
         stm_.flush();
       }
 
@@ -98,8 +104,9 @@ namespace bandit {
             << colorizer_.bad()
             << "[ FAIL ]"
             << colorizer_.reset()
-            << " it " << desc
-            << std::endl;
+            << " it " << desc;
+        print_timing();
+        stm_ << std::endl;
         stm_.flush();
       }
 
@@ -112,8 +119,9 @@ namespace bandit {
             << colorizer_.bad()
             << "-ERROR->"
             << colorizer_.reset()
-            << " it " << desc
-            << std::endl;
+            << " it " << desc;
+        print_timing();
+        stm_ << std::endl;
         stm_.flush();
       }
 
@@ -157,6 +165,17 @@ namespace bandit {
 
       std::string indent() {
         return std::string(2 * active_context_index_, ' ');
+      }
+
+      void print_timing() {
+          if (report_timing_) {
+              std::chrono::duration<double> dur_in_sec(testcase_duration_);
+                  stm_
+                  << colorizer_.neutral()
+                  << " ("
+                  << time_to_string(dur_in_sec.count())
+                  << " seconds)";
+          }
       }
 
       void list_failures_and_errors() {
@@ -271,6 +290,7 @@ namespace bandit {
 
       std::vector<context_info> context_stack_;
       decltype(context_stack_)::size_type active_context_index_;
+      bool report_timing_;
     };
   }
 }

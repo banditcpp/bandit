@@ -13,7 +13,8 @@ namespace bandit {
     struct progress_base : public interface {
       progress_base(const detail::failure_formatter_t& formatter)
           : specs_run_(0), specs_succeeded_(0), specs_failed_(0), specs_skipped_(0),
-            failure_formatter_(formatter) {}
+            failure_formatter_(formatter),
+            testcase_start_time_point_(), testcase_duration_(), testsuite_runtime_() {}
 
       progress_base& operator=(const progress_base&) {
         return *this;
@@ -99,8 +100,15 @@ namespace bandit {
 
     protected:
       void update_test_duration() {
-        testcase_duration_  = std::chrono::high_resolution_clock::now() - testcase_start_time_point_;
+        testcase_duration_ = std::chrono::high_resolution_clock::now() - testcase_start_time_point_;
         testsuite_runtime_ += std::chrono::duration_cast<std::chrono::nanoseconds>(testcase_duration_);
+      }
+
+      std::string time_to_string(double t) {
+        std::stringstream ss;
+        ss.precision(3);
+        ss << std::fixed << t;
+        return ss.str();
       }
 
       int specs_run_;

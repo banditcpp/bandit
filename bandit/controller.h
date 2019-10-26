@@ -11,7 +11,7 @@
 namespace bandit {
   namespace detail {
     struct controller_t {
-      controller_t() : adapter(new adapter::snowhouse) {}
+      controller_t() : adapter(new adapter::snowhouse), report_timing(false) {}
 
       context::stack_t& get_contexts() {
         return context_stack;
@@ -60,6 +60,14 @@ namespace bandit {
 
       void set_policy(run_policy_t* run_policy_) {
         run_policy.reset(run_policy_);
+      }
+
+      bool get_report_timing() {
+        return report_timing;
+      }
+
+      void set_report_timing(bool report_timing_) {
+        report_timing = report_timing_;
       }
 
       void describe(const std::string& desc, const std::function<void()>& func, bool hard_skip) {
@@ -186,6 +194,7 @@ namespace bandit {
       std::unique_ptr<failure_formatter_t> formatter;
       std::unique_ptr<reporter_t> reporter;
       std::unique_ptr<run_policy_t> run_policy;
+      bool report_timing;
     };
 
     inline void register_controller(controller_t* controller) {
