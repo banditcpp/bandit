@@ -13,7 +13,7 @@ codecov)
 		-DCMAKE_BUILD_TYPE=Debug \
 		-DCMAKE_CXX_FLAGS_DEBUG="-g -O0 -fprofile-arcs -ftest-coverage" ..
 	;;
-normal|coverity)
+normal)
 	echo "Building in release mode"
 	cmake -DCMAKE_BUILD_TYPE=Release ..
 	;;

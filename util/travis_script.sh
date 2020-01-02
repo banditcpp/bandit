@@ -8,13 +8,6 @@ check)
 	./util/check_header_guards.sh &&
 	./util/check_selfsufficiency.sh
 	;;
-coverity)
-	export COVERITY_SCAN_PROJECT_NAME=banditcpp/bandit
-	export COVERITY_SCAN_NOTIFICATION_EMAIL=nope
-	export COVERITY_SCAN_BRANCH_PATTERN=coverity-scan
-	export COVERITY_SCAN_BUILD_COMMAND="make -C build"
-	curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
-	;;
 normal|codecov)
 	make -C build
 	;;

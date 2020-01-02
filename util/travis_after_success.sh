@@ -13,7 +13,7 @@ codecov)
 	echo "Sending information to codecov.io"
 	curl -s https://codecov.io/bash | bash
 	;;
-check|coverity)
+check)
 	;;
 normal)
 	../util/check_documentation_output.sh bin/bandit-specs
