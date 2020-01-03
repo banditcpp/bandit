@@ -4,12 +4,12 @@ branches:
   except:
     - coverity-scan
 environment:
-    matrix:
-        - {}
+  matrix:
+    - {}
 clone_folder: c:\projects\bandit
 install: git submodule update --init --recursive
 build_script:
-    - mkdir build
-    - cd build
-    - cmake c:\projects\bandit -G "Visual Studio 14"
-    - cmake --build . --config Debug
+  - mkdir build
+  - cd build
+  - cmake c:\projects\bandit -G "Visual Studio 14"
+  - cmake --build . --config Debug

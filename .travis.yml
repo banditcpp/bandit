@@ -32,10 +32,10 @@ matrix:
     - compiler: gcc
       if: branch = coverity-scan
       env:
-       - BUILD_TYPE=none
-       - secure: "LFj7swWUwUqOnb/Lqtf72FzGakgfZZnYaSw1YJspPMen2Hfv60w96T6KzsB5i1cwG898K2ILMsZjlxW2DC2fg2G87xnHWq/B+ZwBCBxZRhQUqTEfkf5Hok5WgIBQfgVUZe1lONXyM//5ZNpvDFHTkTqMQuCCGqbK3KKhx51soEg="
-       # The previous declaration is the encrypted COVERITY_SCAN_TOKEN, created
-       #   via the "travis encrypt" command using the project repo's public key
+        - BUILD_TYPE=none
+        - secure: "LFj7swWUwUqOnb/Lqtf72FzGakgfZZnYaSw1YJspPMen2Hfv60w96T6KzsB5i1cwG898K2ILMsZjlxW2DC2fg2G87xnHWq/B+ZwBCBxZRhQUqTEfkf5Hok5WgIBQfgVUZe1lONXyM//5ZNpvDFHTkTqMQuCCGqbK3KKhx51soEg="
+        # The previous declaration is the encrypted COVERITY_SCAN_TOKEN, created
+        #   via the "travis encrypt" command using the project repo's public key
 
 before_script:
   - util/travis.sh before_script
