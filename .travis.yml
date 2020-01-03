@@ -38,11 +38,11 @@ matrix:
        #   via the "travis encrypt" command using the project repo's public key
 
 before_script:
-  - util/travis_before_script.sh
+  - util/travis.sh before_script
 script:
-  - util/travis_script.sh
+  - util/travis.sh script
 after_success:
-  - util/travis_after_success.sh
+  - util/travis.sh after_success
 
 notifications:
   irc:
