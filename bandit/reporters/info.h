@@ -229,12 +229,7 @@ namespace bandit {
       }
 
       void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
-        ++specs_failed_;
-
-        std::stringstream ss;
-        ss << current_context_name() << " " << desc << ":" << std::endl
-           << failure_formatter_.format(ex);
-        failures_.push_back(ss.str());
+        progress_base::it_failed(desc, ex);
 
         ++context_stack_.top().total;
         ++context_stack_.top().failed;
@@ -250,11 +245,7 @@ namespace bandit {
       }
 
       void it_unknown_error(const std::string& desc) override {
-        ++specs_failed_;
-
-        std::stringstream ss;
-        ss << current_context_name() << " " << desc << ": Unknown exception" << std::endl;
-        failures_.push_back(ss.str());
+        progress_base::it_unknown_error(desc);
 
         ++context_stack_.top().total;
         ++context_stack_.top().failed;
