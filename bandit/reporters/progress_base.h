@@ -51,7 +51,6 @@ namespace bandit {
         specs_failed_++;
 
         std::stringstream ss;
-        ss << std::endl;
         ss << current_context_name() << " " << desc << ":" << std::endl;
         ss << failure_formatter_.format(ex);
 
@@ -62,7 +61,6 @@ namespace bandit {
         specs_failed_++;
 
         std::stringstream ss;
-        ss << std::endl;
         ss << current_context_name() << " " << desc << ":" << std::endl;
         ss << "Unknown exception";
         ss << std::endl;
