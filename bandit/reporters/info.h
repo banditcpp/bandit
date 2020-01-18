@@ -2,7 +2,6 @@
 #define BANDIT_REPORTERS_INFO_H
 
 #include <iostream>
-#include <vector>
 #include <bandit/reporters/colored_base.h>
 
 namespace bandit {

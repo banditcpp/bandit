@@ -2,8 +2,8 @@
 #define BANDIT_REPORTERS_PROGRESS_BASE_H
 
 #include <algorithm>
-#include <list>
 #include <sstream>
+#include <vector>
 #include <bandit/failure_formatters/interface.h>
 #include <bandit/reporters/interface.h>
 
@@ -97,9 +97,9 @@ namespace bandit {
       int specs_failed_;
       int specs_skipped_;
       const detail::failure_formatter_t& failure_formatter_;
-      std::list<std::string> contexts_;
-      std::list<std::string> failures_;
-      std::list<std::string> test_run_errors_;
+      std::vector<std::string> contexts_;
+      std::vector<std::string> failures_;
+      std::vector<std::string> test_run_errors_;
     };
   }
 }
