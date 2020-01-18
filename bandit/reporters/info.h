@@ -43,7 +43,7 @@ namespace bandit {
 
       void context_ended(const std::string& desc) override {
         colored_base::context_ended(desc);
-        if (context_stack_.size() == 1 || context_stack_.back().total > context_stack_.back().skipped) {
+        if (context_stack_.size() == 1 || !context_stack_.back().skipped_all()) {
           output_context_end_message();
         }
         const auto context = std::move(context_stack_.back());
@@ -55,12 +55,11 @@ namespace bandit {
 
       void it_skip(const std::string& desc) override {
         colored_base::it_skip(desc);
-        ++context_stack_.back().total;
-        ++context_stack_.back().skipped;
+        context_stack_.back().count_skip();
       }
 
       void it_starting(const std::string& desc) override {
-        if (context_stack_.size() > 1 && context_stack_.back().total == context_stack_.back().skipped) {
+        if (context_stack_.size() > 1 && context_stack_.back().skipped_all()) {
           output_not_yet_shown_context_start_messages();
         }
 
@@ -77,7 +76,7 @@ namespace bandit {
 
       void it_succeeded(const std::string& desc) override {
         colored_base::it_succeeded(desc);
-        ++context_stack_.back().total;
+        context_stack_.back().count_success();
         --active_context_index_;
         stm_
             << "\r" << indent()
@@ -91,9 +90,7 @@ namespace bandit {
 
       void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         colored_base::it_failed(desc, ex);
-
-        ++context_stack_.back().total;
-        ++context_stack_.back().failed;
+        context_stack_.back().count_failure();
         --active_context_index_;
         stm_
             << "\r" << indent()
@@ -107,9 +104,7 @@ namespace bandit {
 
       void it_unknown_error(const std::string& desc) override {
         colored_base::it_unknown_error(desc);
-
-        ++context_stack_.back().total;
-        ++context_stack_.back().failed;
+        context_stack_.back().count_failure();
         --active_context_index_;
         stm_
             << "\r" << indent()
@@ -123,18 +118,42 @@ namespace bandit {
 
     protected:
       struct context_info {
-        context_info(const std::string& d) : desc(d), total(0), skipped(0), failed(0) {}
+        context_info(const std::string& d) : desc(d), total_(0), skipped_(0), failed_(0) {}
 
         void merge(const context_info& ci) {
-          total += ci.total;
-          skipped += ci.skipped;
-          failed += ci.failed;
+          total_ += ci.total();
+          skipped_ += ci.skipped();
+          failed_ += ci.failed();
         }
 
+        void count_success() {
+          ++total_;
+        }
+
+        void count_skip() {
+          ++total_;
+          ++skipped_;
+        }
+
+        void count_failure() {
+          ++total_;
+          ++failed_;
+        }
+
+        bool skipped_all() const {
+          return total_ == skipped_;
+        }
+
+        int total() const { return total_; }
+        int skipped() const { return skipped_; }
+        int failed() const { return failed_; }
+
         const std::string desc; // copy
-        int total;
-        int skipped;
-        int failed;
+
+      private:
+        int total_;
+        int skipped_;
+        int failed_;
       };
 
       std::string indent() {
@@ -232,20 +251,20 @@ namespace bandit {
             << "end "
             << colorizer_.reset()
             << context.desc;
-        if (context.total > 0) {
+        if (context.total() > 0) {
           stm_
               << colorizer_.emphasize()
-              << " " << context.total << " total";
+              << " " << context.total() << " total";
         }
-        if (context.skipped > 0) {
+        if (context.skipped() > 0) {
           stm_
               << colorizer_.neutral()
-              << " " << context.skipped << " skipped";
+              << " " << context.skipped() << " skipped";
         }
-        if (context.failed > 0) {
+        if (context.failed() > 0) {
           stm_
               << colorizer_.bad()
-              << " " << context.failed << " failed";
+              << " " << context.failed() << " failed";
         }
         stm_ << colorizer_.reset() << std::endl;
       }
