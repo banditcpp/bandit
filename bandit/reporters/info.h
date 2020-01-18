@@ -2,15 +2,14 @@
 #define BANDIT_REPORTERS_INFO_H
 
 #include <iostream>
-#include <stack>
+#include <vector>
 #include <bandit/reporters/colored_base.h>
 
 namespace bandit {
   namespace reporter {
     struct info : public colored_base {
       info(std::ostream& stm, const detail::failure_formatter_t& formatter, const detail::colorizer_t& colorizer)
-          : colored_base(stm, formatter, colorizer),
-            indentation_(0), not_yet_shown_(0), context_stack_() {}
+          : colored_base(stm, formatter, colorizer), active_context_index_(0) {}
 
       info(const detail::failure_formatter_t& formatter, const detail::colorizer_t& colorizer)
           : info(std::cout, formatter, colorizer) {}
@@ -37,37 +36,32 @@ namespace bandit {
 
       void context_starting(const std::string& desc) override {
         colored_base::context_starting(desc);
-        context_stack_.emplace(desc);
+        context_stack_.emplace_back(desc);
         if (context_stack_.size() == 1) {
           output_context_start_message();
-        } else {
-          ++not_yet_shown_;
         }
       }
 
       void context_ended(const std::string& desc) override {
         colored_base::context_ended(desc);
-        if (context_stack_.size() == 1 || context_stack_.top().total > context_stack_.top().skipped) {
+        if (context_stack_.size() == 1 || context_stack_.back().total > context_stack_.back().skipped) {
           output_context_end_message();
         }
-        const context_info context = context_stack_.top(); // copy
-        context_stack_.pop();
+        const context_info context = context_stack_.back(); // copy
+        context_stack_.pop_back();
         if (!context_stack_.empty()) {
-          context_stack_.top().merge(context);
-        }
-        if (not_yet_shown_ > 0) {
-          --not_yet_shown_;
+          context_stack_.back().merge(context);
         }
       }
 
       void it_skip(const std::string& desc) override {
         colored_base::it_skip(desc);
-        ++context_stack_.top().total;
-        ++context_stack_.top().skipped;
+        ++context_stack_.back().total;
+        ++context_stack_.back().skipped;
       }
 
       void it_starting(const std::string& desc) override {
-        if (context_stack_.size() > 1 && context_stack_.top().total == context_stack_.top().skipped) {
+        if (context_stack_.size() > 1 && context_stack_.back().total == context_stack_.back().skipped) {
           output_not_yet_shown_context_start_messages();
         }
 
@@ -78,14 +72,14 @@ namespace bandit {
             << "[ TEST ]"
             << colorizer_.reset()
             << " it " << desc;
-        ++indentation_;
+        ++active_context_index_;
         stm_.flush();
       }
 
       void it_succeeded(const std::string& desc) override {
         colored_base::it_succeeded(desc);
-        ++context_stack_.top().total;
-        --indentation_;
+        ++context_stack_.back().total;
+        --active_context_index_;
         stm_
             << "\r" << indent()
             << colorizer_.good()
@@ -99,9 +93,9 @@ namespace bandit {
       void it_failed(const std::string& desc, const detail::assertion_exception& ex) override {
         colored_base::it_failed(desc, ex);
 
-        ++context_stack_.top().total;
-        ++context_stack_.top().failed;
-        --indentation_;
+        ++context_stack_.back().total;
+        ++context_stack_.back().failed;
+        --active_context_index_;
         stm_
             << "\r" << indent()
             << colorizer_.bad()
@@ -115,9 +109,9 @@ namespace bandit {
       void it_unknown_error(const std::string& desc) override {
         colored_base::it_unknown_error(desc);
 
-        ++context_stack_.top().total;
-        ++context_stack_.top().failed;
-        --indentation_;
+        ++context_stack_.back().total;
+        ++context_stack_.back().failed;
+        --active_context_index_;
         stm_
             << "\r" << indent()
             << colorizer_.bad()
@@ -145,7 +139,7 @@ namespace bandit {
       };
 
       std::string indent() {
-        return std::string(2 * indentation_, ' ');
+        return std::string(2 * active_context_index_, ' ');
       }
 
       void list_failures_and_errors() {
@@ -217,30 +211,22 @@ namespace bandit {
             << colorizer_.info()
             << "begin "
             << colorizer_.emphasize()
-            << context_stack_.top().desc
+            << context_stack_[active_context_index_].desc
             << colorizer_.reset()
             << std::endl;
-        ++indentation_;
+        ++active_context_index_;
         stm_.flush();
       }
 
       void output_not_yet_shown_context_start_messages() {
-        std::stack<context_info> temp_stack;
-        for (int i = 0; i < not_yet_shown_; ++i) {
-          temp_stack.push(context_stack_.top());
-          context_stack_.pop();
-        }
-        for (int i = 0; i < not_yet_shown_; ++i) {
-          context_stack_.push(temp_stack.top());
+        for (auto i = active_context_index_; i < context_stack_.size(); ++i) {
           output_context_start_message();
-          temp_stack.pop();
         }
-        not_yet_shown_ = 0;
       }
 
       void output_context_end_message() {
-        const context_info& context = context_stack_.top();
-        --indentation_;
+        const context_info& context = context_stack_.back();
+        --active_context_index_;
         stm_
             << indent()
             << colorizer_.info()
@@ -265,9 +251,8 @@ namespace bandit {
         stm_ << colorizer_.reset() << std::endl;
       }
 
-      int indentation_;
-      int not_yet_shown_; // number of elements in stack that are not yet shown
-      std::stack<context_info> context_stack_;
+      std::vector<context_info> context_stack_;
+      decltype(context_stack_)::size_type active_context_index_;
     };
   }
 }
