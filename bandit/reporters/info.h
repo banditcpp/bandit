@@ -46,7 +46,7 @@ namespace bandit {
         if (context_stack_.size() == 1 || context_stack_.back().total > context_stack_.back().skipped) {
           output_context_end_message();
         }
-        const context_info context = context_stack_.back(); // copy
+        const auto context = std::move(context_stack_.back());
         context_stack_.pop_back();
         if (!context_stack_.empty()) {
           context_stack_.back().merge(context);
