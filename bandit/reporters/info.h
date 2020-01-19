@@ -35,18 +35,19 @@ namespace bandit {
 
       void context_starting(const std::string& desc) override {
         colored_base::context_starting(desc);
-        context_stack_.emplace_back(desc);
+        context_stack_.emplace_back();
         if (context_stack_.size() == 1) {
           output_context_start_message();
         }
       }
 
       void context_ended(const std::string& desc) override {
-        colored_base::context_ended(desc);
         if (context_stack_.size() == 1 || !context_stack_.back().skipped_all()) {
           output_context_end_message();
         }
-        const auto context = std::move(context_stack_.back());
+
+        colored_base::context_ended(desc);
+        const auto context = context_stack_.back();
         context_stack_.pop_back();
         if (!context_stack_.empty()) {
           context_stack_.back().merge(context);
@@ -118,7 +119,7 @@ namespace bandit {
 
     protected:
       struct context_info {
-        context_info(const std::string& d) : desc(d), total_(0), skipped_(0), failed_(0) {}
+        context_info() : total_(0), skipped_(0), failed_(0) {}
 
         void merge(const context_info& ci) {
           total_ += ci.total();
@@ -147,8 +148,6 @@ namespace bandit {
         int total() const { return total_; }
         int skipped() const { return skipped_; }
         int failed() const { return failed_; }
-
-        const std::string desc; // copy
 
       private:
         int total_;
@@ -229,7 +228,7 @@ namespace bandit {
             << colorizer_.info()
             << "begin "
             << colorizer_.emphasize()
-            << context_stack_[active_context_index_].desc
+            << contexts_[active_context_index_]
             << colorizer_.reset()
             << std::endl;
         ++active_context_index_;
@@ -243,14 +242,15 @@ namespace bandit {
       }
 
       void output_context_end_message() {
-        const context_info& context = context_stack_.back();
         --active_context_index_;
         stm_
             << indent()
             << colorizer_.info()
             << "end "
             << colorizer_.reset()
-            << context.desc;
+            << contexts_.back();
+
+        const auto& context = context_stack_.back();
         if (context.total() > 0) {
           stm_
               << colorizer_.emphasize()
