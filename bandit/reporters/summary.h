@@ -2,7 +2,7 @@
 #define BANDIT_REPORTERS_SUMMARY_H
 
 #include <algorithm>
-#include <list>
+#include <vector>
 #include <iostream>
 #include <bandit/colorizers/interface.h>
 
@@ -13,7 +13,7 @@ namespace bandit {
 
       static void write(std::ostream& stm,
           int specs_run, int specs_failed, int specs_succeeded, int specs_skipped,
-          const std::list<std::string>& failures, const std::list<std::string>& errors,
+          const std::vector<std::string>& failures, const std::vector<std::string>& errors,
           const detail::colorizer_t& colorizer) {
         if (specs_run == 0 && errors.size() == 0) {
           stm << colorizer.bad()

@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <deque>
 #include <functional>
-#include <list>
 #include <string>
+#include <vector>
 #include <bandit/test_run_error.h>
 
 namespace bandit {
@@ -63,7 +63,7 @@ namespace bandit {
         }
       }
 
-      void run_all(const std::list<std::function<void()>>& funcs) {
+      void run_all(const std::vector<std::function<void()>>& funcs) {
         for (auto f : funcs) {
           f();
         }
@@ -72,8 +72,8 @@ namespace bandit {
       std::string desc_;
       bool hard_skip_;
       bool is_executing_;
-      std::list<std::function<void()>> before_eaches_;
-      std::list<std::function<void()>> after_eaches_;
+      std::vector<std::function<void()>> before_eaches_;
+      std::vector<std::function<void()>> after_eaches_;
     };
 
     struct stack_t : public std::deque<context::interface*> {
