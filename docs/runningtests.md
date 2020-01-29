@@ -21,6 +21,7 @@ Options:
   --only=<substring>,      Run only 'describe' and 'it' containing substring
   --break-on-failure,      Stop test run on first failing test
   --dry-run,               Skip all tests. Use to list available tests
+  --report-timing,         Instruct reporter to report timing information
   --reporter=<reporter>,   Select reporter: crash, dots, info, singleline, spec,
                            xunit
   --colorizer=<colorizer>, Select color theme: dark, light, off
@@ -149,6 +150,13 @@ This is the default.
 #### `--colorizer=dark`
 
 Uses a color theme with dark colors for light backgrounds.
+
+### Timing
+
+#### `--report-timing`
+
+Instruct reporter to report timing information for each test (only for the
+`info` and `xunit` reporters).
 
 ## Tweaking the behavior
 

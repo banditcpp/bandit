@@ -93,6 +93,9 @@ namespace bandit {
                 {DRY_RUN, 0, "", "dry-run", argument::None,
                     "  --dry-run, "
                     "\tSkip all tests. Use to list available tests"},
+                {REPORT_TIMING, 0, "", "report-timing", argument::None,
+                    "  --report-timing, "
+                    "\tInstruct reporter to report timing information"},
             },
             reporter_help_("  --reporter=<reporter>, "
                 "\tSelect reporter: " + choices_.reporters.comma_separated_list()),
@@ -187,6 +190,10 @@ namespace bandit {
         return options_[DRY_RUN] != nullptr;
       }
 
+      bool report_timing() const {
+        return options_[REPORT_TIMING] != nullptr;
+      }
+
     private:
       enum option_index {
         UNKNOWN,
@@ -199,6 +206,7 @@ namespace bandit {
         ONLY,
         BREAK_ON_FAILURE,
         DRY_RUN,
+        REPORT_TIMING,
       };
 
       bool apply(controller_t& controller, const option_map& choice, enum option_index index) const {

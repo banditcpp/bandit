@@ -10,7 +10,7 @@ go_bandit([]() {
 
     before_each([&]() {
       stm.str(std::string());
-      reporter.reset(new reporter::info(stm, formatter, colorizer));
+      reporter.reset(new reporter::info(stm, formatter, colorizer, false));
     });
 
     auto output = [&]() {
@@ -373,6 +373,43 @@ go_bandit([]() {
 
       it("ends successfully", [&]() {
         AssertThat(reporter->did_we_pass(), IsTrue());
+      });
+    });
+
+    describe("a report with timing", [&]() {
+      before_each([&]() {
+        reporter.reset(new reporter::info(stm, formatter, colorizer, true));
+        reporter->test_run_starting();
+        reporter->context_starting("context");
+        reporter->it_starting("reports timing");
+      });
+
+      it("shows a passing test as passed with timing", [&]() {
+        reporter->it_succeeded("passes");
+        reporter->context_ended("context");
+        reporter->test_run_complete();
+
+        AssertThat(output(), Contains("[ PASS ] it passes (0.0"));
+        AssertThat(output(), Contains(" seconds)"));
+      });
+
+      it("shows a failing test as failed with timing", [&]() {
+        bd::assertion_exception exception("assertion failed!", "some_file", 123);
+        reporter->it_failed("fails", exception);
+        reporter->context_ended("context");
+        reporter->test_run_complete();
+
+        AssertThat(output(), Contains("[ FAIL ] it fails (0.0"));
+        AssertThat(output(), Contains(" seconds)"));
+      });
+
+      it("shows an errored test as errored with timing", [&]() {
+        reporter->it_unknown_error("throws an unknown exception");
+        reporter->context_ended("context");
+        reporter->test_run_complete();
+
+        AssertThat(output(), Contains("-ERROR-> it throws an unknown exception (0.0"));
+        AssertThat(output(), Contains(" seconds)"));
       });
     });
 

@@ -12,7 +12,7 @@ go_bandit([]() {
 
     before_each([&]() {
       stm.str(std::string());
-      reporter.reset(new reporter::xunit(stm, formatter));
+      reporter.reset(new reporter::xunit(stm, formatter, true));
     });
 
     describe("an empty test run", [&]() {
