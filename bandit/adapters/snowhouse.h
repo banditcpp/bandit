@@ -12,7 +12,7 @@ namespace bandit {
         try {
           func();
         } catch (const ::snowhouse::AssertionException& ex) {
-          throw detail::assertion_exception(ex.GetMessage(), ex.GetFilename(), ex.GetLineNumber());
+          throw detail::assertion_exception(ex.what(), ex.file(), ex.line());
         }
       }
     };
