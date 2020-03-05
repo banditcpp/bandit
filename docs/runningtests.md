@@ -59,6 +59,8 @@ depending on whether it succeeds or not.
 
 This is the default.
 
+![Screenshot of dots reporter](images/reporter-dots.png)
+
 #### `--reporter=singleline`
 
 Reports the progress on a single line.
@@ -67,15 +69,21 @@ Updating counters of executed, failed and skipped tests.
 Very useful if you do not want to be bothered a lot by output
 of the testing framework.
 
+![Screenshot of singleline reporter](images/reporter-singleline.png)
+
 #### `--reporter=xunit`
 
 Reports the test results in a XML format supported by most
 continuous integration servers.
 
+![Screenshot of xunit reporter](images/reporter-xunit.png)
+
 #### `--reporter=spec`
 
 Reports the tests in a format similar to how they are
 written along with the status of each test.
+
+![Screenshot of spec reporter](images/reporter-spec.png)
 
 #### `--reporter=info`
 
@@ -88,12 +96,16 @@ Skipped `describe()`s are not shown at all.
 This reporter is somewhat inspired by the
 [Google Test](//github.com/google/googletest) framework.
 
+![Screenshot of info reporter](images/reporter-info.png)
+
 #### `--reporter=crash`
 
 Reports one `it()` per line containing the whole `describe()` stack.
 Very useful, for example, if you have a huge amount of tests and you are
 testing code that may crash, in a continuous integration system that sends
 you a mail with the last few lines of output.
+
+![Screenshot of crash reporter](images/reporter-crash.png)
 
 ### Formatters
 
