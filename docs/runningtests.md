@@ -86,7 +86,7 @@ for every relevant `it`. The marker says `[ TEST ]` when the test starts,
 summary.
 Skipped `describe()`s are not shown at all.
 This reporter is somewhat inspired by the
-[Google Test](https://github.com/google/googletest) framework.
+[Google Test](//github.com/google/googletest) framework.
 
 #### `--reporter=crash`
 
