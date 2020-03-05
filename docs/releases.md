@@ -48,7 +48,7 @@ In the following, we list breaking changes per major release.
 * The option handling became stricter.
   Illegal option arguments like `--reporter=invalid` result in an error now.
 
-* The assertion framework Snowhouse v3.0.0 is used including all its breaking
+* The assertion framework Snowhouse v5.0.0 is used including all its breaking
   changes.
 
 * The `snowhouse` namespace is not used by default.
