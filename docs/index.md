@@ -120,7 +120,7 @@ If you want to see if bandit works for your compiler, bandit is shipped with a
 cmake project for generating bandit's self tests. Let us know how it goes.
 
 If your compiler does not support the C++11 features required by Bandit, we
-suggest that you take a look at [Igloo](http://igloo-testing.org), which is
+suggest that you take a look at [Igloo](//iglootesting.wordpress.com/), which is
 built on the same philosophy but works without C++11.
 
 ## Online resources
