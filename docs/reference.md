@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 
 ## Assertions
 
-Bandit uses the [snowhouse](https://github.com/banditcpp/snowhouse#assertions)
+Bandit uses the [Snowhouse](//github.com/banditcpp/snowhouse#assertions)
 assertion library. Go there for references on how to write assertions.
 For regular use, you probably need `using namespace snowhouse;` in your
 `.cpp` files.
