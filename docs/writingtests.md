@@ -116,6 +116,6 @@ does not provide context logic.)
 
 ## Assertions
 
-Bandit uses the [snowhouse](https://github.com/banditcpp/snowhouse#assertions)
+Bandit uses the [Snowhouse](https://github.com/banditcpp/snowhouse#assertions)
 assertion framework to verify that things work as expected. Snowhouse contains
 a lot of helpers aiming at creating readable tests.
