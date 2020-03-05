@@ -120,7 +120,7 @@ The Qt Creator formatter reports errors as
 file://<filename>:<line>: <error message>
 ```
 
-It enables hyperlink from the console ouptut to jump directly to the error.
+It enables a hyperlink from the console output to jump directly to the error.
 
 #### `--formatter=vs`
 
