@@ -12,7 +12,11 @@ namespace bandit {
         try {
           func();
         } catch (const ::snowhouse::AssertionException& ex) {
+#if defined(SNOWHOUSE_MAJOR) && SNOWHOUSE_MAJOR >= 5
           throw detail::assertion_exception(ex.what(), ex.file(), ex.line());
+#else
+          throw detail::assertion_exception(ex.GetMessage(), ex.GetFilename(), ex.GetLineNumber());
+#endif
         }
       }
     };
