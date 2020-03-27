@@ -1,3 +1,4 @@
+#include <bandit/failure_formatters/qt_creator.h>
 #include <specs/specs.h>
 namespace bd = bandit::detail;
 

@@ -1,3 +1,4 @@
+#include <bandit/failure_formatters/posix.h>
 #include <specs/specs.h>
 namespace bd = bandit::detail;
 

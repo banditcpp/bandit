@@ -1,3 +1,4 @@
+#include <bandit/colorizers.h>
 #include <specs/specs.h>
 
 go_bandit([]() {

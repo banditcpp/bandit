@@ -1,3 +1,4 @@
+#include <bandit/failure_formatters/visual_studio.h>
 #include <specs/specs.h>
 namespace bd = bandit::detail;
 

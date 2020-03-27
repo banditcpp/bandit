@@ -1,3 +1,6 @@
+#include <bandit/failure_formatters/posix.h>
+#include <bandit/colorizers/off.h>
+#include <bandit/reporters/singleline.h>
 #include <specs/specs.h>
 namespace bd = bandit::detail;
 

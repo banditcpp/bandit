@@ -1,3 +1,4 @@
+#include <bandit/run_policies/bandit.h>
 #include <specs/specs.h>
 
 go_bandit([]() {

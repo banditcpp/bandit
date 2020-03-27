@@ -1,3 +1,5 @@
+#include <bandit/runner.h>
+#include <bandit/options.h>
 #include <specs/util/argv_helper.h>
 #include <specs/specs.h>
 

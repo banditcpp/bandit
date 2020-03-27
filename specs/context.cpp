@@ -1,4 +1,5 @@
 #include <specs/specs.h>
+#include <bandit/context.h>
 
 go_bandit([]() {
   describe("context::bandit", [&]() {
