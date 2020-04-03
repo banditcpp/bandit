@@ -27,7 +27,6 @@ esac
 
 case "$BUILD_TYPE:$phase" in
 check:script)
-	./util/check_header_guards.sh &&
 	./util/check_selfsufficiency.sh
 	;;
 normal:before_script)
