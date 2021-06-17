@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 option(BANDIT_BUILD_SPECS   "Build the Bandit specs"                ON)
 option(BANDIT_RUN_SPECS     "Run the Bandit specs"                  ON)
 
+if(POLICY CMP0058)
+  cmake_policy(SET CMP0058 NEW)
+endif()
+
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cotire/CMake/cotire OPTIONAL RESULT_VARIABLE HAS_COTIRE)
 
