@@ -15,6 +15,7 @@ bandit
 [![Issues](https://img.shields.io/github/issues/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/pulls)
 [![freenode](https://img.shields.io/badge/chat-%20on%20freenode-brightgreen.svg)](//webchat.freenode.net/?channels=%23banditcpp)
+[![Conan Center](https://shields.io/conan/v/bandit)](https://conan.io/center/recipes/bandit)
 
 Human-friendly unit testing for C++11
 
