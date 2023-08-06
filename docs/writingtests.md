@@ -80,7 +80,7 @@ this file includes tests that we want to be part of the execution by using the
 
 Inside `go_bandit()` we can now write our tests.
 
-Bandit takes some inspiration from frameworks like [RSpec](http://rspec.info/),
+Bandit takes some inspiration from frameworks like [RSpec](https://rspec.info/),
 where our tests take the form of specifications that describe how a component
 should work.
 These specifications can be executed to verify that your code fulfills them.

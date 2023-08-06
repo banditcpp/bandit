@@ -3,7 +3,7 @@
 For a list of releases including release notes, go to
 [bandit's releases page on GitHub](//github.com/banditcpp/bandit/releases).
 
-Bandit will be using [Semantic Versioning 2.0.0](http://semver.org/spec/v2.0.0.html)
+Bandit will be using [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)
 beginning from the next major release v3.0.0.
 In the following, we list breaking changes per major release.
 
