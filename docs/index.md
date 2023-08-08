@@ -1,21 +1,16 @@
 bandit
 ======
 [![MIT License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](LICENSE.txt)
+[![Conan Center](https://img.shields.io/conan/v/bandit)](https://conan.io/center/recipes/bandit)
+[![Codacy quality grade](https://app.codacy.com/project/badge/Grade/d86badcd05184ce79d715cf7f22722ed)](https://app.codacy.com/gh/banditcpp/bandit/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Contributors](https://img.shields.io/github/contributors/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/graphs/contributors)
 [![Watchers](https://img.shields.io/github/watchers/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/watchers)
 [![Stars](https://img.shields.io/github/stars/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/stargazers)
 [![Forks](https://img.shields.io/github/forks/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/network/members)
 [![Commits per year](https://img.shields.io/github/commit-activity/y/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/graphs/code-frequency)
 [![Last commit](https://img.shields.io/github/last-commit/banditcpp/bandit/main.svg)](https://github.com/banditcpp/bandit/commits/main)
-[![Travis CI Status](https://img.shields.io/travis/banditcpp/bandit/main.svg?label=tests+on+UNIX)](https://travis-ci.org/banditcpp/bandit)
-[![AppVeyor Status](https://img.shields.io/appveyor/ci/banditcpp/bandit/main.svg?label=tests+on+Windows)](https://ci.appveyor.com/project/banditcpp/bandit)
-[![Codecov Badge](https://img.shields.io/codecov/c/github/banditcpp/bandit/main.svg)](https://codecov.io/gh/banditcpp/bandit)
-[![Codacy Badge](https://img.shields.io/codacy/grade/8b00743b0047469bbe794cdc35832a73/main.svg)](https://www.codacy.com/app/sbeyer/bandit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=banditcpp/bandit&amp;utm_campaign=Badge_Grade)
-[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/14169.svg)](https://scan.coverity.com/projects/banditcpp-bandit)
 [![Issues](https://img.shields.io/github/issues/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/banditcpp/bandit.svg)](https://github.com/banditcpp/bandit/pulls)
-[![freenode](https://img.shields.io/badge/chat-%20on%20freenode-brightgreen.svg)](//webchat.freenode.net/?channels=%23banditcpp)
-[![Conan Center](https://shields.io/conan/v/bandit)](https://conan.io/center/recipes/bandit)
 
 Human-friendly unit testing for C++11
 
@@ -129,4 +124,3 @@ built on the same philosophy but works without C++11.
  * [The bandit website](//banditcpp.github.io/bandit)
  * [Bandit on GitHub](//github.com/banditcpp/bandit)
  * [Issues with bandit](//github.com/banditcpp/bandit/issues?state=open)
- * IRC: [#banditcpp on freenode](//webchat.freenode.net?channels=%23banditcpp)
