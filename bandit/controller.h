@@ -146,6 +146,10 @@ namespace bandit {
         get_controller_address() = controller;
       }
 
+      static void deregister_controller() {
+        get_controller_address() = nullptr;
+      }
+
       static controller_t& registered_controller() {
         auto controller = get_controller_address();
         throw_if_nullptr(controller, "controller", "bandit::detail::register_controller()");
@@ -199,6 +203,10 @@ namespace bandit {
 
     inline void register_controller(controller_t* controller) {
       controller_t::register_controller(controller);
+    }
+
+    inline void deregister_controller() {
+      controller_t::deregister_controller();
     }
 
     inline controller_t& registered_controller() {

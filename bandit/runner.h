@@ -110,7 +110,10 @@ namespace bandit {
     controller.set_policy(new run_policy::bandit(opt.filter_chain(), opt.break_on_failure(), opt.dry_run()));
 
     detail::register_controller(&controller);
-    return run(opt, detail::specs());
+    int result = run(opt, detail::specs());
+    detail::deregister_controller();
+
+    return result;
   }
 
   inline int run(int argc, char* argv[], bool allow_further = true) {
