@@ -49,20 +49,20 @@ namespace bandit {
     };
 
     struct options {
-      struct argument : public option::Arg {
-        static std::string name(const option::Option& option) {
+      struct argument : public optionparser::Arg {
+        static std::string name(const optionparser::Option& option) {
           std::string copy(option.name);
           return copy.substr(0, option.namelen);
         }
 
-        static option::ArgStatus Required(const option::Option& option, bool msg) {
+        static optionparser::ArgStatus Required(const optionparser::Option& option, bool msg) {
           if (option.arg != nullptr) {
-            return option::ARG_OK;
+            return optionparser::ARG_OK;
           }
           if (msg) {
             std::cerr << "Option '" << name(option) << "' requires an argument\n";
           }
-          return option::ARG_ILLEGAL;
+          return optionparser::ARG_ILLEGAL;
         }
       };
 
@@ -103,23 +103,23 @@ namespace bandit {
                 "\tSelect color theme: " + choices_.colorizers.comma_separated_list()),
             formatter_help_("  --formatter=<formatter>, "
                 "\tSelect error formatter: " + choices_.formatters.comma_separated_list()) {
-        usage_.push_back(option::Descriptor{REPORTER, 0, "", "reporter", argument::Required, reporter_help_.c_str()});
-        usage_.push_back(option::Descriptor{COLORIZER, 0, "", "colorizer", argument::Required, colorizer_help_.c_str()});
-        usage_.push_back(option::Descriptor{FORMATTER, 0, "", "formatter", argument::Required, formatter_help_.c_str()});
-        usage_.push_back(option::Descriptor{0, 0, nullptr, nullptr, nullptr, nullptr});
+        usage_.push_back(optionparser::Descriptor{REPORTER, 0, "", "reporter", argument::Required, reporter_help_.c_str()});
+        usage_.push_back(optionparser::Descriptor{COLORIZER, 0, "", "colorizer", argument::Required, colorizer_help_.c_str()});
+        usage_.push_back(optionparser::Descriptor{FORMATTER, 0, "", "formatter", argument::Required, formatter_help_.c_str()});
+        usage_.push_back(optionparser::Descriptor{0, 0, nullptr, nullptr, nullptr, nullptr});
 
         argc -= (argc > 0);
         argv += (argc > 0); // Skip program name (argv[0]) if present
-        option::Stats stats(usage(), argc, argv);
+        optionparser::Stats stats(usage(), argc, argv);
         options_.resize(stats.options_max);
-        std::vector<option::Option> buffer(stats.buffer_max);
-        option::Parser parse(usage(), argc, argv, options_.data(), buffer.data());
+        std::vector<optionparser::Option> buffer(stats.buffer_max);
+        optionparser::Parser parse(usage(), argc, argv, options_.data(), buffer.data());
         parsed_ok_ = !parse.error();
         has_further_arguments_ = (parse.nonOptionsCount() != 0);
         has_unknown_options_ = (options_[UNKNOWN] != nullptr);
 
         for (int i = 0; i < parse.optionsCount(); ++i) {
-          option::Option& opt = buffer[i];
+          optionparser::Option& opt = buffer[i];
           switch (opt.index()) {
           case SKIP:
             filter_chain_.push_back({opt.arg, true});
@@ -148,7 +148,7 @@ namespace bandit {
       }
 
       void print_usage() const {
-        option::printUsage(std::cout, usage());
+        optionparser::printUsage(std::cout, usage());
       }
 
       bool version() const {
@@ -226,19 +226,19 @@ namespace bandit {
         std::cerr << "Option argument of '--" << what << "' must be one of: " << choice.comma_separated_list() << std::endl;
       }
 
-      const option::Descriptor* usage() const {
+      const optionparser::Descriptor* usage() const {
         return &usage_[0];
       }
 
       const choice_options& choices_;
 
-      std::vector<option::Descriptor> usage_;
+      std::vector<optionparser::Descriptor> usage_;
 
       const std::string reporter_help_;
       const std::string colorizer_help_;
       const std::string formatter_help_;
 
-      std::vector<option::Option> options_;
+      std::vector<optionparser::Option> options_;
       run_policy::filter_chain_t filter_chain_;
       bool parsed_ok_;
       bool has_further_arguments_;
